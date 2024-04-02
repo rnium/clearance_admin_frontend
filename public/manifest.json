@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SEC Clearances",
+  "name": "SEC Clearance Management System",
   "icons": [
     {
       "src": "favicon.ico",
