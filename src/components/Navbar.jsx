@@ -20,7 +20,6 @@ const Navbar = ({ drawerWidth }) => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-    console.log(all_tabs);
     return (
         <div>
             <AppBar
