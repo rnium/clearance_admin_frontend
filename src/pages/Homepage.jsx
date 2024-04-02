@@ -10,6 +10,8 @@ import Applications from './Applications';
 import Archives from './Archives';
 import Members from './Members';
 import Students from './Students';
+import History from './History';
+import Profile from './Profile';
 
 
 const drawerWidth = 240;
@@ -32,8 +34,10 @@ class Homepage extends Component {
                             <Route path='/' element={<Dashboard />} />
                             <Route path='/applications' element={<Applications />} />
                             <Route path='/archives' element={<Archives />} />
+                            <Route path='/history' element={<History />} />
                             <Route path='/members' element={<Members />} />
                             <Route path='/students' element={<Students />} />
+                            <Route path='/profile' element={<Profile />} />
                         </Routes>
                     </Box>
                 </Box>

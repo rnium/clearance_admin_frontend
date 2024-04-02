@@ -15,9 +15,25 @@ function RolesCard(props) {
 				</Typography>
 				<Box>
 					{
-						props.roles.map((rolename, index) => (
-							<Stack direction="row" sx={{mb:1, ml:2}} alignItems="center">
+						props.super_roles.map((rolename, index) => (
+							<Stack direction="row" sx={{mb:1, ml:2}} alignItems="center" key={`sr-${index}`}>
 								<img src="/static/images/cube.png" alt="" width="25px" height="25px" />
+								<Typography
+									variant='h6'
+									component='div'
+									align='center'
+									sx={{ ml: 2 }}
+									color="text.secondary"
+								>
+									{rolename}
+								</Typography>
+							</Stack>
+						))
+					}
+					{
+						props.roles.map((rolename, index) => (
+							<Stack direction="row" sx={{mb:1, ml:2}} alignItems="center" key={`r-${index}`}>
+								<img src="/static/images/cube-gray.png" alt="" width="25px" height="25px" />
 								<Typography
 									variant='h6'
 									component='div'

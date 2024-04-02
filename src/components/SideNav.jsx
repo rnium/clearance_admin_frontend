@@ -10,8 +10,10 @@ import { Box } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import HistoryIcon from '@mui/icons-material/History';
 import PeopleIcon from '@mui/icons-material/People';
 import FaceIcon from '@mui/icons-material/Face';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate, useLocation } from 'react-router-dom'
 
 
@@ -32,6 +34,11 @@ const tabs = [
         path: '/archives'
     },
     {
+        title: 'History',
+        icon: <HistoryIcon />,
+        path: '/history'
+    },
+    {
         title: 'Members',
         icon: <PeopleIcon />,
         path: '/members'
@@ -40,6 +47,11 @@ const tabs = [
         title: 'Students',
         icon: <FaceIcon />,
         path: '/students'
+    },
+    {
+        title: 'Profile',
+        icon: <AccountCircleIcon />,
+        path: '/profile'
     },
 ]
 
@@ -71,7 +83,7 @@ const SideNav = ({ drawerWidth }) => {
                                 onClick={() => navigate(tab.path)}
                                 sx={{
                                     backgroundColor: location.pathname === tab.path ? '#f4f4f4' : '',
-                                    py: 2
+                                    py: 1.5
                                 }}
                             >
                                 <ListItemIcon>
