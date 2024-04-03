@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Box } from '@mui/material';
+import { Box, Badge } from '@mui/material';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
@@ -83,7 +83,7 @@ const SideNav = ({ drawerWidth }) => {
                                 onClick={() => navigate(tab.path)}
                                 sx={{
                                     backgroundColor: location.pathname === tab.path ? '#f4f4f4' : '',
-                                    py: 1.5
+                                    py: 1.2
                                 }}
                             >
                                 <ListItemIcon>
