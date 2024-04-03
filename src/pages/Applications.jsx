@@ -1,24 +1,18 @@
-import React from 'react'
+import React from 'react';
+import Clearance from '../components/molecules/Clearance';
+import StyledBadge from '../components/atoms/StyledBadge';
 import {
   Container, Grid, Box, Card, CardMedia, CardContent, Typography, Chip, Badge
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import CircularProgressWithLabel from '../components/atoms/CircularProgressWithLabel';
-import CheckIcon from '@mui/icons-material/Check';
-import ArchiveIcon from '@mui/icons-material/Archive';
 import TablePagination from '@mui/material/TablePagination';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -13,
-    top: 3,
-    border: `0px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}));
+// Sample Data
+import { students_data } from '../utils/sample_data'
+
 
 const roles = [
   {
@@ -34,6 +28,8 @@ const roles = [
     title: 'Microprocessor Lab'
   },
 ]
+
+
 
 const Applications = () => {
   const [page, setPage] = React.useState(0);
@@ -56,7 +52,7 @@ const Applications = () => {
   };
   return (
     <Container sx={{ mt: 2 }}>
-      <Box sx={{display: 'flex', mb: 4}} justifyContent="center">
+      <Box sx={{ display: 'flex', mb: 4 }} justifyContent="center">
         <ToggleButtonGroup
           sx={{ pt: 2 }}
           value={role}
@@ -67,7 +63,7 @@ const Applications = () => {
         >
           {
             roles.map((r, index) => (
-              <ToggleButton key={index} sx={{px:2, pr: 4}} value={r.title} aria-label={r.title}>
+              <ToggleButton key={index} sx={{ px: 2, pr: 4 }} value={r.title} aria-label={r.title}>
                 <StyledBadge badgeContent={4} color="info" >
                   <div>{r.title}</div>
                 </StyledBadge>
@@ -91,62 +87,9 @@ const Applications = () => {
                 Sign as Head of EEE
               </Typography>
             </Box>
-            <Card sx={{ display: 'flex', mb: 1 }} alignItems="center" justifyContent="center">
-              <CardMedia
-                component="img"
-                sx={{ width: 150, height: 'auto' }}
-                image="/static/images/avatar.png"
-                alt="avatar"
-              />
-              <CardContent sx={{ width: '100%' }} >
-                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: "center" }}>
-                  <Box sx={{ display: 'flex' }} alignItems="center">
-                    <Box component="div" flexGrow={1} >
-                      <Typography component="div" variant="h5">
-                        Md. Saiful Islam Roni
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary" component="div">
-                        2018338514
-                      </Typography>
-                      <Typography variant="subtitle2" color="text.secondary" component="div">
-                        EEE 2018-19
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <CircularProgressWithLabel value={90} />
-                    </Box>
-                  </Box>
-                  <Box sx={{ mt: 2, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
-                    <Box>
-                      <Chip
-                        label="Clear"
-                        sx={{ px: 1 }}
-                        color='primary'
-                        icon={<CheckIcon />}
-                        // onClick={() => approve_reg(baseUrl + reg.approval_link)}
-                        variant='contained'
-                      >
-                        Approve
-                      </Chip>
-                      <Chip
-                        label="Archive"
-                        sx={{ px: 1, ml: { xs: 0, md: 1 }, mt: { xs: 1, md: 0 } }}
-                        color='error'
-                        icon={<ArchiveIcon />}
-                        // onClick={() => openDialog(reg.id)}
-                        variant='outlined'
-                      >
-                        Approve
-                      </Chip>
-                    </Box>
-                    <Typography container="span" color="text.secondary">
-                      8:13PM, 14 March 2024
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-
-            </Card>
+            {
+              students_data.map(student => (<Clearance key={student.registration} student_data={student} type="pending" />))
+            }
             <TablePagination
               component="div"
               count={100}

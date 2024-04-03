@@ -1,0 +1,1 @@
+export const dateMask = 'h:MMTT, d mmm yyyy';
