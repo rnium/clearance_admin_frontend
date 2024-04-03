@@ -5,7 +5,7 @@ import {
 import CircularProgressWithLabel from '../components/atoms/CircularProgressWithLabel';
 import CheckIcon from '@mui/icons-material/Check';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import RolesCard from '../components/RolesCard';
+import RolesCard from '../components/molecules/RolesCard';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 

@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Navbar from '../components/Navbar';
-import SideNav from '../components/SideNav';
+import Navbar from '../components/molecules/Navbar';
+import SideNav from '../components/molecules/SideNav';
 import {
     Box
 } from '@mui/material';
