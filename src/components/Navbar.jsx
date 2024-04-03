@@ -31,7 +31,7 @@ const Navbar = ({ drawerWidth }) => {
                     }
                 }
             >
-                <Toolbar sx={{ backgroundColor: '#ffffff', py: 1, color: 'gray' }}>
+                <Toolbar sx={{ backgroundColor: '#ffffff', color: 'gray' }}>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
