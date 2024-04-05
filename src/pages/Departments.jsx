@@ -30,7 +30,7 @@ const Departments = () => {
             <Paper style={{ overflow: 'hidden' }} className="deptRole" elevation={2}>
               <img className='role-logo' src="/static/images/3d-cube.png" alt="" />
               <Box>
-                <Stack alignItems="center" sx={{ px: 2, py: 3 }} spacing={2}>
+                <Stack alignItems="center" sx={{ px: 2, py: 3 }} spacing={3}>
                   <Typography variant='h6' color="primary" sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }}>
                     Head of EEE
                   </Typography>
@@ -72,7 +72,7 @@ const Departments = () => {
             <Paper style={{ overflow: 'hidden' }} className="deptRole" elevation={2}>
               <img className='role-logo' src="/static/images/cube.png" alt="" />
               <Box>
-                <Stack alignItems="center" sx={{ px: 2, py: 3 }} spacing={2}>
+                <Stack alignItems="center" sx={{ px: 2, py: 3 }} spacing={3}>
                   <Typography variant='h6' color="primary" sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }}>
                     Microprocessor Lab
                   </Typography>
@@ -114,13 +114,13 @@ const Departments = () => {
             <Paper style={{ overflow: 'hidden' }} className="deptRole" elevation={2}>
               <img className='role-logo' src="/static/images/cube.png" alt="" />
               <Box>
-                <Stack alignItems="center" sx={{ px: 2, py: 3 }} spacing={2}>
+                <Stack alignItems="center" sx={{ px: 2, py: 3 }} spacing={3}>
                   <Typography variant='h6' color="primary" sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }}>
                     VLSI Lab
                   </Typography>
-                  <Stack direction="row" alignItems="center">
-                    <PersonOffIcon fontSize='large' sx={{mr: 1}} color="tertiary" />
-                    <Typography variant='h5'>No In-Charge</Typography>
+                  <Stack direction="row" alignItems="center" >
+                    <PersonOffIcon fontSize='large' sx={{mr: 1}} />
+                    <Typography variant='h6' color="text.secondary">No One In-Charge</Typography>
                   </Stack>
                   <Chip
                     label="Assign"
