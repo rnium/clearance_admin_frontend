@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import Clearance from '../components/molecules/Clearance'
 import {
   Container, Grid, Paper, Box, CardMedia, Typography, Chip, Stack
@@ -6,15 +6,25 @@ import {
 import CheckIcon from '@mui/icons-material/Check';
 import RolesCard from '../components/molecules/RolesCard';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Modal } from 'antd';
 
 // Sample Data
 import {students_data} from '../utils/sample_data'
 
 const Dashboard = (props) => {
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const super_roles = ['Head of EEE', 'SEC Academic']
   const roles = ['ATTS Lab', 'Microprocessor Lab']
+  const openCommentsModal = () => {
+    setIsCommentModalOpen(true);
+  }
   return (
     <Container sx={{ mt: 4 }}>
+      <Modal title="" open={isCommentModalOpen} onCancel={() => setIsCommentModalOpen(false)}>
+        <p>Lorem, ipsum dolor.</p>
+        <p>Lorem, ipsum dolor.</p>
+        <p>Lorem, ipsum dolor.</p>
+      </Modal>
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
           {/* type 1 */}
@@ -31,7 +41,14 @@ const Dashboard = (props) => {
               </Typography>
             </Box>
             {
-              students_data.map(student => (<Clearance key={student.registration} student_data={student} type="pending" />))
+              students_data.map(student => (
+                <Clearance 
+                  key={student.registration} 
+                  student_data={student} 
+                  type="pending" 
+                  handleOpenModal={openCommentsModal}
+                />
+              ))
             }
           </Box>
           {/* Type 2 */}
@@ -48,7 +65,14 @@ const Dashboard = (props) => {
               </Typography>
             </Box>
             {
-              students_data.map(student => (<Clearance key={student.registration} student_data={student} type="pending" />))
+              students_data.map(student => (
+                <Clearance 
+                  key={student.registration} 
+                  student_data={student} 
+                  type="pending"
+                  handleOpenModal={openCommentsModal}
+                />
+              ))
             }
           </Box>
         </Grid>

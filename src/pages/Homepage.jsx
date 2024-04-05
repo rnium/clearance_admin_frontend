@@ -9,6 +9,7 @@ import Dashboard from './Dashboard';
 import Applications from './Applications';
 import Archives from './Archives';
 import Members from './Members';
+import Departments from './Departments';
 import Students from './Students';
 import History from './History';
 import Profile from './Profile';
@@ -36,6 +37,7 @@ class Homepage extends Component {
                             <Route path='/archives' element={<Archives />} />
                             <Route path='/history' element={<History />} />
                             <Route path='/members' element={<Members />} />
+                            <Route path='/departments' element={<Departments />} />
                             <Route path='/students' element={<Students />} />
                             <Route path='/profile' element={<Profile />} />
                         </Routes>

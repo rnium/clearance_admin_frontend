@@ -1,16 +1,17 @@
-import React from 'react';
+import {useState} from 'react';
 import {
-    Card, CardContent, CardMedia, Box, Typography, Chip
+    Card, CardContent, CardMedia, Box, Typography, Chip, Stack, Paper
 } from '@mui/material';
+import NotesIcon from '@mui/icons-material/Notes';
 import CircularProgressWithLabel from '../atoms/CircularProgressWithLabel';
 import CheckIcon from '@mui/icons-material/Check';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import dateFormat from "dateformat";
-import {dateMask} from '../../utils/config'
+import { dateMask } from '../../utils/config'
 
 
-const Clearance = ({ student_data, type }) => {
+const Clearance = ({ student_data, type, handleOpenModal }) => {
     let action_btns;
     switch (type) {
         case 'pending':
@@ -66,7 +67,7 @@ const Clearance = ({ student_data, type }) => {
             break;
     }
     return (
-        <Card sx={{ display: 'flex', mb: 1 }} alignItems="center" justifyContent="center">
+        <Paper sx={{ display: 'flex', mb: 1 }} alignItems="center" justifyContent="center">
             <CardMedia
                 component="img"
                 sx={{ width: 150, height: 'auto' }}
@@ -80,11 +81,17 @@ const Clearance = ({ student_data, type }) => {
                             <Typography component="div" variant="h5">
                                 {student_data.name}
                             </Typography>
-                            <Typography variant="subtitle1" color="text.secondary" component="div">
-                                {student_data.registration}
-                            </Typography>
-                            <Typography variant="subtitle2" color="text.secondary" component="div">
-                                {student_data.session}
+
+                            <Stack direction="row" spacing={1}>
+                                <Typography variant="subtitle1" color="text.secondary" component="span">
+                                    {student_data.registration}
+                                </Typography>
+                                <Typography variant="subtitle1" color="secondary" component="span">
+                                    {student_data.session}
+                                </Typography>
+                            </Stack>
+                            <Typography container="span" fontSize="0.8rem" color="text.secondary">
+                                Applied At: {dateFormat(student_data.applied_at, dateMask)}
                             </Typography>
                         </Box>
                         <Box>
@@ -93,13 +100,11 @@ const Clearance = ({ student_data, type }) => {
                     </Box>
                     <Box sx={{ mt: 2, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                         {action_btns}
-                        <Typography container="span" color="text.secondary">
-                            {dateFormat(student_data.applied_at, dateMask)}
-                        </Typography>
+                        <Chip label="Comments" icon={<NotesIcon />} onClick={handleOpenModal} sx={{px:1}} />
                     </Box>
                 </Box>
             </CardContent>
-        </Card>
+        </Paper>
     )
 }
 

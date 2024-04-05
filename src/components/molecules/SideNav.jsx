@@ -14,6 +14,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import PeopleIcon from '@mui/icons-material/People';
 import FaceIcon from '@mui/icons-material/Face';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DomainIcon from '@mui/icons-material/Domain';
 import { useNavigate, useLocation } from 'react-router-dom'
 
 
@@ -42,6 +43,11 @@ const tabs = [
         title: 'Members',
         icon: <PeopleIcon />,
         path: '/members'
+    },
+    {
+        title: 'Departments',
+        icon: <DomainIcon />,
+        path: '/departments'
     },
     {
         title: 'Students',
