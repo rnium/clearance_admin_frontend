@@ -5,9 +5,13 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(props) {
+  let color = 'primary';
+  if (props.value === 100) {
+    color = 'success'
+  }
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" {...props} />
+      <CircularProgress color={color} variant="determinate" {...props} />
       <Box
         sx={{
           top: 0,

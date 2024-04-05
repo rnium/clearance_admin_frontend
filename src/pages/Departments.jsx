@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import '../styles/department.css'
 import {
-  Box, Container, Grid, Typography, Paper, Avatar, Stack, Chip, Button, TextField,
-  FormControl, MenuItem, Select, InputLabel
+  Box, Container, Grid, Typography, Paper, Avatar, Stack, Chip
 } from '@mui/material';
 import { Modal } from 'antd';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -118,9 +117,9 @@ const Departments = () => {
                   <Typography variant='h6' color="primary" sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }}>
                     VLSI Lab
                   </Typography>
-                  <Stack direction="row" alignItems="center" >
+                  <Stack direction="row" alignItems="center" sx={{py:0.8}}>
                     <PersonOffIcon fontSize='large' sx={{mr: 1}} />
-                    <Typography variant='h6' color="text.secondary">No One In-Charge</Typography>
+                    <Typography variant='h6' color="text.secondary">Nobody In-Charge</Typography>
                   </Stack>
                   <Chip
                     label="Assign"
