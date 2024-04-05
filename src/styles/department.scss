@@ -1,0 +1,12 @@
+.dept {
+    .deptRole {
+        position: relative;
+        img.role-logo {
+            width: 50px;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            opacity: 0.4;
+        }
+    }
+}
