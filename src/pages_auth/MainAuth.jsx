@@ -9,7 +9,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 
 const MainAuth = () => {
-
   return (
     <BrowserRouter>
       <Box display="flex" flexDirection="column" alignItems="center">
@@ -27,4 +26,4 @@ const MainAuth = () => {
   )
 }
 
-export default MainAuth
+export default MainAuth;
