@@ -1,13 +1,11 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Homepage from './pages/Homepage';
+import Homepage from './pages_admin/Homepage';
+import Loginpage from './pages_auth/Loginpage';
 
 const Main = () => {
   return (
     <div>
-      <BrowserRouter>
-        <Homepage />
-      </BrowserRouter>
+      <Loginpage />
     </div>
   )
 }
