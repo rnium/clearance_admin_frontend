@@ -4,7 +4,7 @@ import SideNav from '../components/molecules/SideNav';
 import {
     Box
 } from '@mui/material';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Applications from './Applications';
 import Archives from './Archives';
@@ -13,7 +13,6 @@ import Departments from './Departments';
 import Students from './Students';
 import History from './History';
 import Profile from './Profile';
-import { BrowserRouter } from 'react-router-dom';
 
 
 const drawerWidth = 240;
