@@ -20,6 +20,12 @@ const Main = () => {
         <MainAuth />
       </div>
     )
+  } else {
+    return (
+      <div>
+        <Homepage />
+      </div>
+    )
   }
 }
 
