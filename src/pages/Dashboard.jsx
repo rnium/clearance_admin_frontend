@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import Clearance from '../components/molecules/Clearance'
+import PendingStudent from '../components/molecules/PendingStudent';
 import {
   Container, Grid, Paper, Box, CardMedia, Typography, Chip, Stack
 } from '@mui/material';
@@ -9,7 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Modal } from 'antd';
 
 // Sample Data
-import {students_data} from '../utils/sample_data'
+import {students_data, peding_students} from '../utils/sample_data'
+
 
 const Dashboard = (props) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -85,96 +87,11 @@ const Dashboard = (props) => {
               <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
                 Pending Accounts
               </Typography>
-              <Paper sx={{ display: 'flex', mb: 1, px: 1, py: 1.2, backgroundColor: '#d5e3eb' }} alignItems="center" justifyContent="center">
-                <Box sx={{ display: 'flex', width: '100%' }} alignItems="center">
-                  <CardMedia
-                    component="img"
-                    sx={{ width: 80, borderRadius: '5px', m: 0, mr: 1, height: 'auto' }}
-                    image="/static/images/admin_avatar.jpg"
-                    alt="avatar"
-                  />
-                  <Box component="div" flexGrow={1} >
-                    <Typography component="div" variant="h5" sx={{ fontSize: '1rem' }}>
-                      Tamim A Rahman
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary" component="div" sx={{ fontSize: '0.8rem' }}>
-                      2018338548
-                      <Typography sx={{ ml: 1, fontSize: '0.8rem' }} variant="subtitle2" color="secondary" component="span" >
-                        EEE 2018-19
-                      </Typography>
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.8rem' }} variant="subtitle2" color="text.secondary" component="span" >
-                      IP: 172.123.22.122
-                    </Typography>
-
-                  </Box>
-                  <Stack>
-                    <Chip
-                      label="Approve"
-                      sx={{ px: 1, fontSize: '0.8rem' }}
-                      color='info'
-                      icon={<CheckIcon />}
-                      // onClick={() => approve_reg(baseUrl + reg.approval_link)}
-                      variant='contained'
-                    >
-                    </Chip>
-                    <Chip
-                      label="Delete"
-                      sx={{ px: 1, mt: 0.5 }}
-                      color='error'
-                      icon={<DeleteIcon />}
-                      // onClick={() => openDialog(reg.id)}
-                      variant='contained'
-                    >
-                    </Chip>
-                  </Stack>
-                </Box>
-              </Paper>
-              <Paper sx={{ display: 'flex', mb: 1, px: 1, py: 1.2, backgroundColor: '#d5e3eb' }} alignItems="center" justifyContent="center">
-                <Box sx={{ display: 'flex', width: '100%' }} alignItems="center">
-                  <CardMedia
-                    component="img"
-                    sx={{ width: 80, borderRadius: '5px', m: 0, mr: 1, height: 'auto' }}
-                    image="/static/images/avatar.png"
-                    alt="avatar"
-                  />
-                  <Box component="div" flexGrow={1} >
-                    <Typography component="div" variant="h5" sx={{ fontSize: '1rem' }}>
-                      Tamim A Rahman
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary" component="div" sx={{ fontSize: '0.8rem' }}>
-                      2018338548
-                      <Typography sx={{ ml: 1, fontSize: '0.8rem' }} variant="subtitle2" color="secondary" component="span" >
-                        EEE 2018-19
-                      </Typography>
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.8rem' }} variant="subtitle2" color="text.secondary" component="span" >
-                      IP: 172.123.22.122
-                    </Typography>
-
-                  </Box>
-                  <Stack>
-                    <Chip
-                      label="Approve"
-                      sx={{ px: 1, fontSize: '0.8rem' }}
-                      color='info'
-                      icon={<CheckIcon />}
-                      // onClick={() => approve_reg(baseUrl + reg.approval_link)}
-                      variant='contained'
-                    >
-                    </Chip>
-                    <Chip
-                      label="Delete"
-                      sx={{ px: 1, mt: 0.5 }}
-                      color='error'
-                      icon={<DeleteIcon />}
-                      // onClick={() => openDialog(reg.id)}
-                      variant='contained'
-                    >
-                    </Chip>
-                  </Stack>
-                </Box>
-              </Paper>
+              {
+                peding_students.map(s => (
+                  <PendingStudent student={s} />
+                ))
+              }
             </Paper>
           </Box>
         </Grid>

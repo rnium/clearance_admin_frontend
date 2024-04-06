@@ -10,7 +10,7 @@ import StudentProfile from '../components/molecules/StudentProfile';
 
 
 const Students = () => {
-  const [deptSelected, setDeptSelected] = useState(null);
+  const [deptSelected, setDeptSelected] = useState('eee');
   const [sessionSelected, setSessionSelected] = useState(null);
   const handleDeptChange = (e, newDept) => {
     if (newDept != null) {
