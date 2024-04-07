@@ -1,16 +1,32 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import Homepage from './pages_admin/Homepage';
 import MainAuth from './pages_auth/MainAuth';
 import Loading from './components/organisms/Loading'
-import { UseSelector, useDispatch, useSelector } from 'react-redux';
-import {setLoaded} from './redux/accountReducer'
+import axios from 'axios';
+import * as urls from './utils/api_urls';
+import { message } from 'antd'
+import { useSelector, useDispatch } from 'react-redux';
+import { setLoaded, setUserInfo } from './redux/accountReducer'
 
 const Main = () => {
   const isLoaded = useSelector((state) => state.is_loaded);
   const userInfo = useSelector((state) => state.userinfo);
   const dispatch = useDispatch()
   useEffect(() => {
-    setTimeout(() => {dispatch(setLoaded(true))}, 1000)
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(urls.userInfoUrl);
+        dispatch(setUserInfo(res.data))
+        dispatch(setLoaded(true))
+      } catch (error) {
+        let error_msg = error?.response?.data?.details;
+        if (error_msg === undefined) {
+          error_msg = error.message;
+        }
+        message.error(error_msg, 5)
+      }
+    }
+    fetchData();
   }, [])
   if (isLoaded === false) {
     return <Loading />;

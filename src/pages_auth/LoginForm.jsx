@@ -3,14 +3,20 @@ import {
     TextField, Button, Stack, Typography, Fade
 } from '@mui/material';
 import { message } from 'antd'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import * as urls from '../utils/api_urls';
+import { useDispatch, UseDispatch } from 'react-redux';
+import { setUserInfo, setLoaded } from '../redux/accountReducer'; 
 
 const LoginForm = () => {
     const [loginForm, setLoginForm] = React.useState({
         email: "",
         password: ""
     })
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleChange = event => {
         const { name, value } = event.target;
@@ -21,13 +27,18 @@ const LoginForm = () => {
     }
 
     const handleSubmit = async () => {
-        message.error("Credentials Mismatch", 5)
-        // try {
-        //   const res = await axios.post(urls.loginUrl, loginForm);
-        //   setAdminUserName(res.data.username);
-        // } catch (error) {
-        //   alert(error.message);
-        // }
+        try {
+          const res = await axios.post(urls.loginUrl, loginForm);
+          dispatch(setLoaded(true));
+          dispatch(setUserInfo(res.data.data));
+          navigate('/');
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg, 5)
+        }
     }
     return (
         <Fade in={true}>

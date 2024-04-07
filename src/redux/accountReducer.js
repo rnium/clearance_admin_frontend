@@ -17,13 +17,13 @@ const accountSlice = createSlice({
     initialState,
     reducers: {
         setUserInfo: (state, action) => {
-            state.userinfo = action.paylod
+            state.userinfo = action.payload;
         },
         setLoaded: (state, action) => {
-            state.is_loaded = action.payload
+            state.is_loaded = action.payload;
         },
         setLoading: (state, action) => {
-            state.is_loading = action.payload
+            state.is_loading = action.payload;
         },
         resetUserInfo: (state, action) => {
             state.userinfo = initialState.userinfo
