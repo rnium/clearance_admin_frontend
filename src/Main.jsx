@@ -26,7 +26,9 @@ const Main = () => {
         message.error(error_msg, 5)
       }
     }
-    fetchData();
+    if (!isLoaded) {
+      fetchData();
+    }
   }, [])
   if (isLoaded === false) {
     return <Loading />;

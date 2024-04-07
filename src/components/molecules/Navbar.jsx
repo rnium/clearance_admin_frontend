@@ -9,7 +9,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import UserInfo from '../atoms/UserInfo';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { NavLink } from 'react-router-dom';
-import {all_tabs} from './SideNav'
+import {all_tabs} from './SideNav';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 
 const Navbar = ({ drawerWidth }) => {
@@ -20,6 +22,7 @@ const Navbar = ({ drawerWidth }) => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+    const userinfo = useSelector(state => state.userinfo);
     return (
         <div>
             <AppBar
@@ -77,7 +80,7 @@ const Navbar = ({ drawerWidth }) => {
                     <Typography variant="h6" noWrap component="div" flexGrow={1}>
                         SEC Clearances
                     </Typography>
-                    <UserInfo username='User Name' avatarSrc='' />
+                    <UserInfo username={userinfo.user_fullname} avatarSrc='' />
                     <Button
                         variant="outlined"
                         color='error'

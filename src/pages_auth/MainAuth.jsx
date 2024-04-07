@@ -16,8 +16,7 @@ const MainAuth = () => {
           <img src="/static/images/cube(1).png" alt="Technoventure Logo" width="100px" />
           <Typography sx={{ mb: 4, mt: 1 }} color="text.secondary" variant='h5'>SEC Clearance Portal</Typography>
           <Routes>
-            <Route path='' element={<Navigate to="/login" />} />
-            <Route path='/login' element={<LoginForm />} />
+            <Route path='/' element={<LoginForm />} />
             <Route path='/forgot' element={<Forgot />} />
           </Routes>
         </Box>

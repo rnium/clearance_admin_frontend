@@ -27,7 +27,7 @@ const Forgot = () => {
     const handleSubmit = async () => {
         message.success("Recovery Email Sent", 5)
         // axios call here
-        navigate('/login')
+        navigate('/')
     }
     return (
         <Fade in={true}>
@@ -40,7 +40,7 @@ const Forgot = () => {
                 }
                 <Stack direction="row" sx={{ mt: 2 }} justifyContent="left" alignItems="center">
                     <ArrowBackIosIcon fontSize='small' color='primary' />
-                    <Link to="/login">
+                    <Link to="/">
                         <Typography color="primary" variant='body1' >Login</Typography>
                     </Link>
                 </Stack>
