@@ -9,7 +9,7 @@ const StudentHome = () => {
   return (
     <div >
       <NavbarStudent />
-      <Container sx={{ mt: 5, mb: 10 }} >
+      <Container sx={{ mt: 7, mb: 10 }} >
         <Box>
           <Steps
             current={2}
@@ -32,7 +32,7 @@ const StudentHome = () => {
             ]}
           />
         </Box>
-        <Box sx={{display: 'flex', mt: 5, flexDirection: 'column'}} alignItems="center" justifyContent="center">
+        <Box sx={{display: 'none', mt: 5, flexDirection: 'column'}} alignItems="center" justifyContent="center">
             <Box sx={{display: {xs: 'none', md: 'block'}}}>
               <img src="./static/images/verification.svg" width="300px" alt="" />
             </Box>
@@ -42,7 +42,7 @@ const StudentHome = () => {
             <Typography variant="h5" fontSize={{xs: '1rem', md: '1.7rem'}} textAlign="center">Your Student Account is being verified by SEC Academic</Typography>
             <Typography variant="subtitle1" color="text.secondary" fontSize={{xs: '0.7rem', md: '1rem'}} textAlign="center">Please ensure that your information is accurate and includes a valid profile picture</Typography>
         </Box>
-        <Box sx={{display: 'none', mt: 5, flexDirection: 'column'}} alignItems="center" justifyContent="center">
+        <Box sx={{display: 'flex', mt: 5, flexDirection: 'column'}} alignItems="center" justifyContent="center">
             <Box sx={{display: {xs: 'none', md: 'block'}}}>
               <img src="./static/images/apply.svg" width="300px" alt="" />
             </Box>

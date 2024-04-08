@@ -39,10 +39,16 @@ const Main = () => {
         <MainAuth />
       </div>
     )
-  } else {
+  } else if (isLoaded && userInfo.account_type === 'student') {
     return (
       <div>
         <StudentHome />
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <Homepage />
       </div>
     )
   }

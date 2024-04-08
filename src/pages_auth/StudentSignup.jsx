@@ -6,10 +6,15 @@ import PictureInput from '../components/atoms/PictureInput'
 import { useState } from 'react';
 import { message } from 'antd';
 import axios from 'axios';
-import * as urls from '../utils/api_urls'
+import * as urls from '../utils/api_urls';
+import { useDispatch, UseDispatch } from 'react-redux';
+import { setUserInfo } from '../redux/accountReducer';
+import { useNavigate } from 'react-router-dom';
 
 
 const StudentSignup = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState(
         {
             first_name: '',
@@ -41,9 +46,18 @@ const StudentSignup = () => {
         postData.append('profilePhoto', profilePhoto);
         try {
             const response = await axios.post(urls.studentSignupUrl, postData);
-            console.log(response.data);
+            message.success("Signup complete", 5)
+            dispatch(setUserInfo(response.data.info));
+            navigate('/');
+            // setTimeout(() => {
+            //     dispatch(setUserInfo(response.data.info));
+            // }, 2100)
         } catch (error) {
-            console.error('Error:', error);
+            let info = error?.response?.data?.details
+            if (info === undefined) {
+                info = error.message;
+            }
+            message.error(info, 5)
         }
     }
     const handleChange = e => {
@@ -58,7 +72,7 @@ const StudentSignup = () => {
     const handleFileChange = e => {
         let file = e.target.files[0];
         let filesize = (file.size / 1024).toFixed(1);
-        if (file.type != 'image/png' & file.type != 'image/jpeg') {
+        if (file.type !== 'image/png' & file.type !== 'image/jpeg') {
             message.error("Invalid File Type", 4);
             return;
         }
