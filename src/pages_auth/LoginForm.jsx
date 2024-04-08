@@ -51,9 +51,12 @@ const LoginForm = () => {
                         <Button onClick={handleSubmit} variant="contained" sx={{ mt: 3 }} fullWidth>Login</Button>
                         : <Button onClick={handleSubmit} variant="contained" sx={{ mt: 3 }} fullWidth disabled>Login</Button>
                 }
-                <Stack direction="row" sx={{ mt: 1 }} justifyContent="right">
+                <Stack direction="row" sx={{ mt: 1 }} justifyContent="space-between">
                     <Link to="/forgot">
                         <Typography color="primary" variant='body2' >Forgot Password?</Typography>
+                    </Link>
+                    <Link to="/signup">
+                        <Typography color="primary" variant='body2' >Student Signup</Typography>
                     </Link>
                 </Stack>
             </div>
