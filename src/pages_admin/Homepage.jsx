@@ -4,7 +4,7 @@ import SideNav from '../components/molecules/SideNav';
 import {
     Box
 } from '@mui/material';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Applications from './Applications';
 import Archives from './Archives';
@@ -23,29 +23,27 @@ class Homepage extends Component {
     // }
     render() {
         return (
-            <BrowserRouter>
-                <div className='root'>
-                    <Box sx={{ display: 'flex' }}>
-                        <SideNav drawerWidth={drawerWidth} />
-                        <Box component='main'
-                            className='main'
-                            sx={{ mt: 12, width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` } }}
-                        >
-                            <Navbar drawerWidth={drawerWidth} />
-                            <Routes>
-                                <Route path='/' element={<Dashboard />} />
-                                <Route path='/applications' element={<Applications />} />
-                                <Route path='/archives' element={<Archives />} />
-                                <Route path='/history' element={<History />} />
-                                <Route path='/members' element={<Members />} />
-                                <Route path='/departments' element={<Departments />} />
-                                <Route path='/students' element={<Students />} />
-                                <Route path='/profile' element={<Profile />} />
-                            </Routes>
-                        </Box>
+            <div className='root'>
+                <Box sx={{ display: 'flex' }}>
+                    <SideNav drawerWidth={drawerWidth} />
+                    <Box component='main'
+                        className='main'
+                        sx={{ mt: 12, width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` } }}
+                    >
+                        <Navbar drawerWidth={drawerWidth} />
+                        <Routes>
+                            <Route path='/' element={<Dashboard />} />
+                            <Route path='/applications' element={<Applications />} />
+                            <Route path='/archives' element={<Archives />} />
+                            <Route path='/history' element={<History />} />
+                            <Route path='/members' element={<Members />} />
+                            <Route path='/departments' element={<Departments />} />
+                            <Route path='/students' element={<Students />} />
+                            <Route path='/profile' element={<Profile />} />
+                        </Routes>
                     </Box>
-                </div>
-            </BrowserRouter>
+                </Box>
+            </div>
         )
     }
 }
