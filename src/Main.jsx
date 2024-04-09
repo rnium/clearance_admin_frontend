@@ -10,8 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLoaded, setUserInfo } from './redux/accountReducer'
 
 const Main = () => {
-  const isLoaded = useSelector((state) => state.is_loaded);
-  const userInfo = useSelector((state) => state.userinfo);
+  const isLoaded = useSelector((state) => state.account.is_loaded);
+  const userInfo = useSelector((state) => state.account.userinfo);
   const dispatch = useDispatch()
   useEffect(() => {
     const fetchData = async () => {

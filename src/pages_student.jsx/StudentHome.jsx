@@ -1,18 +1,44 @@
-import React from 'react';
+import {useEffect} from 'react';
 import NavbarStudent from '../components/molecules/NavbarStudent';
 import {
   Container, Box, Grid, Paper, Stack, Typography, Button
 } from '@mui/material';
-import { Steps } from 'antd';
+import { Steps, Spin } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import {loadInfo, setLoaded} from '../redux/studentStoreReducer';
+import PendingCard from '../components/atoms/PendingCard';
+import ApplyCard from '../components/atoms/ApplyCard';
+
+const customState = {
+  state: 2
+}
 
 const StudentHome = () => {
+  const studentInfo = useSelector(state => state.studentStore.info);
+  const studentInfoLoaded = useSelector(state => state.studentStore.is_loaded);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadInfo(customState));
+    dispatch(setLoaded(true));
+  }, [])
+  console.log(studentInfo);
+  if (!studentInfoLoaded) {
+    return (
+      <div>
+        <NavbarStudent />
+        <Stack sx={{mt: '15vh'}}>
+            <Spin size='large' />
+        </Stack>
+      </div>
+    )
+  }
   return (
     <div >
       <NavbarStudent />
       <Container sx={{ mt: 7, mb: 10 }} >
         <Box>
           <Steps
-            current={2}
+            current={studentInfo.state}
             items={[
               {
                 title: 'Signup',
@@ -32,26 +58,14 @@ const StudentHome = () => {
             ]}
           />
         </Box>
-        <Box sx={{display: 'none', mt: 5, flexDirection: 'column'}} alignItems="center" justifyContent="center">
-            <Box sx={{display: {xs: 'none', md: 'block'}}}>
-              <img src="./static/images/verification.svg" width="300px" alt="" />
-            </Box>
-            <Box sx={{display: {xs: 'block', md: 'none'}}}>
-              <img src="./static/images/verification.svg" width="150px" alt="" />
-            </Box>
-            <Typography variant="h5" fontSize={{xs: '1rem', md: '1.7rem'}} textAlign="center">Your Student Account is being verified by SEC Academic</Typography>
-            <Typography variant="subtitle1" color="text.secondary" fontSize={{xs: '0.7rem', md: '1rem'}} textAlign="center">Please ensure that your information is accurate and includes a valid profile picture</Typography>
-        </Box>
-        <Box sx={{display: 'flex', mt: 5, flexDirection: 'column'}} alignItems="center" justifyContent="center">
-            <Box sx={{display: {xs: 'none', md: 'block'}}}>
-              <img src="./static/images/apply.svg" width="300px" alt="" />
-            </Box>
-            <Box sx={{display: {xs: 'block', md: 'none'}}}>
-              <img src="./static/images/apply.svg" width="150px" alt="" />
-            </Box>
-            <Typography variant="h5" fontSize={{xs: '1rem', md: '1.7rem'}} textAlign="center">Great!!! Now You Can Apply For Clearance</Typography>
-            <Button variant='contained' sx={{mt: 3, px: 5, py: 1, borderRadius: '180px'}}>Apply Now</Button>
-        </Box>
+        {
+          studentInfo.state == 1 ? <PendingCard /> : null
+        }
+        {
+          studentInfo.state == 2 ? <ApplyCard /> : null
+        }
+        
+        
         {/* <Grid container spacing={2} sx={{mt: 5}}>
           <Grid item xs={12} md={7}>
             <Paper sx={{py:20}}>

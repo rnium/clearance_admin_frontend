@@ -1,10 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit'
-import accountReducer from './accountReducer'
+import accountReducer from './accountReducer';
+import studentStoreReducer from './studentStoreReducer';
+
 
 const store = configureStore({
-    reducer: accountReducer
+    reducer: {
+        account: accountReducer,
+        studentStore: studentStoreReducer,
+    }
 })
 
 export default store;
 
-// store.subscribe(() => console.log(store.getState()))
+store.subscribe(() => console.log(store.getState()))

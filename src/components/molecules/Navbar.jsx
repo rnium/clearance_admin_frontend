@@ -22,7 +22,7 @@ const Navbar = ({ drawerWidth }) => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-    const userinfo = useSelector(state => state.userinfo);
+    const userinfo = useSelector(state => state.account.userinfo);
     return (
         <div>
             <AppBar

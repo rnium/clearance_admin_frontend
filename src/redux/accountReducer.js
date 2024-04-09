@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     userinfo: {
-        is_authenticated: false,
+        is_authenticated: true,
         username: '',
         user_fullname: '',
-        account_type: '',
+        account_type: 'student',
         user_type: '',
     },
-    is_loaded: false,
+    is_loaded: true,
     is_loading: false,
 }
 
@@ -34,4 +34,4 @@ const accountSlice = createSlice({
 export const {
     setUserInfo, setLoaded, setLoading, resetUserInfo
 } = accountSlice.actions;
-export default accountSlice.reducer
+export default accountSlice.reducer;
