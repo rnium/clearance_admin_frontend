@@ -5,24 +5,24 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import {
     Stack
-} from '@mui/material'
+} from '@mui/material';
+import { useSelector } from 'react-redux';
+import * as urls from '../../utils/api_urls'
 
-const pages = ['Products', 'Pricing', 'Blog'];
+
 const settings = ['Account', 'Logout'];
 
 function NavbarStudent() {
+    const avatar_url = urls.baseUrl + useSelector(state => state.studentStore.info?.profile_picture);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+    console.log(avatar_url);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -58,7 +58,7 @@ function NavbarStudent() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open options">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="UserName" src="/static/images/admin_avatar.jpg" />
+                                <Avatar alt="UserName" src={avatar_url} />
                             </IconButton>
                         </Tooltip>
                         <Menu

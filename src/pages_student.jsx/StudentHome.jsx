@@ -1,33 +1,46 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import NavbarStudent from '../components/molecules/NavbarStudent';
 import {
   Container, Box, Grid, Paper, Stack, Typography, Button
 } from '@mui/material';
-import { Steps, Spin } from 'antd';
+import { Steps, Spin, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import {loadInfo, setLoaded} from '../redux/studentStoreReducer';
+import { loadInfo, setLoaded } from '../redux/studentStoreReducer';
 import PendingCard from '../components/atoms/PendingCard';
 import ApplyCard from '../components/atoms/ApplyCard';
+import axios from 'axios';
+import * as urls from '../utils/api_urls'
 
-const customState = {
-  state: 2
-}
 
 const StudentHome = () => {
   const studentInfo = useSelector(state => state.studentStore.info);
   const studentInfoLoaded = useSelector(state => state.studentStore.is_loaded);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadInfo(customState));
-    dispatch(setLoaded(true));
+    async function loadStudentInfo() {
+      try {
+        let res = await axios.get(urls.studentinfoUrl);
+        dispatch(loadInfo(res.data.info));
+        dispatch(setLoaded(true));
+      } catch (error) {
+        let error_msg = error?.response?.data?.details;
+        if (error_msg === undefined) {
+          error_msg = error.message;
+        }
+        message.error(error_msg);
+      }
+    }
+    if (!studentInfoLoaded) {
+      loadStudentInfo();
+    }
   }, [])
   console.log(studentInfo);
   if (!studentInfoLoaded) {
     return (
       <div>
         <NavbarStudent />
-        <Stack sx={{mt: '15vh'}}>
-            <Spin size='large' />
+        <Stack sx={{ mt: '15vh' }}>
+          <Spin size='large' />
         </Stack>
       </div>
     )
@@ -59,13 +72,13 @@ const StudentHome = () => {
           />
         </Box>
         {
-          studentInfo.state == 1 ? <PendingCard /> : null
+          studentInfo.state === 1 ? <PendingCard /> : null
         }
         {
-          studentInfo.state == 2 ? <ApplyCard /> : null
+          studentInfo.state === 2 ? <ApplyCard /> : null
         }
-        
-        
+
+
         {/* <Grid container spacing={2} sx={{mt: 5}}>
           <Grid item xs={12} md={7}>
             <Paper sx={{py:20}}>
