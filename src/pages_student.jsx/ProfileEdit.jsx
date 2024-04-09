@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Container, Grid, Box, Stack, Typography, TextField, Button
 } from '@mui/material';
@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import PictureInput from '../components/atoms/PictureInput'
-import { message } from 'antd';
-import { loadInfo } from '../redux/studentStoreReducer'; 
+import { message, Spin } from 'antd';
+import { loadInfo, setLoaded } from '../redux/studentStoreReducer';
 
 
 const img_dim = 110;
@@ -17,6 +17,7 @@ const img_dim = 110;
 const Profile = () => {
     const dispatch = useDispatch();
     const studentInfo = useSelector(state => state.studentStore.info);
+    const studentInfoLoaded = useSelector(state => state.studentStore.is_loaded);
     let full_name = studentInfo?.first_name;
     if (studentInfo?.last_name) {
         full_name += ` ${studentInfo?.last_name}`
@@ -86,6 +87,39 @@ const Profile = () => {
         setFileInfo(info);
         setprofilePhoto(file);
     }
+    useEffect(() => {
+        async function loadStudentInfo() {
+            try {
+                let res = await axios.get(urls.studentinfoUrl);
+                dispatch(loadInfo(res.data.info));
+                dispatch(setLoaded(true));
+                setFormData(
+                    {
+                        first_name: '',
+                        last_name: '',
+                        email: '',
+                        password: '',
+                    }
+                )
+            } catch (error) {
+                let error_msg = error?.response?.data?.details;
+                if (error_msg === undefined) {
+                    error_msg = error.message;
+                }
+                message.error(error_msg);
+            }
+        }
+        if (!studentInfoLoaded) {
+            loadStudentInfo();
+        }
+    }, [])
+    if (!studentInfoLoaded) {
+        return (
+            <Stack sx={{ mt: '15vh' }}>
+                <Spin size='large' />
+            </Stack>
+        )
+    }
     return (
         <Box display="flex" flexDirection="row" justifyContent="center" alignContent="center">
             <Box sx={{ mt: '5vh', mb: 5 }} width={{ xs: "90%", md: '40%' }}>
@@ -105,22 +139,22 @@ const Profile = () => {
                 <form action="" onSubmit={handleSubmit} >
                     <Grid container spacing={1} sx={{ mt: 2 }}>
                         <Grid item xs={12} md={6}>
-                            <TextField label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} variant='outlined'  fullWidth />
+                            <TextField label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} variant='outlined' fullWidth />
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} variant='outlined' fullWidth />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} variant='outlined'  fullWidth />
+                            <TextField label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} variant='outlined' fullWidth />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Passoword" name="password" type="password" onChange={handleChange} variant='outlined'  fullWidth />
+                            <TextField label="Passoword" name="password" type="password" onChange={handleChange} variant='outlined' fullWidth />
                         </Grid>
                         <Grid item xs={12}>
                             {
                                 (rePass !== null) & (rePass !== formData.password) ?
-                                    <TextField error label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined'  fullWidth />
-                                    : <TextField label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined'  fullWidth />
+                                    <TextField error label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
+                                    : <TextField label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
                             }
                         </Grid>
                         <Grid item xs={12}>
