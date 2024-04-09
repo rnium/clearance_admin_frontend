@@ -9,7 +9,7 @@ import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import PictureInput from '../components/atoms/PictureInput'
 import { message } from 'antd';
-import { setUserInfo } from '../redux/accountReducer';
+import { loadInfo } from '../redux/studentStoreReducer'; 
 
 
 const img_dim = 110;
@@ -25,7 +25,6 @@ const Profile = () => {
         {
             first_name: studentInfo?.first_name,
             last_name: studentInfo?.last_name,
-            registration: studentInfo?.registration,
             email: studentInfo?.email,
             password: '',
         }
@@ -53,7 +52,7 @@ const Profile = () => {
             const response = await axios.post(urls.studentProfileUpdateUrl, postData);
             message.success("Profile Updated", 5)
             setTimeout(() => {
-                dispatch(setUserInfo(response.data.info));
+                dispatch(loadInfo(response.data.info));
             }, 1000)
         } catch (error) {
             let info = error?.response?.data?.details
@@ -110,9 +109,6 @@ const Profile = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} variant='outlined' fullWidth />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField label="Registration No." name="registration_no" value={formData.registration}  onChange={handleChange} variant='outlined'  fullWidth />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} variant='outlined'  fullWidth />
