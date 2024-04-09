@@ -13,25 +13,18 @@ import {
     Stack
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import * as urls from '../../utils/api_urls'
+import * as urls from '../../utils/api_urls';
+import { NavLink, Link } from 'react-router-dom';
 
 
 const settings = ['Account', 'Logout'];
 
 function NavbarStudent() {
-    const avatar_url = urls.baseUrl + useSelector(state => state.studentStore.info?.profile_picture);
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const avatar_url = urls.baseUrl + useSelector(state => state.studentStore.info?.avatar_url);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    console.log(avatar_url);
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
@@ -42,17 +35,21 @@ function NavbarStudent() {
         <AppBar position="static" color='transparent'>
             <Container maxWidth="xl">
                 <Toolbar color="light" sx={{ py: 1 }} disableGutters>
-                    <Box flexGrow={1} sx={{ display: 'flex' }} alignItems="center">
-                        <Box sx={{display: {xs: 'none', md: 'block'}}}>
-                            <img src="/static/images/cube(1).png" width="70px" alt="" />
-                        </Box>
-                        <Box sx={{display: {xs: 'block', md: 'none'}}}>
-                            <img src="/static/images/cube(1).png" width="50px" alt="" />
-                        </Box>
-                        <Stack sx={{ ml: 1 }}>
-                            <Typography color="primary" variant='h5' sx={{fontSize: {xs: '1rem', md: '1.4rem'}}} component="span">SEC Clearance Portal</Typography>
-                            <Typography color="text.secondary" variant='h6' sx={{fontSize: {xs: '0.8rem', md: '1rem'}}}>Student</Typography>
-                        </Stack>
+                    <Box flexGrow={1} >
+                        <Link to="/">
+                            <Box sx={{ display: 'flex' }} alignItems="center">
+                                <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                                    <img src="/static/images/cube(1).png" width="70px" alt="" />
+                                </Box>
+                                <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+                                    <img src="/static/images/cube(1).png" width="50px" alt="" />
+                                </Box>
+                                <Stack sx={{ ml: 1 }}>
+                                    <Typography color="primary" variant='h5' sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }} component="span">SEC Clearance Portal</Typography>
+                                    <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}>Student</Typography>
+                                </Stack>
+                            </Box>
+                        </Link>
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
@@ -77,11 +74,11 @@ function NavbarStudent() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                            <NavLink to='profile/'>
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    Profile
                                 </MenuItem>
-                            ))}
+                            </NavLink>
                         </Menu>
                     </Box>
                 </Toolbar>

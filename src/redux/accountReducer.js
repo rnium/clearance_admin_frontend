@@ -4,7 +4,7 @@ const initialState = {
     userinfo: {
         is_authenticated: true,
         username: '',
-        user_fullname: '',
+        user_fullname: 'Md. Saiful Islam Roni',
         account_type: 'student',
         user_type: '',
     },

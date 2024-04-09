@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { message } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
-import { useDispatch, UseDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../redux/accountReducer';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,11 +47,10 @@ const StudentSignup = () => {
         try {
             const response = await axios.post(urls.studentSignupUrl, postData);
             message.success("Signup complete", 5)
-            dispatch(setUserInfo(response.data.info));
-            navigate('/');
-            // setTimeout(() => {
-            //     dispatch(setUserInfo(response.data.info));
-            // }, 2100)
+            setTimeout(() => {
+                dispatch(setUserInfo(response.data.info));
+                navigate('/');
+            }, 1000)
         } catch (error) {
             let info = error?.response?.data?.details
             if (info === undefined) {
@@ -95,7 +94,7 @@ const StudentSignup = () => {
                         <Typography color="text.secondary" variant='h6'>Student Signup</Typography>
                     </Stack>
                 </Box>
-                <form action="" onSubmit={handleSubmit} >
+                <form onSubmit={handleSubmit} >
                     <Grid container spacing={1} sx={{ mt: 4 }}>
                         <Grid item xs={12} md={6}>
                             <TextField label="First Name" name="first_name" onChange={handleChange} variant='outlined' required fullWidth />
