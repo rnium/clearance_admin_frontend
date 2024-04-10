@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
 import Clearance from '../components/molecules/Clearance'
 import PendingStudent from '../components/molecules/PendingStudent';
 import {
@@ -7,19 +7,47 @@ import {
 import CheckIcon from '@mui/icons-material/Check';
 import RolesCard from '../components/molecules/RolesCard';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Modal } from 'antd';
+import { Modal, Spin, message } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import * as urls from '../utils/api_urls'
+import { setPendingClearances, setPendingClearancesLoaded } from '../redux/dashboardReducer';
 
 // Sample Data
-import {students_data, peding_students} from '../utils/sample_data'
+import { students_data, peding_students } from '../utils/sample_data'
+import ClearanceSection from '../components/organisms/ClearanceSection';
 
 
 const Dashboard = (props) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances)
+  const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded)
   const super_roles = ['Head of EEE', 'SEC Academic']
   const roles = ['ATTS Lab', 'Microprocessor Lab']
   const openCommentsModal = () => {
     setIsCommentModalOpen(true);
   }
+  async function loadClearances() {
+    try {
+      let res = await axios.get(urls.dashboardClearancesUrl);
+      dispatch(setPendingClearances(res.data))
+      dispatch(setPendingClearancesLoaded(true))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+        if (error_msg === undefined) {
+          error_msg = error.message;
+        }
+        message.error(error_msg);
+    }
+  }
+
+  useEffect(() => {
+    if (!pendingClearancesLoaded) {
+      loadClearances();
+    }
+  }, [])
+
   return (
     <Container sx={{ mt: 4 }}>
       <Modal title="" open={isCommentModalOpen} onCancel={() => setIsCommentModalOpen(false)}>
@@ -29,54 +57,17 @@ const Dashboard = (props) => {
       </Modal>
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
-          {/* type 1 */}
-          <Box sx={{mb: 4}}>
-            <Box sx={{ display: 'flex', mb: 2 }} justifyContent="center">
-              <img src="/static/images/cube.png" alt="" width="30px" height="30px" />
-              <Typography
-                variant='h5'
-                align='center'
-                sx={{ ml: 2 }}
-                color="text.secondary"
-              >
-                Head of EEE
-              </Typography>
-            </Box>
-            {
-              students_data.map(student => (
-                <Clearance 
-                  key={student.registration} 
-                  student_data={student} 
-                  type="pending" 
-                  handleOpenModal={openCommentsModal}
-                />
-              ))
-            }
-          </Box>
-          {/* Type 2 */}
-          <Box sx={{mb: 2}}>
-            <Box sx={{ display: 'flex', mb: 2 }} justifyContent="center">
-              <img src="/static/images/cube-gray.png" alt="" width="30px" height="30px" />
-              <Typography
-                variant='h5'
-                align='center'
-                sx={{ ml: 2 }}
-                color="text.secondary"
-              >
-                Microprocessor Lab
-              </Typography>
-            </Box>
-            {
-              students_data.map(student => (
-                <Clearance 
-                  key={student.registration} 
-                  student_data={student} 
-                  type="pending"
-                  handleOpenModal={openCommentsModal}
-                />
-              ))
-            }
-          </Box>
+          {
+            pendingClearancesLoaded === false ?
+              <Stack sx={{ mt: 5 }}>
+                <Spin size='large' />
+              </Stack>
+              : pendingClearances.map(section => {
+                return (
+                  <ClearanceSection section_data = {section} />
+                )
+              })
+          }
         </Grid>
         <Grid item xs={12} md={5}>
           <Box sx={{ mb: 2 }}>

@@ -15,7 +15,7 @@ const initialState = {
     },
 }
 
-const accountSlice = createSlice({
+const dashboardSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
@@ -41,6 +41,6 @@ const accountSlice = createSlice({
 })
 
 export const {
-    setUserInfo, setLoaded, setLoading, resetUserInfo
-} = accountSlice.actions;
-export default accountSlice.reducer;
+    setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded, setPendingAccounts, setPendingAccountsLoaded
+} = dashboardSlice.actions;
+export default dashboardSlice.reducer;

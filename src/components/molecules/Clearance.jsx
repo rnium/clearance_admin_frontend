@@ -8,7 +8,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import dateFormat from "dateformat";
-import { dateMask } from '../../utils/config'
+import { dateMask } from '../../utils/config';
+import * as urls from '../../utils/api_urls'
+
 
 
 const Clearance = ({ student_data, type, handleOpenModal }) => {
@@ -67,11 +69,12 @@ const Clearance = ({ student_data, type, handleOpenModal }) => {
             break;
     }
     return (
-        <Paper sx={{ display: 'flex', mb: 1 }} alignItems="center" justifyContent="center">
+        <Paper sx={{ display: 'flex', mb: 1 }} style={{overflow: 'hidden'}} alignItems="center" justifyContent="center">
             <CardMedia
                 component="img"
                 sx={{ width: 150, height: 'auto' }}
-                image={student_data.avatar_url}
+                // style = {{borderRadius: '5px'}}
+                image={urls.baseUrl + student_data.avatar_url}
                 alt="avatar"
             />
             <CardContent sx={{ width: '100%' }} >
