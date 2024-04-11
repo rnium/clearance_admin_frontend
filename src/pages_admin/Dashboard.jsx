@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import Clearance from '../components/molecules/Clearance'
 import PendingStudent from '../components/molecules/PendingStudent';
 import {
-  Container, Grid, Paper, Box, CardMedia, Typography, Chip, Stack
+  Container, Grid, Paper, Box, Typography, Stack, Dialog, TextField, Button,
+  DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import RolesCard from '../components/molecules/RolesCard';
@@ -21,6 +22,8 @@ import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 
 const Dashboard = (props) => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deletableId, setDeletableId] = useState(null);
   const dispatch = useDispatch();
   const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances)
   const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded)
@@ -32,6 +35,14 @@ const Dashboard = (props) => {
 
   const openCommentsModal = () => {
     setIsCommentModalOpen(true);
+  }
+  const closeDialog = () => {
+    setDialogOpen(false);
+    setDeletableId(null);
+  }
+  const openDialog = reg_id => {
+    setDialogOpen(true);
+    setDeletableId(reg_id);
   }
 
   async function loadClearances() {
@@ -94,8 +105,25 @@ const Dashboard = (props) => {
   const approveAccount = async registration => {
     try {
       let res = await axios.post(
-        urls.approveStudentAcUrl, 
-        {registration: registration}
+        urls.approveStudentAcUrl,
+        { registration: registration }
+      );
+      message.success(res.data.info);
+      res = await axios.get(urls.pendingStudentAcUrl);
+      dispatch(setPendingAccounts(res.data))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  const deleteAccount = async payload => {
+    try {
+      let res = await axios.post(
+        urls.deleteStudentAcUrl, payload
       );
       message.success(res.data.info);
       res = await axios.get(urls.pendingStudentAcUrl);
@@ -169,7 +197,7 @@ const Dashboard = (props) => {
                       {
                         pendingAccounts.length ?
                           pendingAccounts.map(s => (
-                            <PendingStudent approve={approveAccount} student={s} />
+                            <PendingStudent openDialog={openDialog} approve={approveAccount} student={s} />
                           )) :
                           <Stack sx={{ py: 5 }}>
                             <Empty />
@@ -186,6 +214,53 @@ const Dashboard = (props) => {
           }
         </Grid>
       </Grid>
+      <Dialog
+        open={dialogOpen}
+        onClose={closeDialog}
+        PaperProps={{
+          component: 'form',
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            deleteAccount(formData)
+            closeDialog();
+          },
+        }}
+      >
+        <DialogTitle>Delete Student Account</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Before you proceed with deleting this account, provide a reason for the action.
+            The student will receive an email notification regarding this decision
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="reason"
+            name="reason"
+            label="Specify Reason"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <Box display="none">
+            <TextField
+              type="text"
+              name="registration"
+              value={deletableId}
+            >
+            </TextField>
+          </Box>
+
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button type="submit">Delete</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   )
 }

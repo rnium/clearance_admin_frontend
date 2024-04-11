@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import * as urls from '../../utils/api_urls'
 
-const PendingStudent = ({student, approve}) => {
+const PendingStudent = ({student, approve, openDialog}) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const performAprroval = async (registration) => {
         setIsSubmitting(true);
@@ -53,7 +53,7 @@ const PendingStudent = ({student, approve}) => {
                         color='error'
                         icon={<DeleteIcon />}
                         disabled={isSubmitting}
-                        // onClick={() => openDialog(reg.id)}
+                        onClick={() => openDialog(student.registration)}
                         variant='contained'
                     >
                     </Chip>
