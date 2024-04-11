@@ -5,8 +5,6 @@ import {
 import Clearance from '../molecules/Clearance';
 import { Empty } from 'antd';
 
-// Sample Data
-import { students_data, peding_students } from '../../utils/sample_data'
 
 const ClearanceSection = ({section_data, onAction}) => {
     let logo_src = "/static/images/cube.png";

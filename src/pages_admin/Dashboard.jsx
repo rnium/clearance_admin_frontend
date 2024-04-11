@@ -16,6 +16,7 @@ import {
   setPendingAccounts, setPendingAccountsLoaded
 } from '../redux/dashboardReducer';
 import ClearanceSection from '../components/organisms/ClearanceSection';
+import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 
 
 const Dashboard = (props) => {
@@ -88,7 +89,7 @@ const Dashboard = (props) => {
       }
       message.error(error_msg);
     }
-  } 
+  }
 
   useEffect(() => {
     if (!pendingClearancesLoaded) {
@@ -115,12 +116,15 @@ const Dashboard = (props) => {
             pendingClearancesLoaded === false ?
               <Stack sx={{ mt: 5 }}>
                 <Spin size='large' />
-              </Stack>
-              : pendingClearances.map(section => {
-                return (
-                  <ClearanceSection section_data={section} onAction={hitClearanceAction}  />
-                )
-              })
+              </Stack> :
+              pendingClearances.length == 0 ?
+                <ClearancesEmpty />
+                :
+                pendingClearances.map(section => {
+                  return (
+                    <ClearanceSection section_data={section} onAction={hitClearanceAction} />
+                  )
+                })
           }
         </Grid>
         <Grid item xs={12} md={5}>
@@ -146,12 +150,12 @@ const Dashboard = (props) => {
                       </Typography>
                       {
                         pendingAccounts.length ?
-                        pendingAccounts.map(s => (
-                          <PendingStudent student={s} />
-                        )) :
-                        <Stack sx={{ py: 5 }}>
-                          <Empty />
-                        </Stack>
+                          pendingAccounts.map(s => (
+                            <PendingStudent student={s} />
+                          )) :
+                          <Stack sx={{ py: 5 }}>
+                            <Empty />
+                          </Stack>
                       }
                     </Paper> :
                     <Paper sx={{ py: 15 }}>
