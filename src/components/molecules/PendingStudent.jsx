@@ -3,6 +3,7 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
+import * as urls from '../../utils/api_urls'
 
 const PendingStudent = ({student}) => {
     return (
@@ -11,7 +12,7 @@ const PendingStudent = ({student}) => {
                 <CardMedia
                     component="img"
                     sx={{ width: 80, borderRadius: '5px', m: 0, mr: 1, height: 'auto' }}
-                    image={student.avatar_url}
+                    image={urls.baseUrl + student.avatar_url}
                     alt="avatar"
                 />
                 <Box component="div" flexGrow={1} >

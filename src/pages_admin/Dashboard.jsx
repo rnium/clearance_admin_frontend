@@ -7,16 +7,14 @@ import {
 import CheckIcon from '@mui/icons-material/Check';
 import RolesCard from '../components/molecules/RolesCard';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Modal, Spin, message } from 'antd';
+import { Modal, Spin, message, Empty } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as urls from '../utils/api_urls'
 import {
-  setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded
+  setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
+  setPendingAccounts, setPendingAccountsLoaded
 } from '../redux/dashboardReducer';
-
-// Sample Data
-import { students_data, peding_students } from '../utils/sample_data'
 import ClearanceSection from '../components/organisms/ClearanceSection';
 
 
@@ -27,11 +25,14 @@ const Dashboard = (props) => {
   const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded)
   const adminRoles = useSelector(state => state.dashboard.adminRoles.roles)
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
-  const super_roles = ['Head of EEE', 'SEC Academic']
-  const roles = ['ATTS Lab', 'Microprocessor Lab']
+  const pendingAccounts = useSelector(state => state.dashboard.pendingAccounts.accounts)
+  const pendingAccountsLoaded = useSelector(state => state.dashboard.pendingAccounts.isLoaded)
+  const adminAcType = useSelector(state => state.account.userinfo?.user_type)
+
   const openCommentsModal = () => {
     setIsCommentModalOpen(true);
   }
+
   async function loadClearances() {
     try {
       let res = await axios.get(urls.dashboardClearancesUrl);
@@ -45,11 +46,26 @@ const Dashboard = (props) => {
       message.error(error_msg);
     }
   }
+
   async function loadRoles() {
     try {
       let res = await axios.get(urls.adminRolesUrl);
       dispatch(setAdminRoles(res.data.info))
       dispatch(setAdminRolesLoaded(true))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  async function loadPendingAccounts() {
+    try {
+      let res = await axios.get(urls.pendingStudentAcUrl);
+      dispatch(setPendingAccounts(res.data))
+      dispatch(setPendingAccountsLoaded(true))
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -65,6 +81,9 @@ const Dashboard = (props) => {
     };
     if (!adminRolesLoaded) {
       loadRoles();
+    };
+    if (adminAcType === 'academic' && pendingAccountsLoaded === false) {
+      loadPendingAccounts();
     }
   }, [])
 
@@ -101,18 +120,33 @@ const Dashboard = (props) => {
                 : <RolesCard roles={adminRoles} />
             }
           </Box>
-          <Box sx={{ mb: 2 }}>
-            <Paper sx={{ p: 2 }} >
-              <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-                Pending Accounts
-              </Typography>
-              {
-                peding_students.map(s => (
-                  <PendingStudent student={s} />
-                ))
-              }
-            </Paper>
-          </Box>
+          {
+            adminAcType === 'academic' ?
+              <Box sx={{ mb: 2 }}>
+                {
+                  pendingAccountsLoaded ?
+                    <Paper sx={{ p: 2 }} >
+                      <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+                        Pending Accounts
+                      </Typography>
+                      {
+                        pendingAccounts.length ?
+                        pendingAccounts.map(s => (
+                          <PendingStudent student={s} />
+                        )) :
+                        <Stack sx={{ py: 5 }}>
+                          <Empty />
+                        </Stack>
+                      }
+                    </Paper> :
+                    <Paper sx={{ py: 15 }}>
+                      <Stack>
+                        <Spin size='large' />
+                      </Stack>
+                    </Paper>
+                }
+              </Box> : null
+          }
         </Grid>
       </Grid>
     </Container>

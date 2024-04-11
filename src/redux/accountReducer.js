@@ -6,7 +6,7 @@ const initialState = {
         username: '',
         user_fullname: 'Md Shahid Iqbal',
         account_type: 'admin',
-        user_type: '',
+        user_type: 'academic',
     },
     is_loaded: true,
     is_loading: false,
