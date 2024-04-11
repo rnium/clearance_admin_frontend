@@ -91,6 +91,24 @@ const Dashboard = (props) => {
     }
   }
 
+  const approveAccount = async registration => {
+    try {
+      let res = await axios.post(
+        urls.approveStudentAcUrl, 
+        {registration: registration}
+      );
+      message.success(res.data.info);
+      res = await axios.get(urls.pendingStudentAcUrl);
+      dispatch(setPendingAccounts(res.data))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
   useEffect(() => {
     if (!pendingClearancesLoaded) {
       loadClearances();
@@ -151,7 +169,7 @@ const Dashboard = (props) => {
                       {
                         pendingAccounts.length ?
                           pendingAccounts.map(s => (
-                            <PendingStudent student={s} />
+                            <PendingStudent approve={approveAccount} student={s} />
                           )) :
                           <Stack sx={{ py: 5 }}>
                             <Empty />

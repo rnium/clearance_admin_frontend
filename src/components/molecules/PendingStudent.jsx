@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     Paper, Box, CardMedia, Typography, Chip, Stack
 } from '@mui/material';
@@ -5,7 +6,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import * as urls from '../../utils/api_urls'
 
-const PendingStudent = ({student}) => {
+const PendingStudent = ({student, approve}) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const performAprroval = async (registration) => {
+        setIsSubmitting(true);
+        await approve(registration);
+        setIsSubmitting(false);
+    }
     return (
         <Paper sx={{ display: 'flex', mb: 1, px: 1, py: 1.2, backgroundColor: '#d5e3eb' }} alignItems="center" justifyContent="center">
             <Box sx={{ display: 'flex', width: '100%' }} alignItems="center">
@@ -35,7 +42,8 @@ const PendingStudent = ({student}) => {
                         sx={{ px: 1, fontSize: '0.8rem' }}
                         color='info'
                         icon={<CheckIcon />}
-                        // onClick={() => approve_reg(baseUrl + reg.approval_link)}
+                        onClick={() => performAprroval(student.registration)}
+                        disabled={isSubmitting}
                         variant='contained'
                     >
                     </Chip>
@@ -44,6 +52,7 @@ const PendingStudent = ({student}) => {
                         sx={{ px: 1, mt: 0.5 }}
                         color='error'
                         icon={<DeleteIcon />}
+                        disabled={isSubmitting}
                         // onClick={() => openDialog(reg.id)}
                         variant='contained'
                     >

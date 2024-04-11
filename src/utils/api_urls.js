@@ -6,5 +6,7 @@ export const studentProfileUpdateUrl = baseUrl + '/account/student/updateprofile
 export const studentinfoUrl = baseUrl + '/account/progressive-studentinfo/'
 export const applyClearanceUrl = baseUrl + '/clearance/api/apply/'
 export const pendingStudentAcUrl = baseUrl + '/account/pendingstudents/'
+export const approveStudentAcUrl = baseUrl + '/account/studentac/approve/'
+export const deleteStudentAcUrl = baseUrl + '/account/studentac/delete/'
 export const adminRolesUrl = baseUrl + '/account/admin-roles/'
 export const dashboardClearancesUrl = baseUrl + '/clearance/api/dashboard-clearances/'
