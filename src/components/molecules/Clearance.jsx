@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {
-    Card, CardContent, CardMedia, Box, Typography, Chip, Stack, Paper
+    CardContent, CardMedia, Box, Typography, Chip, Stack, Paper
 } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 import CircularProgressWithLabel from '../atoms/CircularProgressWithLabel';
@@ -13,7 +13,13 @@ import * as urls from '../../utils/api_urls'
 
 
 
-const Clearance = ({ student_data, type, handleOpenModal }) => {
+const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const performAction = async (url) => {
+        setIsSubmitting(true);
+        await onAction(url);
+        setIsSubmitting(false);
+    }
     let action_btns;
     switch (type) {
         case 'pending':
@@ -23,7 +29,8 @@ const Clearance = ({ student_data, type, handleOpenModal }) => {
                     sx={{ px: 1 }}
                     color='primary'
                     icon={<CheckIcon />}
-                    // onClick={() => approve_reg(baseUrl + reg.approval_link)}
+                    onClick={() => performAction(student_data.approval_url)}
+                    disabled={isSubmitting}
                     variant='contained'
                 >
                     Approve
@@ -33,7 +40,8 @@ const Clearance = ({ student_data, type, handleOpenModal }) => {
                     sx={{ px: 1, ml: { xs: 0, md: 1 }, mt: { xs: 1, md: 0 } }}
                     color='error'
                     icon={<ArchiveIcon />}
-                    // onClick={() => openDialog(reg.id)}
+                    disabled={isSubmitting}
+                    onClick={() => performAction(student_data.archive_url)}
                     variant='outlined'
                 >
                     Approve

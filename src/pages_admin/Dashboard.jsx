@@ -75,6 +75,21 @@ const Dashboard = (props) => {
     }
   }
 
+  const hitClearanceAction = async url => {
+    try {
+      let res = await axios.get(urls.baseUrl + url);
+      message.success(res.data.info);
+      res = await axios.get(urls.dashboardClearancesUrl);
+      dispatch(setPendingClearances(res.data))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  } 
+
   useEffect(() => {
     if (!pendingClearancesLoaded) {
       loadClearances();
@@ -103,7 +118,7 @@ const Dashboard = (props) => {
               </Stack>
               : pendingClearances.map(section => {
                 return (
-                  <ClearanceSection section_data={section} />
+                  <ClearanceSection section_data={section} onAction={hitClearanceAction}  />
                 )
               })
           }

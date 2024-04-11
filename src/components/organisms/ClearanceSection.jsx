@@ -8,7 +8,7 @@ import { Empty } from 'antd';
 // Sample Data
 import { students_data, peding_students } from '../../utils/sample_data'
 
-const ClearanceSection = ({section_data}) => {
+const ClearanceSection = ({section_data, onAction}) => {
     let logo_src = "/static/images/cube.png";
     // if (section_data.type == 'administrative') {
     //     logo_src = "/static/images/cube.png"
@@ -36,6 +36,7 @@ const ClearanceSection = ({section_data}) => {
                         key={student.registration}
                         student_data={student}
                         type="pending"
+                        onAction={onAction}
                         // handleOpenModal={}
                     />
                 ))
