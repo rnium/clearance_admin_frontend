@@ -5,9 +5,7 @@ import {
   Container, Grid, Paper, Box, Typography, Stack, Dialog, TextField, Button,
   DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import RolesCard from '../components/molecules/RolesCard';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { Modal, Spin, message, Empty } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';

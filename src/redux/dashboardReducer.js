@@ -7,7 +7,7 @@ const initialState = {
     },
     adminRoles: {
         isLoaded: false,
-        roles: null
+        roles: []
     },
     pendingAccounts: {
         isLoaded: false,
