@@ -1,45 +1,31 @@
 import React from 'react';
 import Clearance from '../components/molecules/Clearance';
-import StyledBadge from '../components/atoms/StyledBadge';
 import {
-  Container, Grid, Box, Card, CardMedia, CardContent, Typography, Chip, Badge
+  Container, Grid, Box, Typography, Button
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import TablePagination from '@mui/material/TablePagination';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { useSelector } from 'react-redux';
+import WidgetsIcon from '@mui/icons-material/Widgets';
+import WidgetsOutlinedIcon from '@mui/icons-material/WidgetsOutlined';
 
 
 // Sample Data
 import { students_data } from '../utils/sample_data'
 
 
-const roles = [
-  {
-    code: 'eee-head',
-    title: 'Head of EEE'
-  },
-  {
-    code: 'atts-lab',
-    title: 'ATTS Lab'
-  },
-  {
-    code: 'microprocessor-lab',
-    title: 'Microprocessor Lab'
-  },
-]
 
 
 
 const Applications = () => {
+  const roles = useSelector(state => state.dashboard.adminRoles.roles);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [role, setRole] = React.useState(roles[0].title);
+  const [type, setType] = React.useState(roles[0].type);
+  const [code, setCode] = React.useState(roles[0].code);
 
-  const handleRoleChange = (event, newRole) => {
-    if (newRole) {
-      setRole(newRole);
-    }
+  const handleRoleChange = (newType, newCode) => {
+    setType(newType);
+    setCode(newCode);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -52,26 +38,34 @@ const Applications = () => {
   };
   return (
     <Container sx={{ mt: 2 }}>
-      <Box sx={{ display: 'flex', mb: 4 }} justifyContent="center">
-        <ToggleButtonGroup
-          sx={{ pt: 2 }}
-          value={role}
-          exclusive
-          onChange={handleRoleChange}
-          aria-label="Role Selection"
-          color='primary'
-        >
-          {
-            roles.map((r, index) => (
-              <ToggleButton key={index} sx={{ px: 2, pr: 4 }} value={r.title} aria-label={r.title}>
-                <StyledBadge badgeContent={4} color="info" >
-                  <div>{r.title}</div>
-                </StyledBadge>
-              </ToggleButton>
-            ))
-          }
-        </ToggleButtonGroup>
-      </Box>
+      <Grid container spacing={2} justifyContent="center" sx={{ mb: 4 }}>
+        <Grid item xs={12} md={9}>
+          <Box>
+            {
+              roles.map(r => (
+                type === r.type && code === r.code ?
+                  <Button
+                    sx={{ mb: 1, mr: 1 }}
+                    variant='contained'
+                    color={r.type === 'administrative' || r.type === 'dept_head' ? 'primary': 'info'}
+                    startIcon={r.type === 'administrative' || r.type === 'dept_head' ? <WidgetsIcon />: <WidgetsOutlinedIcon />}
+                  >
+                    {r.title}
+                  </Button> :
+                  <Button
+                    sx={{ mb: 1, mr: 1 }}
+                    variant='outlined'
+                    color={r.type === 'administrative' || r.type === 'dept_head' ? 'primary': 'info'}
+                    startIcon={r.type === 'administrative' || r.type === 'dept_head' ? <WidgetsIcon />: <WidgetsOutlinedIcon />}
+                    onClick={() => handleRoleChange(r.type, r.code)}
+                  >
+                    {r.title}
+                  </Button>
+              ))
+            }
+          </Box>
+        </Grid>
+      </Grid>
       <Grid container spacing={2} justifyContent="center" >
         <Grid item xs={12} md={9}>
           {/* type 1 */}
