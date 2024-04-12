@@ -25,16 +25,14 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
         case 'pending':
             action_btns = (<Box>
                 <Chip
-                    label="Clear"
+                    label="Approve"
                     sx={{ px: 1 }}
                     color='primary'
                     icon={<CheckIcon />}
                     onClick={() => performAction(student_data.approval_url)}
                     disabled={isSubmitting}
                     variant='contained'
-                >
-                    Approve
-                </Chip>
+                />
                 <Chip
                     label="Archive"
                     sx={{ px: 1, ml: { xs: 0, md: 1 }, mt: { xs: 1, md: 0 } }}
@@ -43,9 +41,7 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
                     disabled={isSubmitting}
                     onClick={() => performAction(student_data.archive_url)}
                     variant='outlined'
-                >
-                    Approve
-                </Chip>
+                />
             </Box>)
             break;
         case 'archived':
@@ -63,7 +59,7 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
         case 'approved':
             action_btns = (<Box>
                 <Chip
-                    label={`Signed at: ${dateFormat(student_data.approved_at, dateMask)}`}
+                    label={`Approved at: ${dateFormat(student_data.approved_at, dateMask)}`}
                     sx={{ px: 1 }}
                     color='secondary'
                     icon={<CheckIcon />}
