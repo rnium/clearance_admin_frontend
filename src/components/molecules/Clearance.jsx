@@ -55,7 +55,7 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
                     sx={{ px: 1 }}
                     color='secondary'
                     icon={<UnarchiveIcon />}
-                    // onClick={() => approve_reg(baseUrl + reg.approval_link)}
+                    onClick={() => performAction(student_data.unarchive_url)}
                     variant='contained'
                 />
             </Box>)
@@ -67,7 +67,6 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
                     sx={{ px: 1 }}
                     color='secondary'
                     icon={<CheckIcon />}
-                    // onClick={() => approve_reg(baseUrl + reg.approval_link)}
                     variant='outlined'
                 />
             </Box>)

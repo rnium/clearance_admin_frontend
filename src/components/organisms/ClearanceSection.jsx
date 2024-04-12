@@ -6,7 +6,7 @@ import Clearance from '../molecules/Clearance';
 import { Empty } from 'antd';
 
 
-const ClearanceSection = ({section_data, onAction, titleAlign='center'}) => {
+const ClearanceSection = ({section_data, onAction, titleAlign='center', type='pending'}) => {
     let logo_src = "/static/images/cube.png";
     // if (section_data.type == 'administrative') {
     //     logo_src = "/static/images/cube.png"
@@ -33,7 +33,7 @@ const ClearanceSection = ({section_data, onAction, titleAlign='center'}) => {
                     <Clearance
                         key={student.registration}
                         student_data={student}
-                        type="pending"
+                        type={type}
                         onAction={onAction}
                         // handleOpenModal={}
                     />
