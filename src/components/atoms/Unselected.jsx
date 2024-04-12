@@ -8,7 +8,7 @@ const Unselected = () => {
         <Paper sx={{ py: 10 }}>
             <Stack alignItems="center" spacing={2}>
                 <img src='/static/images/decide.svg' width="80%" />
-                <Typography variant='h5'>Select a role to view Requests</Typography>
+                <Typography variant='h5'>Select a role to view applications</Typography>
             </Stack>
         </Paper>
     )

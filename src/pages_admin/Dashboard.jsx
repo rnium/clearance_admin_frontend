@@ -85,7 +85,7 @@ const Dashboard = (props) => {
     }
   }
 
-  const hitClearanceAction = async url => {
+  const clearanceAction = async url => {
     try {
       let res = await axios.get(urls.baseUrl + url);
       message.success(res.data.info);
@@ -166,7 +166,7 @@ const Dashboard = (props) => {
                 :
                 pendingClearances.map(section => {
                   return (
-                    <ClearanceSection section_data={section} onAction={hitClearanceAction} />
+                    <ClearanceSection section_data={section} onAction={clearanceAction} />
                   )
                 })
           }

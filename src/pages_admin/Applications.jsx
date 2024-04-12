@@ -84,8 +84,7 @@ const Applications = () => {
     }
   }
 
-  const fetchPage = async () => {
-    setIsLoading(true);
+  const fetchPageSilent = async () => {
     let params = { code, type, page: page + 1, pagesize: rowsPerPage };
     try {
       let res = await axios.get(urls.clearanceSectionUrl, { params });
@@ -94,7 +93,28 @@ const Applications = () => {
     } catch (error) {
       message.error(error.message)
     }
+  }
+
+  const fetchPage = async () => {
+    setIsLoading(true);
+    await fetchPageSilent();
     setIsLoading(false);
+  }
+
+  const clearanceAction = async url => {
+    try {
+      let res = await axios.get(urls.baseUrl + url);
+      message.success(res.data.info);
+      fetchPageSilent();
+      res = await axios.get(urls.dashboardClearancesUrl);
+      dispatch(setPendingClearances(res.data))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
   }
 
   useEffect(() => {
@@ -146,7 +166,7 @@ const Applications = () => {
           {
             type ?
               isLoading ?
-                <Stack sx={{ mt: 2, mb: '80vh' }}>
+                <Stack sx={{ mt: 7 }}>
                   <Spin size='large' />
                 </Stack> :
                 <div>
@@ -160,6 +180,7 @@ const Applications = () => {
                   />
                   <ClearanceSection
                     titleAlign='left'
+                    onAction={clearanceAction}
                     section_data={
                       {
                         title: sectionTitle,
