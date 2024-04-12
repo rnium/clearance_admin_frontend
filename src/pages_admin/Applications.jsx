@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import Clearance from '../components/molecules/Clearance';
 import {
-  Container, Grid, Box, Typography, Button
+  Container, Grid, Box, Button, Stack
 } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import WidgetsOutlinedIcon from '@mui/icons-material/WidgetsOutlined';
 import * as urls from '../utils/api_urls';
 import axios from 'axios';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
 } from '../redux/dashboardReducer';
+import Unselected from '../components/atoms/Unselected';
 import ClearanceSection from '../components/organisms/ClearanceSection';
 
 
@@ -30,10 +31,12 @@ const Applications = () => {
   const adminRoles = useSelector(state => state.dashboard.adminRoles.roles)
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
   const [page, setPage] = useState(0);
+  const [count, setCount] = useState(0);
   const [clearances, setClearances] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState(null);
   const [code, setCode] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [sectionTitle, setSectionTitle] = useState('');
 
   const handleRoleChange = (newType, newCode) => {
@@ -82,20 +85,23 @@ const Applications = () => {
   }
 
   const fetchPage = async () => {
-    let params = { code, type, page: page+1 };
+    setIsLoading(true);
+    let params = { code, type, page: page + 1, pagesize: rowsPerPage };
     try {
       let res = await axios.get(urls.clearanceSectionUrl, { params });
+      setCount(res.data.count);
       setClearances(res.data.results);
     } catch (error) {
       message.error(error.message)
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
-    if(type && code) {
+    if (type && code) {
       fetchPage();
     }
-  }, [page, type, code])
+  }, [page, rowsPerPage, type, code])
 
   useEffect(() => {
     if (!adminRolesLoaded) {
@@ -103,11 +109,11 @@ const Applications = () => {
     }
   })
 
-  
+
 
   return (
-    <Container sx={{ mt: 2 }}>
-      <Grid container spacing={2} justifyContent="center" sx={{ mb: 4 }}>
+    <Container sx={{ mt: 2, mb: 5 }}>
+      <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={9}>
           <Box>
             {
@@ -137,14 +143,34 @@ const Applications = () => {
       </Grid>
       <Grid container spacing={2} justifyContent="center" >
         <Grid item xs={12} md={9}>
-          <ClearanceSection
-            section_data={
-              {
-                title: sectionTitle,
-                approvals: clearances
-              }
-            }
-          />
+          {
+            type ?
+              isLoading ?
+                <Stack sx={{ mt: 2, mb: '80vh' }}>
+                  <Spin size='large' />
+                </Stack> :
+                <div>
+                  <TablePagination
+                    component="div"
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                  <ClearanceSection
+                    titleAlign='left'
+                    section_data={
+                      {
+                        title: sectionTitle,
+                        approvals: clearances
+                      }
+                    }
+                  />
+
+                </div>
+              : <Unselected />
+          }
         </Grid>
       </Grid>
     </Container>

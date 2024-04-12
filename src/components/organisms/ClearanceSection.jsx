@@ -6,14 +6,14 @@ import Clearance from '../molecules/Clearance';
 import { Empty } from 'antd';
 
 
-const ClearanceSection = ({section_data, onAction}) => {
+const ClearanceSection = ({section_data, onAction, titleAlign='center'}) => {
     let logo_src = "/static/images/cube.png";
     // if (section_data.type == 'administrative') {
     //     logo_src = "/static/images/cube.png"
     // }
     return (
         <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: 'flex', mb: 2 }} justifyContent="center">
+            <Box sx={{ display: 'flex', mb: 2 }} justifyContent={titleAlign}>
                 <img src={logo_src} alt="" width="30px" height="30px" />
                 <Typography
                     variant='h5'

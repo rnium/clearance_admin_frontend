@@ -28,7 +28,7 @@ class Homepage extends Component {
                     <SideNav drawerWidth={drawerWidth} />
                     <Box component='main'
                         className='main'
-                        sx={{ mt: 12, width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` } }}
+                        sx={{ width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` } }}
                     >
                         <Navbar drawerWidth={drawerWidth} />
                         <Routes>

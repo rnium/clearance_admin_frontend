@@ -27,12 +27,8 @@ const Navbar = ({ drawerWidth }) => {
         <div>
             <AppBar
                 elevation={1}
-                sx={
-                    {
-                        width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
-                        ml: `${drawerWidth}px`,
-                    }
-                }
+                position='relative'
+                
             >
                 <Toolbar sx={{ backgroundColor: '#ffffff', color: 'gray' }}>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
