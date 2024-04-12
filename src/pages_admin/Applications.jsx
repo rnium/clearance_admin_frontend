@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Clearance from '../components/molecules/Clearance';
 import {
   Container, Grid, Box, Button, Stack
 } from '@mui/material';
@@ -17,18 +16,9 @@ import Unselected from '../components/atoms/Unselected';
 import ClearanceSection from '../components/organisms/ClearanceSection';
 
 
-// Sample Data
-import { students_data } from '../utils/sample_data'
-
-
-
-
-
-
 const Applications = () => {
   const dispatch = useDispatch();
   const roles = useSelector(state => state.dashboard.adminRoles?.roles);
-  const adminRoles = useSelector(state => state.dashboard.adminRoles.roles)
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
@@ -61,12 +51,13 @@ const Applications = () => {
     try {
       let res = await axios.get(urls.dashboardClearancesUrl);
       dispatch(setPendingClearances(res.data))
+      dispatch(setPendingClearancesLoaded(true))
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
         error_msg = error.message;
       }
-      message.error(error_msg);
+      console.log(error_msg);
     }
   }
 
@@ -106,8 +97,7 @@ const Applications = () => {
       let res = await axios.get(urls.baseUrl + url);
       message.success(res.data.info);
       fetchPageSilent();
-      res = await axios.get(urls.dashboardClearancesUrl);
-      dispatch(setPendingClearances(res.data))
+      loadClearances();
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -132,7 +122,7 @@ const Applications = () => {
 
 
   return (
-    <Container sx={{ mt: 2, mb: 5 }}>
+    <Container sx={{ mt: 4, mb: 5 }}>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={9}>
           <Box>
