@@ -12,3 +12,5 @@ export const adminRolesUrl = baseUrl + '/account/admin-roles/'
 export const membersUrl = baseUrl + '/account/members/'
 export const dashboardClearancesUrl = baseUrl + '/clearance/api/dashboard-clearances/'
 export const clearanceSectionUrl = baseUrl + '/clearance/api/section-clearances/'
+export const departmentsUrl = baseUrl + '/clearance/api/departments/';
+export const sendInviatationUrl = baseUrl + '/account/members/sendinvite/'

@@ -10,12 +10,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Spin, message } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls'
-import {setMembers, setLoaded} from '../redux/membersReducer';
+import { setMembers, setLoaded } from '../redux/membersReducer';
 import InvitationModal from '../components/molecules/InvitationModal';
 
 
 
 const Members = () => {
+  const adminAcType = useSelector(state => state.account.userinfo?.user_type)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const memberSections = useSelector(state => state.members.memberSections)
   const membersLoaded = useSelector(state => state.members.is_loaded)
@@ -43,7 +44,7 @@ const Members = () => {
 
   if (!membersLoaded) {
     return (
-      <Stack alignItems="center" sx={{mt: 10}}>
+      <Stack alignItems="center" sx={{ mt: 10 }}>
         <Spin size='large' />
       </Stack>
     )
@@ -51,10 +52,13 @@ const Members = () => {
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>
-      <Box sx={{ display: 'flex' }} justifyContent="flex-end">
-        <Button variant='contained' startIcon={<MarkAsUnreadIcon />} onClick={() => setIsModalOpen(true)}>Send Invitation</Button>
-        <InvitationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      </Box>
+      {
+        adminAcType === 'academic' || adminAcType === 'principal' ?
+          <Box sx={{ display: 'flex' }} justifyContent="flex-end">
+            <Button variant='contained' startIcon={<MarkAsUnreadIcon />} onClick={() => setIsModalOpen(true)}>Send Invitation</Button>
+            <InvitationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+          </Box>: null
+      }
       {
         memberSections.map(section => (
           <MemberSection section={section} />
