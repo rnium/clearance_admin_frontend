@@ -9,7 +9,7 @@ import RolesCard from '../components/molecules/RolesCard';
 import { Modal, Spin, message, Empty } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import * as urls from '../utils/api_urls'
+import * as urls from '../utils/api_urls';
 import {
   setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
   setPendingAccounts, setPendingAccountsLoaded
@@ -148,7 +148,7 @@ const Dashboard = (props) => {
   }, [])
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, mb: 5 }}>
       <Modal title="" open={isCommentModalOpen} onCancel={() => setIsCommentModalOpen(false)}>
         <p>Lorem, ipsum dolor.</p>
         <p>Lorem, ipsum dolor.</p>

@@ -2,6 +2,7 @@ import {configureStore} from '@reduxjs/toolkit'
 import accountReducer from './accountReducer';
 import studentStoreReducer from './studentStoreReducer';
 import dashboardReducer from './dashboardReducer';
+import membersReducer from './membersReducer';
 
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
         account: accountReducer,
         studentStore: studentStoreReducer,
         dashboard: dashboardReducer,
+        members: membersReducer,
     }
 })
 
