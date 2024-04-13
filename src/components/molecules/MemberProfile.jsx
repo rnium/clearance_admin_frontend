@@ -6,6 +6,7 @@ import * as urls from '../../utils/api_urls'
 import { dateMask } from '../../utils/config';
 import dateFormat from 'dateformat';
 import MemberRole from '../atoms/MemberRole';
+import ActiveAvatar from '../atoms/ActiveAvatar';
 
 
 

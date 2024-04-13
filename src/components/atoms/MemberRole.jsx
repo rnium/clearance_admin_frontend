@@ -26,7 +26,7 @@ const MemberRole = ({ role }) => {
             chiptext = role.title;
     }
     return (
-        <Tooltip title={roletext}>
+        <Tooltip title={roletext} arrow>
             <Chip sx={{ ml: 1, px: 1 }}
                 variant={variant}
                 label={chiptext}
