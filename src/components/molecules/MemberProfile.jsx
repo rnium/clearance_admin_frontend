@@ -5,6 +5,7 @@ import {
 import * as urls from '../../utils/api_urls'
 import { dateMask } from '../../utils/config';
 import dateFormat from 'dateformat';
+import MemberRole from '../atoms/MemberRole';
 
 
 
@@ -39,14 +40,7 @@ const AdminProfile = ({ profile }) => {
                     <Box sx={{ py: 0.5, px: 1, backgroundColor: 'aliceblue' }}>
                         {
                             profile.roles.map(role => (
-                                role.type === 'administrative' || role.type === 'dept_head' ?
-                                <Chip sx={{ ml: 1, px: 1 }} label={role.code} size='small' color="primary" /> :
-                                <Chip sx={{ ml: 1, px: 1 }}
-                                    variant="outlined"
-                                    label={role.title}
-                                    size='small'
-                                    color="primary"
-                                />
+                                <MemberRole role={role} />
                             ))
                         }
                     </Box>
