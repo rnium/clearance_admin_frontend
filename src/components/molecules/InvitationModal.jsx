@@ -48,7 +48,7 @@ const InvitationModal = ({ isModalOpen, setIsModalOpen }) => {
         try {
             let res = await axios.post(urls.sendInviatationUrl, {email, dept});
             setIsModalOpen(false);
-            message.info(res.data.info);
+            message.success(res.data.info);
         } catch (error) {
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
