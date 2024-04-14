@@ -6,9 +6,11 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { useSelector } from 'react-redux';
 import * as urls from '../../utils/api_urls'
 
 const DeptEntity = ({ entity, sectionTitle, handleAssignClick }) => {
+    const adminAcType = useSelector(state => state.account.userinfo?.user_type)
     let logo_src = '/static/images/cube.png';
     if (entity.type === 'administrative' || entity.type === 'dept_head') {
         logo_src = '/static/images/3d-cube.png';
@@ -44,30 +46,32 @@ const DeptEntity = ({ entity, sectionTitle, handleAssignClick }) => {
                             </Stack>
                     }
                     {
-                        entity.incharge_user ?
-                            <Stack direction="row" spacing={1}>
+                        adminAcType === 'principal' || adminAcType === 'academic' ?
+                            entity.incharge_user ?
+                                <Stack direction="row" spacing={1}>
+                                    <Chip
+                                        label="Change"
+                                        size='small'
+                                        icon={<PeopleAltIcon />}
+                                        onClick={() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
+                                        sx={{ px: 1 }}
+                                    />
+                                    <Chip
+                                        label="Remove"
+                                        size='small'
+                                        sx={{ px: 1 }}
+                                        icon={<PersonRemoveIcon />}
+                                        variant='outlined'
+                                    />
+                                </Stack> :
                                 <Chip
-                                    label="Change"
-                                    size='small'
-                                    icon={<PeopleAltIcon />}
-                                    onClick = {() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
-                                    sx={{ px: 1 }}
+                                    label="Assign"
+                                    color='primary'
+                                    icon={<PersonAddIcon />}
+                                    onClick={() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
+                                    sx={{ px: 2 }}
                                 />
-                                <Chip
-                                    label="Remove"
-                                    size='small'
-                                    sx={{ px: 1 }}
-                                    icon={<PersonRemoveIcon />}
-                                    variant='outlined'
-                                />
-                            </Stack> :
-                            <Chip
-                                label="Assign"
-                                color='primary'
-                                icon={<PersonAddIcon />}
-                                onClick = {() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
-                                sx={{ px: 2 }}
-                            />
+                            : <Box sx={{pb: 2}}></Box>
                     }
 
                 </Stack>

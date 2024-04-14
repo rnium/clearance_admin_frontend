@@ -48,7 +48,7 @@ const Departments = () => {
     if (!sectionsLoaded) {
       loadDeptSections();
     }
-  }, [])
+  }, [pageInitialized])
 
   if (!sectionsLoaded || !pageInitialized) {
     return (

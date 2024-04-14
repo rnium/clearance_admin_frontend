@@ -42,7 +42,7 @@ const Members = () => {
     if (!membersLoaded) {
       loadMembers(dispatch);
     }
-  }, [])
+  }, [pageInitialized])
 
   if (!membersLoaded || !pageInitialized) {
     return (

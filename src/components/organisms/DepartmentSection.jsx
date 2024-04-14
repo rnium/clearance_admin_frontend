@@ -1,11 +1,7 @@
 import React from 'react';
 import {
-    Box, Grid, Typography, Paper, Avatar, Stack, Chip
+    Box, Grid, Typography, Stack
 } from '@mui/material';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonOffIcon from '@mui/icons-material/PersonOff';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DeptEntity from '../atoms/DeptEntity';
 
 const DepartmentSection = (props) => {
