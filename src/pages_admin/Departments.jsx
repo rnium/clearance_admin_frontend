@@ -15,10 +15,8 @@ import DepartmentSection from '../components/organisms/DepartmentSection';
 
 const Departments = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type)
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [selectedTitle, setTitle] = useState(null);
-  const [selectedRole, setRole] = useState(null);
-  const [selectedCode, setCode] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState({ title: null, section: null, role: null, code: null })
   const deptSections = useSelector(state => state.departments.deptSections)
   const sectionsLoaded = useSelector(state => state.departments.is_loaded)
   const dispatch = useDispatch();
@@ -35,6 +33,11 @@ const Departments = () => {
       }
       message.error(error_msg);
     }
+  }
+
+  const handleAssignClick = (title, section, role, code) => {
+    setSelectedRole({ title, section, role, code });
+    setIsModalOpen(true);
   }
 
   useEffect(() => {
@@ -56,14 +59,16 @@ const Departments = () => {
       {
         deptSections.map(section => (
           <DepartmentSection
-            section={section}
-            setTitle={setTitle}
-            setCode={setCode}
-            setRole={setRole}
+            section = {section}
+            handleAssignClick = {handleAssignClick}
           />
         ))
       }
-      <MemberAssignModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <MemberAssignModal
+        isModalOpen={isModalOpen} 
+        setIsModalOpen={setIsModalOpen}
+        selectedRole={selectedRole}
+      />
     </Container>
   )
 }

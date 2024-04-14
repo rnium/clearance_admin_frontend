@@ -13,7 +13,21 @@ import * as urls from '../../utils/api_urls';
 const MemberAssignModal = (props) => {
     const [sending, setSending] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
-
+    let title;
+    switch (props.selectedRole.role) {
+        case 'dept_head':
+            title = `Head of ${props.selectedRole.section}`
+            break;
+        case 'dept_clerk':
+            title = `Clerk of ${props.selectedRole.section}`
+            break;
+        case 'lab_incharge':
+            title = `In-Charge of ${props.selectedRole.title}`
+            break;
+        default:
+            title = props.selectedRole.title;
+            break;
+    }
 
     async function assignMember() {
         setSending(true);
@@ -25,7 +39,7 @@ const MemberAssignModal = (props) => {
         <Modal title="Assign Member" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
                 <img src="/static/images/3d-cube.png" alt="" width="70px" />
-                <Typography variant='h6' >Head of Dept of EEE</Typography>
+                <Typography variant='h6' >{title}</Typography>
                 <TextField
                     label="Member email or first name"
                     variant="outlined"

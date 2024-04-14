@@ -8,7 +8,7 @@ import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import * as urls from '../../utils/api_urls'
 
-const DeptEntity = ({ entity }) => {
+const DeptEntity = ({ entity, sectionTitle, handleAssignClick }) => {
     let logo_src = '/static/images/cube.png';
     if (entity.type === 'administrative' || entity.type === 'dept_head') {
         logo_src = '/static/images/3d-cube.png';
@@ -50,6 +50,7 @@ const DeptEntity = ({ entity }) => {
                                     label="Change"
                                     size='small'
                                     icon={<PeopleAltIcon />}
+                                    onClick = {() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
                                     sx={{ px: 1 }}
                                 />
                                 <Chip
@@ -64,6 +65,7 @@ const DeptEntity = ({ entity }) => {
                                 label="Assign"
                                 color='primary'
                                 icon={<PersonAddIcon />}
+                                onClick = {() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
                                 sx={{ px: 2 }}
                             />
                     }

@@ -28,9 +28,8 @@ const DepartmentSection = (props) => {
                         <Grid item xs={12} md={4}>
                             <DeptEntity
                                 entity={entity}
-                                setTitle={props.setTitle}
-                                setCode={props.setCode}
-                                setRole={props.setRole}
+                                sectionTitle={props.section.title}
+                                handleAssignClick={props.handleAssignClick}
                             />
                         </Grid>
                     ))
