@@ -4,6 +4,7 @@ import studentStoreReducer from './studentStoreReducer';
 import dashboardReducer from './dashboardReducer';
 import membersReducer from './membersReducer';
 import departmentsReducer from './departmentsReducer';
+import deptSessionReducer from './deptSessionReducer';
 
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
         dashboard: dashboardReducer,
         members: membersReducer,
         departments: departmentsReducer,
+        deptSession: deptSessionReducer,
     }
 })
 

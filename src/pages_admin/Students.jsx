@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../styles/department.css';
 import {
   Box, ToggleButtonGroup, ToggleButton, Container, Stack, Grid, Typography, Paper, Button
@@ -6,19 +6,60 @@ import {
 import { Modal } from 'antd';
 import { departments, students_data } from '../utils/sample_data';
 import StudentProfile from '../components/molecules/StudentProfile';
+import { useSelector, useDispatch } from 'react-redux';
+import { Spin, message } from 'antd';
+import axios from 'axios';
+import * as urls from '../utils/api_urls';
+import { setDeptSessions, setLoaded } from '../redux/deptSessionReducer';
 
-
+export const loadDeptSessions = async (dispatch) => {
+  try {
+    let res = await axios.get(urls.departmentsSessionsUrl);
+    dispatch(setDeptSessions(res.data))
+    dispatch(setLoaded(true))
+  } catch (error) {
+    let error_msg = error?.response?.data?.details;
+    if (error_msg === undefined) {
+      error_msg = error.message;
+    }
+    message.error(error_msg);
+  }
+}
 
 const Students = () => {
-  const [deptSelected, setDeptSelected] = useState('eee');
+  const adminAcType = useSelector(state => state.account.userinfo?.user_type);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const departments = useSelector(state => state.deptSession.departments)
+  const deptSessionsLoaded = useSelector(state => state.deptSession.is_loaded)
+  const dispatch = useDispatch();
+  const [deptSelected, setDeptSelected] = useState(null);
   const [sessionSelected, setSessionSelected] = useState(null);
+
   const handleDeptChange = (e, newDept) => {
     if (newDept != null) {
       setDeptSelected(newDept);
     }
   }
+
+  useEffect(() => {
+    if (departments) {
+      setDeptSelected(Object.keys(departments)[0]);
+    }
+    if (!deptSessionsLoaded) {
+      loadDeptSessions(dispatch);
+    }
+  }, [departments])
+
+  if (!deptSessionsLoaded) {
+    return (
+      <Stack alignItems="center" sx={{ mt: 10 }}>
+        <Spin size='large' />
+      </Stack>
+    )
+  }
+
   return (
-    <Container>
+    <Container sx={{ mt: 4, mb: 5 }}>
       <Stack sx={{ mb: 2 }} direction="row" justifyContent="center">
           <img src="/static/images/3d-cube.png" alt="" width="30px" height="30px" />
           <Typography
