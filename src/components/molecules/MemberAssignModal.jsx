@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Modal, Spin, message } from 'antd';
+import { Modal, Empty, Spin, message } from 'antd';
 import {
     Stack, Typography, TextField, List, ListItem, ListItemButton, ListItemText,
     ListItemAvatar, Box, Button, InputLabel, Avatar, Divider
@@ -13,6 +13,8 @@ import * as urls from '../../utils/api_urls';
 const MemberAssignModal = (props) => {
     const [sending, setSending] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [members, setMembers] = useState([]);
     let title;
     switch (props.selectedRole.role) {
         case 'dept_head':
@@ -31,9 +33,30 @@ const MemberAssignModal = (props) => {
 
     async function assignMember() {
         setSending(true);
-
         setSending(false);
     }
+
+    const searchMembers = async () => {
+        let params = {query: searchQuery}
+        try {
+            let res = await axios.get(urls.searchMemberUrl, {params});
+            setMembers(res.data);
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg);
+        }
+    }
+
+    useEffect(() => {
+        if (searchQuery.length) {
+            searchMembers();
+        } else {
+            setSelectedUser(null);
+        }
+    }, [searchQuery])
 
     return (
         <Modal title="Assign Member" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
@@ -43,48 +66,34 @@ const MemberAssignModal = (props) => {
                 <TextField
                     label="Member email or first name"
                     variant="outlined"
-                    // onChange={e => setEmail(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     fullWidth
                 />
-                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                    
-                    <div>
-                        <ListItemButton alignItems="flex-start" selected={1}>
-                            <ListItemAvatar>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar.png" />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Md. Saiful Islam"
-                                secondary="rniumo@gmail.com"
-                            />
-                        </ListItemButton>
-                        <Divider variant="inset" component="li" />
-                    </div>
-                    <div>
-                        <ListItemButton alignItems="flex-start" selected={0}>
-                            <ListItemAvatar>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar.png" />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Md. Saiful Islam"
-                                secondary="rniumo@gmail.com"
-                            />
-                        </ListItemButton>
-                        <Divider variant="inset" component="li" />
-                    </div>
-                    <div>
-                        <ListItemButton alignItems="flex-start" selected={0}>
-                            <ListItemAvatar>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar.png" />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Md. Saiful Islam"
-                                secondary="rniumo@gmail.com"
-                            />
-                        </ListItemButton>
-                        <Divider variant="inset" component="li" />
-                    </div>
-                </List>
+                {
+                    searchQuery.length ?
+                        members.length ?
+                            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                                {
+                                    members.map(m => (
+                                        <div>
+                                            <ListItemButton onClick={() => setSelectedUser(m.id)} alignItems="flex-start" selected={selectedUser === m.id}>
+                                                <ListItemAvatar>
+                                                    <Avatar alt={m.name} src={ urls.baseUrl + m.avatar_url} />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={m.name}
+                                                    secondary={m.email}
+                                                />
+                                            </ListItemButton>
+                                            <Divider variant="inset" component="li" />
+                                        </div>
+                                    ))
+                                }
+                            </List> :
+                            <Empty />
+                        : null
+                }
+
                 <Box sx={{ display: 'flex', width: '100%' }} justifyContent="flex-end">
                     <Button onClick={assignMember} disabled={sending || selectedUser === null} variant='contained' startIcon={<PersonAddIcon />} sx={{ px: 2 }}>Assign</Button>
                 </Box>

@@ -15,3 +15,4 @@ export const clearanceSectionUrl = baseUrl + '/clearance/api/section-clearances/
 export const departmentsUrl = baseUrl + '/clearance/api/departments/';
 export const departmentsSectionsUrl = baseUrl + '/clearance/api/departments/sections/';
 export const sendInviatationUrl = baseUrl + '/account/members/sendinvite/'
+export const searchMemberUrl = baseUrl + '/account/members/search/'
