@@ -15,6 +15,7 @@ import DepartmentSection from '../components/organisms/DepartmentSection';
 
 const Departments = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type)
+  const [pageInitialized, setPageInitialized] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState({ title: null, section: null, role: null, code: null })
   const deptSections = useSelector(state => state.departments.deptSections)
@@ -41,12 +42,15 @@ const Departments = () => {
   }
 
   useEffect(() => {
+    if (!pageInitialized) {
+      setPageInitialized(true);
+    }
     if (!sectionsLoaded) {
       loadDeptSections();
     }
   }, [])
 
-  if (!sectionsLoaded) {
+  if (!sectionsLoaded || !pageInitialized) {
     return (
       <Stack alignItems="center" sx={{ mt: 10 }}>
         <Spin size='large' />

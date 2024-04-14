@@ -4,17 +4,21 @@ import {
     Stack, Typography, TextField, List, ListItem, ListItemButton, ListItemText,
     ListItemAvatar, Box, Button, InputLabel, Avatar, Divider
 } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadMembers } from '../../pages_admin/Members';
 import * as urls from '../../utils/api_urls';
 
 
 const MemberAssignModal = (props) => {
+    const membersLoaded = useSelector(state => state.members.is_loaded)
     const [sending, setSending] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [members, setMembers] = useState([]);
+    const dispatch = useDispatch();
+    
     let logo_src = '/static/images/3d-cube.png';
     if (props.selectedRole.role === 'dept_clerk' || props.selectedRole.role === 'lab_incharge') {
         logo_src = '/static/images/cube.png'
@@ -43,6 +47,9 @@ const MemberAssignModal = (props) => {
             await props.loadDeptSections();
             setMembers(res.data);
             message.success(res.data.info);
+            if (membersLoaded) {
+                loadMembers(dispatch);
+            }
             props.setIsModalOpen(false)
             setSelectedUser(null);
         } catch (error) {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Container, Grid, Typography, Paper, Avatar, Stack, Chip, Button, TextField,
-  FormControl, MenuItem, Select, InputLabel
+  Box, Container, Stack, Button, Fade
 } from '@mui/material';
 import MarkAsUnreadIcon from '@mui/icons-material/MarkAsUnread';
 
@@ -14,35 +13,38 @@ import { setMembers, setLoaded } from '../redux/membersReducer';
 import InvitationModal from '../components/molecules/InvitationModal';
 
 
+export const loadMembers = async (dispatch) => {
+  try {
+    let res = await axios.get(urls.membersUrl);
+    dispatch(setMembers(res.data))
+    dispatch(setLoaded(true))
+  } catch (error) {
+    let error_msg = error?.response?.data?.details;
+    if (error_msg === undefined) {
+      error_msg = error.message;
+    }
+    message.error(error_msg);
+  }
+}
 
 const Members = () => {
-  const adminAcType = useSelector(state => state.account.userinfo?.user_type)
+  const adminAcType = useSelector(state => state.account.userinfo?.user_type);
+  const [pageInitialized, setPageInitialized] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const memberSections = useSelector(state => state.members.memberSections)
   const membersLoaded = useSelector(state => state.members.is_loaded)
   const dispatch = useDispatch();
 
-  async function loadMembers() {
-    try {
-      let res = await axios.get(urls.membersUrl);
-      dispatch(setMembers(res.data))
-      dispatch(setLoaded(true))
-    } catch (error) {
-      let error_msg = error?.response?.data?.details;
-      if (error_msg === undefined) {
-        error_msg = error.message;
-      }
-      message.error(error_msg);
-    }
-  }
-
   useEffect(() => {
+    if (!pageInitialized) {
+      setPageInitialized(true);
+    }
     if (!membersLoaded) {
-      loadMembers();
+      loadMembers(dispatch);
     }
   }, [])
 
-  if (!membersLoaded) {
+  if (!membersLoaded || !pageInitialized) {
     return (
       <Stack alignItems="center" sx={{ mt: 10 }}>
         <Spin size='large' />
