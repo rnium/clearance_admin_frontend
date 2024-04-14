@@ -9,7 +9,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useSelector } from 'react-redux';
 import * as urls from '../../utils/api_urls'
 
-const DeptEntity = ({ entity, sectionTitle, handleAssignClick }) => {
+const DeptEntity = ({ entity, sectionTitle, handleAssignClick, handleUnAssignClick }) => {
     const adminAcType = useSelector(state => state.account.userinfo?.user_type)
     let logo_src = '/static/images/cube.png';
     if (entity.type === 'administrative' || entity.type === 'dept_head') {
@@ -60,6 +60,7 @@ const DeptEntity = ({ entity, sectionTitle, handleAssignClick }) => {
                                         label="Remove"
                                         size='small'
                                         sx={{ px: 1 }}
+                                        onClick={() => handleUnAssignClick(entity.type, entity.code, entity.incharge_user.id)}
                                         icon={<PersonRemoveIcon />}
                                         variant='outlined'
                                     />
@@ -71,7 +72,7 @@ const DeptEntity = ({ entity, sectionTitle, handleAssignClick }) => {
                                     onClick={() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
                                     sx={{ px: 2 }}
                                 />
-                            : <Box sx={{pb: 2}}></Box>
+                            : <Box sx={{ pb: 2 }}></Box>
                     }
 
                 </Stack>

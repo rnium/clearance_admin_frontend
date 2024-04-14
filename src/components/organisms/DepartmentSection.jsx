@@ -26,6 +26,7 @@ const DepartmentSection = (props) => {
                                 entity={entity}
                                 sectionTitle={props.section.title}
                                 handleAssignClick={props.handleAssignClick}
+                                handleUnAssignClick={props.handleUnAssignClick}
                             />
                         </Grid>
                     ))

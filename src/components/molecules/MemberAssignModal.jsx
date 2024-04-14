@@ -45,7 +45,6 @@ const MemberAssignModal = (props) => {
         try {
             let res = await axios.post(urls.assignMemberUrl, params);
             await props.loadDeptSections();
-            setMembers(res.data);
             message.success(res.data.info);
             if (membersLoaded) {
                 loadMembers(dispatch);
