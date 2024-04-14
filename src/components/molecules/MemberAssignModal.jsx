@@ -44,6 +44,7 @@ const MemberAssignModal = (props) => {
             setMembers(res.data);
             message.success(res.data.info);
             props.setIsModalOpen(false)
+            setSelectedUser(null);
         } catch (error) {
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
