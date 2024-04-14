@@ -15,6 +15,10 @@ const MemberAssignModal = (props) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [members, setMembers] = useState([]);
+    let logo_src = '/static/images/3d-cube.png';
+    if (props.selectedRole.role === 'dept_clerk' || props.selectedRole.role === 'lab_incharge') {
+        logo_src = '/static/images/cube.png'
+    }
     let title;
     switch (props.selectedRole.role) {
         case 'dept_head':
@@ -33,13 +37,27 @@ const MemberAssignModal = (props) => {
 
     async function assignMember() {
         setSending(true);
+        let params = { ...props.selectedRole, user_id: selectedUser }
+        try {
+            let res = await axios.post(urls.assignMemberUrl, params);
+            await props.loadDeptSections();
+            setMembers(res.data);
+            message.success(res.data.info);
+            props.setIsModalOpen(false)
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg);
+        }
         setSending(false);
     }
 
     const searchMembers = async () => {
-        let params = {query: searchQuery}
+        let params = { query: searchQuery }
         try {
-            let res = await axios.get(urls.searchMemberUrl, {params});
+            let res = await axios.get(urls.searchMemberUrl, { params });
             setMembers(res.data);
         } catch (error) {
             let error_msg = error?.response?.data?.details;
@@ -61,7 +79,7 @@ const MemberAssignModal = (props) => {
     return (
         <Modal title="Assign Member" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
-                <img src="/static/images/3d-cube.png" alt="" width="70px" />
+                <img src={logo_src} alt="" width="70px" />
                 <Typography variant='h6' >{title}</Typography>
                 <TextField
                     label="Member email or first name"
@@ -78,7 +96,7 @@ const MemberAssignModal = (props) => {
                                         <div>
                                             <ListItemButton onClick={() => setSelectedUser(m.id)} alignItems="flex-start" selected={selectedUser === m.id}>
                                                 <ListItemAvatar>
-                                                    <Avatar alt={m.name} src={ urls.baseUrl + m.avatar_url} />
+                                                    <Avatar alt={m.name} src={urls.baseUrl + m.avatar_url} />
                                                 </ListItemAvatar>
                                                 <ListItemText
                                                     primary={m.name}

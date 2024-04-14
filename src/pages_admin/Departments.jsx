@@ -68,6 +68,7 @@ const Departments = () => {
         isModalOpen={isModalOpen} 
         setIsModalOpen={setIsModalOpen}
         selectedRole={selectedRole}
+        loadDeptSections={loadDeptSections}
       />
     </Container>
   )
