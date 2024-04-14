@@ -89,7 +89,7 @@ const MemberAssignModal = (props) => {
                 <img src={logo_src} alt="" width="70px" />
                 <Typography variant='h6' >{title}</Typography>
                 <TextField
-                    label="Member email or first name"
+                    label="Member name or email"
                     variant="outlined"
                     onChange={e => setSearchQuery(e.target.value)}
                     fullWidth
