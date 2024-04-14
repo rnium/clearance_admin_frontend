@@ -8,7 +8,7 @@ import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DeptEntity from '../atoms/DeptEntity';
 
-const DepartmentSection = ({ section }) => {
+const DepartmentSection = (props) => {
     return (
         <Box sx={{ mb: 4, px: 2, py: 3 }} className="dept">
             <Stack sx={{ mb: 3 }} direction="row" justifyContent="center">
@@ -19,14 +19,19 @@ const DepartmentSection = ({ section }) => {
                     sx={{ ml: 2 }}
                     color="text.secondary"
                 >
-                    {section.title}
+                    {props.section.title}
                 </Typography>
             </Stack>
             <Grid container spacing={2}>
                 {
-                    section.entities.map(entity => (
+                    props.section.entities.map(entity => (
                         <Grid item xs={12} md={4}>
-                            <DeptEntity entity={entity} />
+                            <DeptEntity
+                                entity={entity}
+                                setTitle={props.setTitle}
+                                setCode={props.setCode}
+                                setRole={props.setRole}
+                            />
                         </Grid>
                     ))
                 }

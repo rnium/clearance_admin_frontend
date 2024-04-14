@@ -8,13 +8,17 @@ import { Spin, message, Modal } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls'
 import { setDeptSections, setLoaded } from '../redux/departmentsReducer';
+import MemberAssignModal from '../components/molecules/MemberAssignModal';
 
 
 import DepartmentSection from '../components/organisms/DepartmentSection';
 
 const Departments = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type)
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [selectedTitle, setTitle] = useState(null);
+  const [selectedRole, setRole] = useState(null);
+  const [selectedCode, setCode] = useState(null);
   const deptSections = useSelector(state => state.departments.deptSections)
   const sectionsLoaded = useSelector(state => state.departments.is_loaded)
   const dispatch = useDispatch();
@@ -51,9 +55,15 @@ const Departments = () => {
     <Container sx={{ mt: 4, mb: 5 }}>
       {
         deptSections.map(section => (
-          <DepartmentSection section={section} />
+          <DepartmentSection
+            section={section}
+            setTitle={setTitle}
+            setCode={setCode}
+            setRole={setRole}
+          />
         ))
       }
+      <MemberAssignModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </Container>
   )
 }
