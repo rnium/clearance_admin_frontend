@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-    Paper, Stack, Typography
+    Box, Stack, Typography
 } from '@mui/material'
 
-const Unselected = () => {
+const Unselected = ({ image='decide.svg', message = 'Select a role to view applications' }) => {
     return (
-        <Paper sx={{ py: 10 }}>
-            <Stack alignItems="center" spacing={2}>
-                <img src='/static/images/decide.svg' width="80%" />
-                <Typography variant='h5'>Select a role to view applications</Typography>
-            </Stack>
-        </Paper>
+        <Stack alignItems="center" spacing={3} sx={{ mt: '12vh' }}>
+            <Box sx={{width: {xs: '70%', md: '450px'}}}>
+                <img src={`/static/images/${image}`} width="100%" />
+            </Box>
+            <Typography variant='h5' color="text.secondary">{message}</Typography>
+        </Stack>
     )
 }
 
-export default Unselected
+export default Unselected;

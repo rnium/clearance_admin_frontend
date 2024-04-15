@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Container, Grid, Box, Button, Stack
+  Container, Grid, Box, Button, Stack, Typo
 } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 import WidgetsIcon from '@mui/icons-material/Widgets';
@@ -119,7 +119,13 @@ const Applications = () => {
     }
   })
 
-
+  if (adminRolesLoaded && roles.length == 0) {
+    return (
+      <Container >
+        <Unselected image='leisure.svg' message='No Roles Assigned' />
+      </Container>
+    )
+  }
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>

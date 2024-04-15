@@ -16,6 +16,7 @@ import {
 } from '../redux/dashboardReducer';
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
+import Unselected from '../components/atoms/Unselected';
 
 
 const Dashboard = (props) => {
@@ -146,6 +147,14 @@ const Dashboard = (props) => {
       loadPendingAccounts();
     }
   }, [])
+
+  if (adminRolesLoaded && adminRoles.length == 0) {
+    return (
+      <Container>
+        <Unselected image='leisure.svg' message='No Roles Assigned' />
+      </Container>
+    )
+  }
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>
