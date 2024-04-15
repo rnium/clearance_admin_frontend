@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
     CardContent, CardMedia, Box, Typography, Chip, Stack, Paper
 } from '@mui/material';
@@ -13,7 +13,7 @@ import * as urls from '../../utils/api_urls'
 
 
 
-const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
+const Clearance = ({ student_data, type, approvalType, onAction, handleRemarksClick }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const performAction = async (url) => {
         setIsSubmitting(true);
@@ -72,7 +72,7 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
             break;
     }
     return (
-        <Paper sx={{ display: 'flex', mb: 1 }} style={{overflow: 'hidden'}} alignItems="center" justifyContent="center">
+        <Paper sx={{ display: 'flex', mb: 1 }} style={{ overflow: 'hidden' }} alignItems="center" justifyContent="center">
             <CardMedia
                 component="img"
                 sx={{ width: 150, height: 'auto' }}
@@ -106,7 +106,12 @@ const Clearance = ({ student_data, type, handleOpenModal, onAction }) => {
                     </Box>
                     <Box sx={{ mt: 2, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                         {action_btns}
-                        <Chip label="Comments" icon={<NotesIcon />} onClick={handleOpenModal} sx={{px:1}} />
+                        <Chip
+                            label="Remarks"
+                            icon={<NotesIcon />}
+                            onClick={() => handleRemarksClick(approvalType, student_data.id)}
+                            sx={{ px: 1 }}
+                        />
                     </Box>
                 </Box>
             </CardContent>

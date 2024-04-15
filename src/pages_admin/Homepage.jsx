@@ -7,11 +7,9 @@ import {
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Applications from './Applications';
-import Archives from './Archives';
 import Members from './Members';
 import Departments from './Departments';
 import Students from './Students';
-import History from './History';
 import Profile from './Profile';
 
 

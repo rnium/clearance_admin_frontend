@@ -17,11 +17,13 @@ import {
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 import Unselected from '../components/atoms/Unselected';
+import RemarksModal from '../components/molecules/RemarksModal'
 
 
 const Dashboard = (props) => {
-  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedClearance, setSelectedClearance] = useState({ type: null, id: null });
   const [deletableId, setDeletableId] = useState(null);
   const dispatch = useDispatch();
   const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances)
@@ -32,9 +34,6 @@ const Dashboard = (props) => {
   const pendingAccountsLoaded = useSelector(state => state.dashboard.pendingAccounts.isLoaded)
   const adminAcType = useSelector(state => state.account.userinfo?.user_type)
 
-  const openCommentsModal = () => {
-    setIsCommentModalOpen(true);
-  }
   const closeDialog = () => {
     setDialogOpen(false);
     setDeletableId(null);
@@ -42,6 +41,10 @@ const Dashboard = (props) => {
   const openDialog = reg_id => {
     setDialogOpen(true);
     setDeletableId(reg_id);
+  }
+
+  const handleRemarksClick = (type, id) => {
+    setSelectedClearance({ type, id })
   }
 
   async function loadClearances() {
@@ -148,6 +151,12 @@ const Dashboard = (props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (selectedClearance.id && selectedClearance.type) {
+      setIsRemarksModalOpen(true);
+    }
+  }, [selectedClearance])
+
   if (adminRolesLoaded && adminRoles.length == 0) {
     return (
       <Container>
@@ -158,11 +167,11 @@ const Dashboard = (props) => {
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>
-      <Modal title="" open={isCommentModalOpen} onCancel={() => setIsCommentModalOpen(false)}>
-        <p>Lorem, ipsum dolor.</p>
-        <p>Lorem, ipsum dolor.</p>
-        <p>Lorem, ipsum dolor.</p>
-      </Modal>
+      <RemarksModal
+        isModalOpen={isRemarksModalOpen}
+        setIsModalOpen={setIsRemarksModalOpen}
+        selectedClearance={selectedClearance}
+      />
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
           {
@@ -175,7 +184,11 @@ const Dashboard = (props) => {
                 :
                 pendingClearances.map(section => {
                   return (
-                    <ClearanceSection section_data={section} onAction={clearanceAction} />
+                    <ClearanceSection
+                      section_data={section}
+                      onAction={clearanceAction}
+                      handleRemarksClick={handleRemarksClick}
+                    />
                   )
                 })
           }
