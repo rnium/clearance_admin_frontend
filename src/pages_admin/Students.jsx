@@ -10,7 +10,9 @@ import { Spin, message, Empty } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import { setDeptSessions, setLoaded } from '../redux/deptSessionReducer';
-import Unselected, { unSelected } from '../components/atoms/Unselected'
+import Unselected from '../components/atoms/Unselected';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import SessionAddModal from '../components/molecules/SessionAddModal';
 
 export const loadDeptSessions = async (dispatch) => {
   try {
@@ -28,7 +30,7 @@ export const loadDeptSessions = async (dispatch) => {
 
 const Students = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const departments = useSelector(state => state.deptSession.departments)
   const deptSessionsLoaded = useSelector(state => state.deptSession.is_loaded)
   const dispatch = useDispatch();
@@ -85,6 +87,7 @@ const Students = () => {
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>
+      <SessionAddModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <Stack sx={{ mb: 2 }} direction="row" justifyContent="center">
         <img src="/static/images/3d-cube.png" alt="" width="30px" height="30px" />
         <Typography
@@ -132,6 +135,16 @@ const Students = () => {
               : null
           }
         </Stack>
+        <Stack sx={{width: '100%'}} direction="row" justifyContent="flex-end" alignItems="flex-end">
+            <Button 
+              size='small' 
+              color='secondary'
+              startIcon={<PlaylistAddIcon />}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Add Session
+            </Button>
+          </Stack>
       </Paper>
       <Box sx={{ mt: 2 }}>
         {
