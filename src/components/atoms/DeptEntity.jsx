@@ -7,6 +7,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useSelector } from 'react-redux';
+import { Popconfirm, message } from 'antd';
 import * as urls from '../../utils/api_urls'
 
 const DeptEntity = ({ entity, sectionTitle, handleAssignClick, handleUnAssignClick }) => {
@@ -56,14 +57,22 @@ const DeptEntity = ({ entity, sectionTitle, handleAssignClick, handleUnAssignCli
                                         onClick={() => handleAssignClick(entity.title, sectionTitle, entity.type, entity.code)}
                                         sx={{ px: 1 }}
                                     />
-                                    <Chip
-                                        label="Remove"
-                                        size='small'
-                                        sx={{ px: 1 }}
-                                        onClick={() => handleUnAssignClick(entity.type, entity.code, entity.incharge_user.id)}
-                                        icon={<PersonRemoveIcon />}
-                                        variant='outlined'
-                                    />
+                                    <Popconfirm
+                                        title="Remove Role"
+                                        description="Are you sure to remove the member"
+                                        onConfirm={() => handleUnAssignClick(entity.type, entity.code, entity.incharge_user.id)}
+                                        onCancel={() => message.info("Cacelled")}
+                                        okText="Yes"
+                                        cancelText="Cancel"
+                                    >
+                                        <Chip
+                                            label="Remove"
+                                            size='small'
+                                            sx={{ px: 1 }}
+                                            icon={<PersonRemoveIcon />}
+                                            variant='outlined'
+                                        />
+                                    </Popconfirm>
                                 </Stack> :
                                 <Chip
                                     label="Assign"
