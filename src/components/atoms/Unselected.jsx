@@ -3,9 +3,9 @@ import {
     Box, Stack, Typography
 } from '@mui/material'
 
-const Unselected = ({ image='decide.svg', message = 'Select a role to view applications' }) => {
+const Unselected = ({ image='decide.svg', message = 'Select a role to view applications', mt = '12vh' }) => {
     return (
-        <Stack alignItems="center" spacing={3} sx={{ mt: '12vh' }}>
+        <Stack alignItems="center" spacing={3} sx={{ mt: mt }}>
             <Box sx={{width: {xs: '70%', md: '450px'}}}>
                 <img src={`/static/images/${image}`} width="100%" />
             </Box>

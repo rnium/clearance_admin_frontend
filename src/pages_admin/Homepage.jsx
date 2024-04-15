@@ -33,9 +33,9 @@ class Homepage extends Component {
                         <Navbar drawerWidth={drawerWidth} />
                         <Routes>
                             <Route path='/' element={<Dashboard />} />
-                            <Route path='/applications' element={<Applications />} />
-                            <Route path='/archives' element={<Archives />} />
-                            <Route path='/history' element={<History />} />
+                            <Route path='/applications' element={<Applications pagetype="pending" />} />
+                            <Route path='/archives' element={<Applications pagetype="archived" />} />
+                            <Route path='/history' element={<Applications pagetype="approved" />} />
                             <Route path='/members' element={<Members />} />
                             <Route path='/departments' element={<Departments />} />
                             <Route path='/students' element={<Students />} />

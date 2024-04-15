@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Container, Grid, Box, Button, Stack, Typo
+  Container, Grid, Box, Button, Stack, Typography
 } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 import WidgetsIcon from '@mui/icons-material/Widgets';
@@ -16,7 +16,20 @@ import Unselected from '../components/atoms/Unselected';
 import ClearanceSection from '../components/organisms/ClearanceSection';
 
 
-const Applications = () => {
+const pageKwargs = {
+  pending: {},
+  archived: { archived: true },
+  approved: { approved: true }
+}
+
+const titles = {
+  pending: "Peding Applications",
+  archived: "Archived Applications",
+  approved: "Approvals"
+}
+
+
+const Applications = ({ pagetype }) => {
   const dispatch = useDispatch();
   const roles = useSelector(state => state.dashboard.adminRoles?.roles);
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
@@ -76,7 +89,7 @@ const Applications = () => {
   }
 
   const fetchPageSilent = async () => {
-    let params = { code, type, page: page + 1, pagesize: rowsPerPage };
+    let params = { code, type, page: page + 1, pagesize: rowsPerPage, ...pageKwargs[pagetype] };
     try {
       let res = await axios.get(urls.clearanceSectionUrl, { params });
       setCount(res.data.count);
@@ -111,7 +124,7 @@ const Applications = () => {
     if (type && code) {
       fetchPage();
     }
-  }, [page, rowsPerPage, type, code])
+  }, [page, rowsPerPage, type, code, pagetype])
 
   useEffect(() => {
     if (!adminRolesLoaded) {
@@ -131,6 +144,7 @@ const Applications = () => {
     <Container sx={{ mt: 4, mb: 5 }}>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={9}>
+          <Typography variant='h5' color="text.secondary" sx={{mb: 2}}>{titles[pagetype]}</Typography>
           <Box>
             {
               roles.map(r => (
@@ -177,6 +191,7 @@ const Applications = () => {
                   <ClearanceSection
                     titleAlign='left'
                     onAction={clearanceAction}
+                    type={pagetype}
                     section_data={
                       {
                         title: sectionTitle,
@@ -186,7 +201,7 @@ const Applications = () => {
                   />
 
                 </div>
-              : <Unselected />
+              : <Unselected mt="0" />
           }
         </Grid>
       </Grid>
