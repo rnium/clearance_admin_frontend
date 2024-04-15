@@ -43,6 +43,11 @@ const Dashboard = (props) => {
     setDeletableId(reg_id);
   }
 
+  const closeRemarksModal = () => {
+    setSelectedClearance({ type: null, id: null });
+    setIsRemarksModalOpen(false);
+  }
+
   const handleRemarksClick = (type, id) => {
     setSelectedClearance({ type, id })
   }
@@ -169,7 +174,7 @@ const Dashboard = (props) => {
     <Container sx={{ mt: 4, mb: 5 }}>
       <RemarksModal
         isModalOpen={isRemarksModalOpen}
-        setIsModalOpen={setIsRemarksModalOpen}
+        setIsModalOpen={closeRemarksModal}
         selectedClearance={selectedClearance}
       />
       <Grid container spacing={2} >
