@@ -47,7 +47,7 @@ const StudentSignup = () => {
         postData.append('profilePhoto', profilePhoto);
         const config = {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 'X-CSRFToken': getCookie('csrftoken')
             },
         };

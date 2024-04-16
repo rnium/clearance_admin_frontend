@@ -101,7 +101,7 @@ const Navbar = ({ drawerWidth }) => {
                     <Typography variant="h6" noWrap component="div" flexGrow={1}>
                         SEC Clearances
                     </Typography>
-                    <UserInfo username={userinfo.user_fullname} avatarSrc='' />
+                    <UserInfo username={userinfo.user_fullname} avatarSrc={ urls.baseUrl + userinfo.avatar_url} />
                     <Button
                         variant="outlined"
                         color='error'

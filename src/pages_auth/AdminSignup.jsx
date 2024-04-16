@@ -48,7 +48,7 @@ const AdminSignup = () => {
         postData.append('tokenid', token);
         const config = {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 'X-CSRFToken': getCookie('csrftoken')
             },
         };
