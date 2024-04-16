@@ -2,15 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     userinfo: {
-        is_authenticated: true,
-        username: 'rnium@aol.com',
-        avatar_url: '/media/profiles/dp/_4735f372-f72d-416c-85cd-6bab3c795456_SnBimOx.jpg',
-        user_fullname: 'Md Saiful Islam',
-        account_type: 'admin',
-        user_type: 'academic',
+        is_authenticated: false,
+        username: '',
+        avatar_url: '',
+        user_fullname: '',
+        account_type: '',
+        user_type: '',
         is_superadmin: false,
     },
-    is_loaded: true,
+    is_loaded: false,
     is_loading: false,
 }
 

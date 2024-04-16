@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
-  Container, Grid, Box, Stack, Typography, TextField, Button
+  Grid, Box, Stack, Typography, TextField, Button
 } from '@mui/material';
 import { Image } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import PictureInput from '../components/atoms/PictureInput'

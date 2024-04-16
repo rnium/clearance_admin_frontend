@@ -28,7 +28,7 @@ const CheckAuth = () => {
 const MainAuth = () => {
   return (
     <Routes>
-      <Route path='admin-signup/' element={<AdminSignup />} />
+      <Route path='member-signup/' element={<AdminSignup />} />
       <Route path='signup/' element={<StudentSignup />} />
       <Route path='/*' element={<CheckAuth />} />
     </Routes>
