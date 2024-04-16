@@ -46,8 +46,9 @@ function NavbarStudent() {
         };
         try {
             let res = await axios.post(urls.logoutUrl, {}, config);
-            message.info(res.data.info)
-            dispatch(resetUserInfo())
+            message.info(res.data.info);
+            dispatch(resetUserInfo());
+            window.location.reload();
         } catch (error) {
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
