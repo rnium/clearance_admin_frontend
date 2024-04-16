@@ -9,9 +9,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import UserInfo from '../atoms/UserInfo';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { NavLink } from 'react-router-dom';
-import {all_tabs} from './SideNav';
+import { all_tabs } from './SideNav';
 import { useSelector, useDispatch } from 'react-redux';
-
+import axios from 'axios';
+import * as urls from '../../utils/api_urls';
+import { resetUserInfo } from '../../redux/accountReducer';
+import { message } from 'antd';
+import { getCookie } from '../../utils/cookies';
 
 
 const Navbar = ({ drawerWidth }) => {
@@ -23,12 +27,33 @@ const Navbar = ({ drawerWidth }) => {
         setAnchorElNav(null);
     };
     const userinfo = useSelector(state => state.account.userinfo);
+    const dispatch = useDispatch();
+
+    const logoutUser = async () => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
+        try {
+            let res = await axios.post(urls.logoutUrl, {}, config);
+            message.info(res.data.info)
+            dispatch(resetUserInfo())
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg);
+        }
+    }
     return (
         <div>
             <AppBar
                 elevation={1}
                 position='relative'
-                
+
             >
                 <Toolbar sx={{ backgroundColor: '#ffffff', color: 'gray' }}>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -81,7 +106,7 @@ const Navbar = ({ drawerWidth }) => {
                         variant="outlined"
                         color='error'
                         endIcon={<LogoutIcon />}
-                        href='/logout'
+                        onClick={logoutUser}
                         sx={{
                             borderRadius: "180px",
                             margin: "0 15px",
