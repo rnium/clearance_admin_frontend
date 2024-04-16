@@ -91,32 +91,37 @@ const RemarksModal = (props) => {
                                     <Typography sx={{ p: 2 }} variant='body1'>
                                         {remarks.remarks_text}
                                     </Typography>
-                                </Paper> : 
-                                <Empty 
-                                    description = {
+                                </Paper> :
+                                <Empty
+                                    description={
                                         <Typography variant='body2' color="text.secondary">No Remarks</Typography>
                                     }
                                 />
                         }
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="Enter Remarks"
-                            onChange={e => setNewRemarks(e.target.value)}
-                            multiline
-                            fullWidth
-                            value={newRemarks}
-                            rows={3}
-                        />
-                        <Box sx={{ display: 'flex', width: '100%' }} justifyContent="flex-end">
-                            <Button
-                                disabled={submitting || newRemarks.length === 0}
-                                variant='contained'
-                                sx={{ px: 4 }}
-                                onClick={addRemakrs}
-                            >
-                                Post
-                            </Button>
-                        </Box>
+                        {
+                            props.pagetype !== 'approved' ?
+                                <Stack spacing={2} sx={{ width: '100%' }}>
+                                    <TextField
+                                        id="outlined-multiline-flexible"
+                                        label="Write Remarks"
+                                        onChange={e => setNewRemarks(e.target.value)}
+                                        multiline
+                                        fullWidth
+                                        value={newRemarks}
+                                        rows={3}
+                                    />
+                                    <Box sx={{ display: 'flex', width: '100%' }} justifyContent="flex-end">
+                                        <Button
+                                            disabled={submitting || newRemarks.length === 0}
+                                            variant='contained'
+                                            sx={{ px: 4 }}
+                                            onClick={addRemakrs}
+                                        >
+                                            Post
+                                        </Button>
+                                    </Box>
+                                </Stack> : null
+                        }
                     </Stack>
             }
 

@@ -14,6 +14,8 @@ import {
 } from '../redux/dashboardReducer';
 import Unselected from '../components/atoms/Unselected';
 import ClearanceSection from '../components/organisms/ClearanceSection';
+import RemarksModal from '../components/molecules/RemarksModal'
+
 
 
 const pageKwargs = {
@@ -25,7 +27,7 @@ const pageKwargs = {
 const titles = {
   pending: "Peding Applications",
   archived: "Archived Applications",
-  approved: "Approvals"
+  approved: "Approval History"
 }
 
 
@@ -33,12 +35,14 @@ const Applications = ({ pagetype }) => {
   const dispatch = useDispatch();
   const roles = useSelector(state => state.dashboard.adminRoles?.roles);
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
+  const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [clearances, setClearances] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState(null);
   const [code, setCode] = useState(null);
+  const [selectedClearanceId, setSelectedClearanceId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [sectionTitle, setSectionTitle] = useState('');
 
@@ -120,6 +124,15 @@ const Applications = ({ pagetype }) => {
     }
   }
 
+  const closeRemarksModal = () => {
+    setSelectedClearanceId(null);
+    setIsRemarksModalOpen(false);
+  }
+
+  const handleRemarksClick = (approval_type, id) => {
+    setSelectedClearanceId(id);
+  }
+
   useEffect(() => {
     if (type && code) {
       fetchPage();
@@ -132,6 +145,12 @@ const Applications = ({ pagetype }) => {
     }
   })
 
+  useEffect(() => {
+    if (selectedClearanceId) {
+      setIsRemarksModalOpen(true);
+    }
+  }, [selectedClearanceId])
+
   if (adminRolesLoaded && roles.length == 0) {
     return (
       <Container >
@@ -142,6 +161,12 @@ const Applications = ({ pagetype }) => {
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>
+      <RemarksModal
+        isModalOpen={isRemarksModalOpen}
+        setIsModalOpen={closeRemarksModal}
+        pagetype={pagetype}
+        selectedClearance={{type, id:selectedClearanceId}}
+      />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={9}>
           <Typography variant='h5' color="text.secondary" sx={{mb: 2}}>{titles[pagetype]}</Typography>
@@ -192,9 +217,11 @@ const Applications = ({ pagetype }) => {
                     titleAlign='left'
                     onAction={clearanceAction}
                     type={pagetype}
+                    handleRemarksClick={handleRemarksClick}
                     section_data={
                       {
                         title: sectionTitle,
+                        type,
                         approvals: clearances
                       }
                     }
