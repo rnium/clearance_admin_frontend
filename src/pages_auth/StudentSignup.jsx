@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { message } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
+import { getCookie } from '../utils/cookies';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../redux/accountReducer';
 import { useNavigate } from 'react-router-dom';
@@ -44,8 +45,14 @@ const StudentSignup = () => {
             postData.append(key, formData[key]);
         }
         postData.append('profilePhoto', profilePhoto);
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-            const response = await axios.post(urls.studentSignupUrl, postData);
+            const response = await axios.post(urls.studentSignupUrl, postData, config);
             message.success("Signup complete", 5)
             setTimeout(() => {
                 dispatch(setUserInfo(response.data.info));

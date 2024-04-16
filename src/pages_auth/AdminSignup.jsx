@@ -6,6 +6,7 @@ import { message, Spin } from 'antd';
 import PictureInput from '../components/atoms/PictureInput'
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
+import { getCookie } from '../utils/cookies';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -37,7 +38,7 @@ const AdminSignup = () => {
         }
         const postData = new FormData();
         for (const key in formData) {
-            if (key !== 'last_name' && formData[key].length == 0) {
+            if (key !== 'last_name' && formData[key].length === 0) {
                 message.warning(`${key} cannot be empty`);
                 return;
             }
@@ -45,8 +46,14 @@ const AdminSignup = () => {
         }
         postData.append('profilePhoto', profilePhoto);
         postData.append('tokenid', token);
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-            await axios.post(urls.adminSignupApiUrl, postData);
+            await axios.post(urls.adminSignupApiUrl, postData, config);
             message.success("Signup complete", 5)
             setTimeout(() => {
                 navigate('/');

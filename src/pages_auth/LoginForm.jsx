@@ -6,6 +6,7 @@ import { message } from 'antd'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
+import { getCookie } from '../utils/cookies';
 import { useDispatch, UseDispatch } from 'react-redux';
 import { setUserInfo, setLoaded } from '../redux/accountReducer'; 
 
@@ -27,8 +28,14 @@ const LoginForm = () => {
     }
 
     const handleSubmit = async () => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-          const res = await axios.post(urls.loginUrl, loginForm);
+          const res = await axios.post(urls.loginUrl, loginForm, config);
           dispatch(setLoaded(true));
           dispatch(setUserInfo(res.data.data));
           navigate('/');

@@ -25,7 +25,8 @@ const Forgot = () => {
     }
 
     const handleSubmit = async () => {
-        message.success("Recovery Email Sent", 5)
+        message.error("API not called", 5)
+        // message.success("Recovery Email Sent", 5)
         // axios call here
         navigate('/')
     }

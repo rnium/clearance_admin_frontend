@@ -7,6 +7,7 @@ import Forgot from './Forgot'
 import StudentSignup from './StudentSignup';
 import AdminSignup from './AdminSignup';
 import { Routes, Route } from 'react-router-dom'
+import LoginRequired from './LoginRequired';
 // import * as urls from '../data/backendUrls';
 
 const CheckAuth = () => {
@@ -18,6 +19,7 @@ const CheckAuth = () => {
         <Routes>
           <Route path='/' element={<LoginForm />} />
           <Route path='/forgot' element={<Forgot />} />
+          <Route path='/*' element={<LoginRequired />} />
         </Routes>
       </Box>
     </Box>
