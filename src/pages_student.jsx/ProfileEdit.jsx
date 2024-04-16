@@ -10,6 +10,7 @@ import * as urls from '../utils/api_urls';
 import PictureInput from '../components/atoms/PictureInput'
 import { message, Spin } from 'antd';
 import { loadInfo, setLoaded } from '../redux/studentStoreReducer';
+import { getCookie } from '../utils/cookies';
 
 
 const img_dim = 110;
@@ -49,8 +50,14 @@ const Profile = () => {
         if (profilePhoto !== null) {
             postData.append('profilePhoto', profilePhoto);
         }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-            const response = await axios.post(urls.studentProfileUpdateUrl, postData);
+            const response = await axios.post(urls.studentProfileUpdateUrl, postData, config);
             message.success("Profile Updated", 5)
             setTimeout(() => {
                 dispatch(loadInfo(response.data.info));

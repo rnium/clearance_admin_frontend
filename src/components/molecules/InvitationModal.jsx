@@ -7,6 +7,7 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import * as urls from '../../utils/api_urls';
+import { getCookie } from '../../utils/cookies';
 
 const undesignated_dept = {
     id: -1,
@@ -45,8 +46,14 @@ const InvitationModal = ({ isModalOpen, setIsModalOpen }) => {
             message.warning("Enter email, please!");
             return;
         }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-            let res = await axios.post(urls.sendInviatationUrl, {email, dept});
+            let res = await axios.post(urls.sendInviatationUrl, {email, dept}, config);
             setIsModalOpen(false);
             message.success(res.data.info);
         } catch (error) {

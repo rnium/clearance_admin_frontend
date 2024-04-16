@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadMembers } from '../../pages_admin/Members';
 import * as urls from '../../utils/api_urls';
-
+import { getCookie } from '../../utils/cookies';
 
 const MemberAssignModal = (props) => {
     const membersLoaded = useSelector(state => state.members.is_loaded)
@@ -41,9 +41,15 @@ const MemberAssignModal = (props) => {
 
     async function assignMember() {
         setSending(true);
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         let params = { ...props.selectedRole, user_id: selectedUser }
         try {
-            let res = await axios.post(urls.assignMemberUrl, params);
+            let res = await axios.post(urls.assignMemberUrl, params, config);
             await props.loadDeptSections();
             message.success(res.data.info);
             if (membersLoaded) {

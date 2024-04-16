@@ -11,6 +11,7 @@ import { setDeptSections, setLoaded } from '../redux/departmentsReducer';
 import MemberAssignModal from '../components/molecules/MemberAssignModal';
 import { loadMembers } from './Members';
 import DepartmentSection from '../components/organisms/DepartmentSection';
+import { getCookie } from '../utils/cookies';
 
 const Departments = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type)
@@ -38,8 +39,14 @@ const Departments = () => {
 
   async function unAssignMember(role, code, user_id) {
     let params = { role, code, user_id }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+    };
     try {
-      let res = await axios.post(urls.unAssignMemberUrl, params);
+      let res = await axios.post(urls.unAssignMemberUrl, params, config);
       await loadDeptSections();
       message.success(res.data.info);
       if (membersLoaded) {

@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import * as urls from '../../utils/api_urls';
+import { getCookie } from '../../utils/cookies';
 
 
 const RemarksModal = (props) => {
@@ -35,8 +36,14 @@ const RemarksModal = (props) => {
     const addRemakrs = async () => {
         setSubmitting(true)
         let payload = { ...props.selectedClearance, remarks_text: newRemarks }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-            let res = await axios.post(urls.clearanceRemarksUrl, payload);
+            let res = await axios.post(urls.clearanceRemarksUrl, payload, config);
             setRemarks(res.data);
             setRemarksLoaded(true);
             setNewRemarks('')

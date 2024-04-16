@@ -9,6 +9,7 @@ import * as urls from '../utils/api_urls';
 import PictureInput from '../components/atoms/PictureInput'
 import { message, Spin } from 'antd';
 import { setUserInfo, setLoaded } from '../redux/accountReducer';
+import { getCookie } from '../utils/cookies';
 
 
 const img_dim = 110;
@@ -58,7 +59,13 @@ const Profile = () => {
       postData.append('profilePhoto', profilePhoto);
     }
     try {
-      const response = await axios.post(urls.adminProfileUpdateUrl, postData);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+      };
+      const response = await axios.post(urls.adminProfileUpdateUrl, postData, config);
       message.success("Profile Updated", 5)
       setTimeout(() => {
         loadUserInfo(dispatch);
@@ -142,8 +149,8 @@ const Profile = () => {
                   type="submit"
                   variant='contained'
                   disabled={
-                    formData.first_name.length === 0 
-                    && formData.last_name.length === 0 
+                    formData.first_name.length === 0
+                    && formData.last_name.length === 0
                     && formData.password.length === 0
                     && profilePhoto === null
                   }

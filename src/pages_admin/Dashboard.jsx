@@ -17,7 +17,8 @@ import {
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 import Unselected from '../components/atoms/Unselected';
-import RemarksModal from '../components/molecules/RemarksModal'
+import RemarksModal from '../components/molecules/RemarksModal';
+import { getCookie } from '../utils/cookies';
 
 
 const Dashboard = (props) => {
@@ -110,10 +111,17 @@ const Dashboard = (props) => {
   }
 
   const approveAccount = async registration => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+    };
     try {
       let res = await axios.post(
         urls.approveStudentAcUrl,
-        { registration: registration }
+        { registration: registration },
+        config
       );
       message.success(res.data.info);
       res = await axios.get(urls.pendingStudentAcUrl);
@@ -128,9 +136,15 @@ const Dashboard = (props) => {
   }
 
   const deleteAccount = async payload => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+    };
     try {
       let res = await axios.post(
-        urls.deleteStudentAcUrl, payload
+        urls.deleteStudentAcUrl, payload, config
       );
       message.success(res.data.info);
       res = await axios.get(urls.pendingStudentAcUrl);

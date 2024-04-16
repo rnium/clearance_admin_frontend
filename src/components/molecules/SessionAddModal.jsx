@@ -6,6 +6,7 @@ import {
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import axios from 'axios';
 import * as urls from '../../utils/api_urls';
+import { getCookie } from '../../utils/cookies';
 
 
 const SessionAddModal = (props) => {
@@ -43,8 +44,14 @@ const SessionAddModal = (props) => {
     async function addSession() {
         setAdding(true);
         let params = { ...formData, dept: props.dept }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
         try {
-            let res = await axios.post(urls.sessionAddUrl, params);
+            let res = await axios.post(urls.sessionAddUrl, params, config);
             message.success(res.data.info);
             await props.loadDeptSessions();
             props.setIsModalOpen(false);
