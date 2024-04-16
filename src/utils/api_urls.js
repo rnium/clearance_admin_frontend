@@ -1,6 +1,7 @@
 export const baseUrl = 'http://127.0.0.1:8000'
 export const loginUrl = baseUrl + '/account/api/login/'
 export const userInfoUrl = baseUrl + '/clearance/api/userinfo/'
+export const adminProfileUpdateUrl = baseUrl + '/account/admin/updateprofile/'
 export const studentSignupUrl = baseUrl + '/account/student/signup/'
 export const studentProfileUpdateUrl = baseUrl + '/account/student/updateprofile/'
 export const studentinfoUrl = baseUrl + '/account/progressive-studentinfo/'
