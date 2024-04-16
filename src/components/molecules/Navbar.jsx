@@ -11,11 +11,12 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { NavLink } from 'react-router-dom';
 import { all_tabs } from './SideNav';
 import { useSelector, useDispatch } from 'react-redux';
+import { resetUserInfo } from '../../redux/accountReducer';
 import axios from 'axios';
 import * as urls from '../../utils/api_urls';
-import { resetUserInfo } from '../../redux/accountReducer';
 import { message } from 'antd';
 import { getCookie } from '../../utils/cookies';
+import { useNavigate } from 'react-router-dom';
 
 
 const Navbar = ({ drawerWidth }) => {
@@ -28,6 +29,7 @@ const Navbar = ({ drawerWidth }) => {
     };
     const userinfo = useSelector(state => state.account.userinfo);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const logoutUser = async () => {
         const config = {
@@ -38,8 +40,10 @@ const Navbar = ({ drawerWidth }) => {
         };
         try {
             let res = await axios.post(urls.logoutUrl, {}, config);
-            message.info(res.data.info)
-            dispatch(resetUserInfo())
+            dispatch(resetUserInfo());
+            
+            navigate('/');
+            window.location.reload();
         } catch (error) {
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
