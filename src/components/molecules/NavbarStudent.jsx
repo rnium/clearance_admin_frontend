@@ -12,9 +12,13 @@ import MenuItem from '@mui/material/MenuItem';
 import {
     Stack
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetUserInfo } from '../../redux/accountReducer';
 import * as urls from '../../utils/api_urls';
+import axios from 'axios';
+import { message } from 'antd';
 import { NavLink, Link } from 'react-router-dom';
+import { getCookie } from '../../utils/cookies';
 
 
 const settings = ['Account', 'Logout'];
@@ -30,6 +34,28 @@ function NavbarStudent() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const dispatch = useDispatch();
+
+    const logoutUser = async () => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
+        try {
+            let res = await axios.post(urls.logoutUrl, {}, config);
+            message.info(res.data.info)
+            dispatch(resetUserInfo())
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg);
+        }
+    }
 
     return (
         <AppBar position="static" color='transparent'>
@@ -84,6 +110,9 @@ function NavbarStudent() {
                                     Profile
                                 </MenuItem>
                             </NavLink>
+                            <MenuItem onClick={logoutUser}>
+                                Logout
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>

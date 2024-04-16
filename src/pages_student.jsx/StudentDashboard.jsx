@@ -70,6 +70,15 @@ const StudentDashboard = () => {
       {
         studentInfo.state === 2 ? <ApplyCard /> : null
       }
+      {
+        studentInfo.state === 3 ?
+          <Stack sx={{mt: '10vh'}} alignItems="center">
+            <Typography variant='h5' color="text.secondary" textAlign="center">
+            Your Clearance Request has been submitted to the administrative team. You will be notified once all approvals have been granted. This process may take several days or weeks.
+            </Typography>
+          </Stack>
+          : null
+      }
 
 
       {/* <Grid container spacing={2} sx={{mt: 5}}>
