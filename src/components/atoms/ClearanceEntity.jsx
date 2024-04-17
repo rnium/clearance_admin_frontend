@@ -25,13 +25,6 @@ const DeptEntity = ({ entity }) => {
                         {title}
                     </Typography>
                     {
-                        entity.remarks ?
-                            <Alert severity="info" icon={false} sx={{width: '100%'}}>
-                                <AlertTitle>Remarks</AlertTitle>
-                                {entity.remarks}
-                            </Alert>: null
-                    }
-                    {
                         entity.is_approved ?
                             <Chip label="Cleared" color='success' icon={<CheckIcon />} sx={{ px: 2 }} />
                             : entity.is_seekable ?

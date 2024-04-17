@@ -1,6 +1,6 @@
 import React from 'react';
 import ClearanceEntity from '../atoms/ClearanceEntity';
-import { Grid, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material';
 
 const StudentClearanceSection = (props) => {
     let entities = [];

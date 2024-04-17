@@ -10,8 +10,10 @@ import ApplyCard from '../components/atoms/ApplyCard';
 import RemarksTimeline from '../components/organisms/RemarksTimeline';
 import StudentClearanceSection from '../components/organisms/StudentClearanceSection';
 import axios from 'axios';
+import CircularProgressWithLabel from '../components/atoms/CircularProgressWithLabel';
 import * as urls from '../utils/api_urls';
-import '../styles/student.css'
+import '../styles/student.css';
+import DonwloadCard from '../components/molecules/DonwloadCard';
 
 
 const StudentDashboard = () => {
@@ -106,9 +108,22 @@ const StudentDashboard = () => {
         studentInfo.state === 2 ? <ApplyCard /> : null
       }
       {
-        studentInfo.state === 3 ?
+        studentInfo.state >= 3 ?
           clearanceInfo.loaded ?
-            <Grid container sx={{mt: 5}} spacing={2}>
+            <Grid container sx={{ mt: 5 }} spacing={2}>
+              <Grid item xs={12} md={3}>
+                <Stack spacing={2}>
+                  {
+                    studentInfo.state === 4 ?
+                    <DonwloadCard /> : null
+                  }
+                  <Stack direction="row" justifyContent="center" spacing={2} alignItems="center">
+                    <Typography variant='h5' sx={{ fontSize: { xs: '1rem', md: '1.3rem' }, mb: 2 }}>Overall Progress</Typography>
+                    <CircularProgressWithLabel value={59} />
+                  </Stack>
+                  <RemarksTimeline />
+                </Stack>
+              </Grid>
               <Grid item xs={12} md={9}>
                 <Paper sx={{ p: 2, backgroundColor: "#e3e3e3" }}>
                   <StudentClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
@@ -119,9 +134,7 @@ const StudentDashboard = () => {
                   }
                 </Paper>
               </Grid>
-              <Grid item xs={12} md={3}>
-                  <RemarksTimeline />
-              </Grid>
+              
 
             </Grid> :
             <Stack alignItems="center">
