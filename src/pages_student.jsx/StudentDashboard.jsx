@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container, Box, Grid, Paper, Stack, Typography, Button
 } from '@mui/material';
@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loadInfo, setLoaded } from '../redux/studentStoreReducer';
 import PendingCard from '../components/atoms/PendingCard';
 import ApplyCard from '../components/atoms/ApplyCard';
+import StudentClearanceSection from '../components/organisms/StudentClearanceSection';
 import axios from 'axios';
 import * as urls from '../utils/api_urls'
 
@@ -14,25 +15,57 @@ import * as urls from '../utils/api_urls'
 const StudentDashboard = () => {
   const studentInfo = useSelector(state => state.studentStore.info);
   const studentInfoLoaded = useSelector(state => state.studentStore.is_loaded);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    async function loadStudentInfo() {
-      try {
-        let res = await axios.get(urls.studentinfoUrl);
-        dispatch(loadInfo(res.data.info));
-        dispatch(setLoaded(true));
-      } catch (error) {
-        let error_msg = error?.response?.data?.details;
-        if (error_msg === undefined) {
-          error_msg = error.message;
-        }
-        message.error(error_msg);
-      }
+  const [clearanceInfo, setClearanceInfo] = useState(
+    {
+      loaded: false,
+      info: null
     }
+  )
+  const dispatch = useDispatch();
+
+  async function loadStudentInfo() {
+    try {
+      let res = await axios.get(urls.studentinfoUrl);
+      dispatch(loadInfo(res.data.info));
+      dispatch(setLoaded(true));
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  async function loadClearanceInfo() {
+    try {
+      let res = await axios.get(urls.clearanceInfoUrl);
+      setClearanceInfo({
+        loaded: true,
+        info: res.data
+      })
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  useEffect(() => {
     if (!studentInfoLoaded) {
       loadStudentInfo();
     }
   }, [])
+
+  useEffect(() => {
+    if (studentInfo.state === 3) {
+      loadClearanceInfo();
+    }
+  }, [studentInfoLoaded])
+
+
   if (!studentInfoLoaded) {
     return (
       <Stack sx={{ mt: '15vh' }}>
@@ -56,10 +89,10 @@ const StudentDashboard = () => {
               title: 'Apply'
             },
             {
-              title: 'Wait For approvals',
+              title: 'Wait For Approvals',
             },
             {
-              title: 'Get clearance',
+              title: 'Get Clearance',
             },
           ]}
         />
@@ -72,22 +105,23 @@ const StudentDashboard = () => {
       }
       {
         studentInfo.state === 3 ?
-          <Stack sx={{mt: '10vh'}} alignItems="center">
-            <Typography variant='h5' color="text.secondary" textAlign="center">
-            Your Clearance Request has been submitted to the administrative team. You will be notified once all approvals have been granted. This process may take several days or weeks.
-            </Typography>
-          </Stack>
+          clearanceInfo.loaded ?
+          <div>
+            <StudentClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
+            {
+              clearanceInfo.info.department.map(dept => (
+                <StudentClearanceSection type="department" data={dept} />
+              ))
+            }
+          </div> :
+            <Stack alignItems="center">
+              <Spin size='large' />
+            </Stack>
           : null
       }
 
 
-      {/* <Grid container spacing={2} sx={{mt: 5}}>
-      <Grid item xs={12} md={7}>
-        <Paper sx={{py:20}}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nobis, temporibus.
-        </Paper>
-      </Grid>
-    </Grid> */}
+
     </Container>
   )
 }
