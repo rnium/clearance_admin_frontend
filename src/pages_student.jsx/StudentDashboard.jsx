@@ -84,7 +84,7 @@ const StudentDashboard = () => {
           current={studentInfo.state}
           items={[
             {
-              title: 'Signup',
+              title: 'Register',
             },
             {
               title: 'Verification'
@@ -137,7 +137,7 @@ const StudentDashboard = () => {
               
 
             </Grid> :
-            <Stack alignItems="center">
+            <Stack alignItems="center" sx={{mt: '10vh'}}>
               <Spin size='large' />
             </Stack>
           : null
