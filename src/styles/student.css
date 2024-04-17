@@ -1,0 +1,10 @@
+.clearanceEntity {
+  position: relative;
+}
+.clearanceEntity img.role-logo {
+  width: 50px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  opacity: 0.4;
+}/*# sourceMappingURL=student.css.map */

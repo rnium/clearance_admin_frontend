@@ -7,9 +7,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loadInfo, setLoaded } from '../redux/studentStoreReducer';
 import PendingCard from '../components/atoms/PendingCard';
 import ApplyCard from '../components/atoms/ApplyCard';
+import RemarksTimeline from '../components/organisms/RemarksTimeline';
 import StudentClearanceSection from '../components/organisms/StudentClearanceSection';
 import axios from 'axios';
-import * as urls from '../utils/api_urls'
+import * as urls from '../utils/api_urls';
+import '../styles/student.css'
 
 
 const StudentDashboard = () => {
@@ -106,14 +108,22 @@ const StudentDashboard = () => {
       {
         studentInfo.state === 3 ?
           clearanceInfo.loaded ?
-          <div>
-            <StudentClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
-            {
-              clearanceInfo.info.department.map(dept => (
-                <StudentClearanceSection type="department" data={dept} />
-              ))
-            }
-          </div> :
+            <Grid container sx={{mt: 5}} spacing={2}>
+              <Grid item xs={12} md={9}>
+                <Paper sx={{ p: 2, backgroundColor: "#e3e3e3" }}>
+                  <StudentClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
+                  {
+                    clearanceInfo.info.department.map(dept => (
+                      <StudentClearanceSection type="department" data={dept} />
+                    ))
+                  }
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                  <RemarksTimeline />
+              </Grid>
+
+            </Grid> :
             <Stack alignItems="center">
               <Spin size='large' />
             </Stack>
