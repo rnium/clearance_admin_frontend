@@ -13,13 +13,14 @@ const ClearanceSection = ({section_data, onAction, handleRemarksClick, titleAlig
     }
     return (
         <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: 'flex', mb: 2 }} justifyContent={titleAlign}>
+            <Box sx={{ display: 'flex', mb: 2 }} alignItems="center" justifyContent={titleAlign}>
                 <img src={logo_src} alt="" width="30px" height="30px" />
                 <Typography
                     variant='h5'
                     align='center'
-                    sx={{ ml: 2 }}
+                    sx={{ ml: 2, fontSize: {xs: '1rem', md: '1.3rem'} }}
                     color="text.secondary"
+
                 >
                     {section_data.title}
                 </Typography>

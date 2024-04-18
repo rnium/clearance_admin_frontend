@@ -93,7 +93,7 @@ const MemberAssignModal = (props) => {
         <Modal title="Assign Member" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
                 <img src={logo_src} alt="" width="70px" />
-                <Typography variant='h6' >{title}</Typography>
+                <Typography variant='h6' textAlign="center">{title}</Typography>
                 <TextField
                     label="Member name or email"
                     variant="outlined"

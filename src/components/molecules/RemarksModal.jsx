@@ -89,7 +89,7 @@ const RemarksModal = (props) => {
                         <Spin size='large' />
                     </Stack> :
                     <Stack alignItems="center" sx={{ mt: 4, pb: 1 }} spacing={2}>
-                        <Typography sx={{ mb: 1 }} variant='h6' color="primary">
+                        <Typography sx={{ mb: 1, fontSize: {xs: '1rem', md: '1.3rem'} }} variant='h6' color="primary" textAlign="center">
                             {remarks.title}
                         </Typography>
                         {
