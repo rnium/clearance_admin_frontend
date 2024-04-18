@@ -25,7 +25,7 @@ const pageKwargs = {
 }
 
 const titles = {
-  pending: "Peding Applications",
+  pending: "Pending Applications",
   archived: "Archived Applications",
   approved: "Approval History"
 }
@@ -151,7 +151,15 @@ const Applications = ({ pagetype }) => {
     }
   }, [selectedClearanceId])
 
-  if (adminRolesLoaded && roles.length == 0) {
+  if (!adminRolesLoaded) {
+    return (
+      <Container >
+        <Stack sx={{mt: '12vh'}} alignItems="center">
+          <Spin size='large'/>
+        </Stack>
+      </Container>
+    )
+  } else if (adminRolesLoaded && roles.length == 0) {
     return (
       <Container >
         <Unselected image='leisure.svg' message='No Roles Assigned' />
