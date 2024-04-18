@@ -15,18 +15,18 @@ const ResetPass = () => {
     const [rePass, setRepass] = React.useState('')
 
     const navigate = useNavigate();
-    const {uid, emailb64} = useParams()
+    const {uid, token} = useParams()
 
 
     const handleSubmit = async () => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                // 'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': getCookie('csrftoken')
             },
         };
         try {
-            let payload = {uid, emailb64, password}
+            let payload = {uid, token, password}
           const res = await axios.post(urls.resetPassowordUrl, payload, config);
           message.success(res.data.info)
           navigate('/');

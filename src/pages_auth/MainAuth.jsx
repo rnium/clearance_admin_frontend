@@ -20,7 +20,7 @@ const CheckAuth = () => {
         <Routes>
           <Route path='/' element={<LoginForm />} />
           <Route path='/forgot' element={<Forgot />} />
-          <Route path='/account/recovery/:uid/:emailb64' element={<ResetPass />} />
+          <Route path='/account/recovery/:uid/:token/' element={<ResetPass />} />
           <Route path='/*' element={<LoginRequired />} />
         </Routes>
       </Box>
