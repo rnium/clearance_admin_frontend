@@ -9,7 +9,7 @@ const Unselected = ({ image='decide.svg', message = 'Select a role to view appli
             <Box sx={{width: {xs: '70%', md: '450px'}}}>
                 <img src={`/static/images/${image}`} width="100%" />
             </Box>
-            <Typography variant='h5' color="text.secondary">{message}</Typography>
+            <Typography sx={{fontSize: {xs: '1rem', md: '1.4rem'}}} variant='h5' color="text.secondary" textAlign="center">{message}</Typography>
         </Stack>
     )
 }

@@ -8,9 +8,9 @@ import { Empty } from 'antd';
 
 const ClearanceSection = ({section_data, onAction, handleRemarksClick, titleAlign='center', type='pending'}) => {
     let logo_src = "/static/images/cube.png";
-    // if (section_data.type == 'administrative') {
-    //     logo_src = "/static/images/cube.png"
-    // }
+    if (section_data.type === 'administrative' || section_data.type === 'dept_head') {
+        logo_src = "/static/images/3d-cube.png"
+    }
     return (
         <Box sx={{ mb: 4 }}>
             <Box sx={{ display: 'flex', mb: 2 }} justifyContent={titleAlign}>

@@ -4,10 +4,10 @@ const initialState = {
     userinfo: {
         is_authenticated: true,
         username: '',
-        avatar_url: '',
+        avatar_url: '/media/profiles/dp/art_18_8N9eTnH.jpeg',
         user_fullname: 'Some User',
-        account_type: 'student',
-        user_type: '',
+        account_type: 'admin',
+        user_type: 'academic',
         is_superadmin: false,
     },
     is_loaded: true,
