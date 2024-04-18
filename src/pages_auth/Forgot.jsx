@@ -8,6 +8,8 @@ import { message } from 'antd'
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import * as urls from '../utils/api_urls'
+import { getCookie } from '../utils/cookies';
 
 const Forgot = () => {
     const [forgotForm, setForgotForm] = React.useState({
@@ -25,20 +27,30 @@ const Forgot = () => {
     }
 
     const handleSubmit = async () => {
-        message.error("API not called", 5)
-        // message.success("Recovery Email Sent", 5)
-        // axios call here
-        navigate('/')
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
+        try {
+          const res = await axios.post(urls.sendRecoveryMailUrl, forgotForm, config);
+          message.success(res.data.info)
+          navigate('/');
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg, 5)
+        }
     }
+
     return (
         <Fade in={true}>
             <div>
                 <TextField sx={{ mb: 2 }} name="email" required onChange={handleChange} label="Email" type="email" variant="outlined" fullWidth />
-                {
-                    forgotForm.email.length ?
-                        <Button onClick={handleSubmit} variant="contained" fullWidth>Send Recovery Link</Button>
-                        : <Button onClick={handleSubmit} variant="contained" disabled fullWidth>Send Recovery Link</Button>
-                }
+                <Button onClick={handleSubmit} variant="contained" disabled={forgotForm.email.length === 0} fullWidth>Send Recovery Link</Button>
                 <Stack direction="row" sx={{ mt: 2 }} justifyContent="left" alignItems="center">
                     <ArrowBackIosIcon fontSize='small' color='primary' />
                     <Link to="/">

@@ -9,12 +9,10 @@ import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import { getCookie } from '../utils/cookies';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../redux/accountReducer';
 import { useNavigate } from 'react-router-dom';
 
 
 const StudentSignup = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formData, setFormData] = useState(
         {
@@ -55,7 +53,6 @@ const StudentSignup = () => {
             const response = await axios.post(urls.studentSignupUrl, postData, config);
             message.success("Signup complete", 5)
             setTimeout(() => {
-                dispatch(setUserInfo(response.data.info));
                 navigate('/');
             }, 1000)
         } catch (error) {
