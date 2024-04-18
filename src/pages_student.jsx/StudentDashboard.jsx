@@ -25,6 +25,12 @@ const StudentDashboard = () => {
       info: null
     }
   )
+  const [remarksInfo, setRemarksInfo] = useState(
+    {
+      loaded: false,
+      info: []
+    }
+  )
   const dispatch = useDispatch();
 
   async function loadStudentInfo() {
@@ -57,6 +63,22 @@ const StudentDashboard = () => {
     }
   }
 
+  async function loadRemarksInfo() {
+    try {
+      let res = await axios.get(urls.clearanceRemarksInfoUrl);
+      setRemarksInfo({
+        loaded: true,
+        info: res.data
+      })
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
   useEffect(() => {
     if (!studentInfoLoaded) {
       loadStudentInfo();
@@ -64,8 +86,9 @@ const StudentDashboard = () => {
   }, [])
 
   useEffect(() => {
-    if (studentInfo.state === 3) {
+    if (studentInfo.state >= 3) {
       loadClearanceInfo();
+      loadRemarksInfo();
     }
   }, [studentInfoLoaded])
 
@@ -119,13 +142,13 @@ const StudentDashboard = () => {
                   }
                   <Stack direction="row" justifyContent="center" spacing={2} alignItems="center">
                     <Typography variant='h5' sx={{ fontSize: { xs: '1rem', md: '1.3rem' }, mb: 2 }}>Overall Progress</Typography>
-                    <CircularProgressWithLabel value={59} />
+                    <CircularProgressWithLabel value={clearanceInfo.info.progress} />
                   </Stack>
-                  <RemarksTimeline />
+                  <RemarksTimeline remarks={remarksInfo.info} />
                 </Stack>
               </Grid>
               <Grid item xs={12} md={9}>
-                <Paper sx={{ p: 2, backgroundColor: "#e3e3e3" }}>
+                <Paper sx={{ p: {xs: 1, md: 2}, backgroundColor: "#e3e3e3" }}>
                   <StudentClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
                   {
                     clearanceInfo.info.department.map(dept => (

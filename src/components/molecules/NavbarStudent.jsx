@@ -72,13 +72,13 @@ function NavbarStudent() {
                             </Link>
                             <Link to="/">
                                 <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-                                    <img src="/static/images/cube(1).png" width="50px" alt="" />
+                                    <img src="/static/images/cube(1).png" width="40px" alt="" />
                                 </Box>
                             </Link>
                             <Link to="/">
                                 <Stack sx={{ ml: 1 }}>
-                                    <Typography color="primary" variant='h5' sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }} component="span">SEC Clearance Portal</Typography>
-                                    <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}>Student</Typography>
+                                    <Typography color="primary" variant='h5' sx={{ fontSize: { xs: '0.8rem', md: '1.4rem' } }} component="span">SEC Clearance Portal</Typography>
+                                    <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.6rem', md: '1rem' } }}>Student</Typography>
                                 </Stack>
                             </Link>
                         </Box>

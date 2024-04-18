@@ -1,5 +1,5 @@
-// export const baseUrl = 'http://127.0.0.1:8000'
-export const baseUrl = ''
+export const baseUrl = 'http://127.0.0.1:8000'
+// export const baseUrl = ''
 export const loginUrl = baseUrl + '/account/api/login/'
 export const logoutUrl = baseUrl + '/account/api/logout/'
 export const userInfoUrl = baseUrl + '/clearance/api/userinfo/'
@@ -30,3 +30,4 @@ export const sessionStudentsUrl = baseUrl + '/clearance/api/sessions/students/';
 export const sessionAddUrl = baseUrl + '/clearance/api/sessions/add/';
 export const clearanceRemarksUrl = baseUrl + '/clearance/api/remarks/';
 export const clearanceInfoUrl = baseUrl + '/clearance/api/clearanceinfo/';
+export const clearanceRemarksInfoUrl = baseUrl + '/clearance/api/remarksinfo/';
