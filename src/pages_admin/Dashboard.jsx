@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Clearance from '../components/molecules/Clearance'
 import PendingStudent from '../components/molecules/PendingStudent';
 import {
   Container, Grid, Paper, Box, Typography, Stack, Dialog, TextField, Button,
@@ -18,13 +17,16 @@ import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 import Unselected from '../components/atoms/Unselected';
 import RemarksModal from '../components/molecules/RemarksModal';
+import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal';
 import { getCookie } from '../utils/cookies';
 
 
 const Dashboard = (props) => {
   const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
+  const [isClearanceDetailModalOpen, setIsClearanceDetailModalOpen] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedClearance, setSelectedClearance] = useState({ type: null, id: null });
+  const [selectedDetailClearance, setSelectedDetailClearance] = useState({ type: null, id: null });
   const [deletableId, setDeletableId] = useState(null);
   const dispatch = useDispatch();
   const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances)
@@ -49,8 +51,17 @@ const Dashboard = (props) => {
     setIsRemarksModalOpen(false);
   }
 
+  const closeClearanceDetailModal = () => {
+    setSelectedDetailClearance({ type: null, id: null });
+    setIsClearanceDetailModalOpen(false);
+  }
+
   const handleRemarksClick = (type, id) => {
     setSelectedClearance({ type, id })
+  }
+
+  const handleClearanceDetailModalClick = (type, id) => {
+    setSelectedDetailClearance({ type, id })
   }
 
   async function loadClearances() {
@@ -139,11 +150,11 @@ const Dashboard = (props) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        // 'X-CSRFToken': getCookie('csrftoken')
+        'X-CSRFToken': getCookie('csrftoken')
       },
     };
     try {
-      let res = await axios.post(urls.approveAllStudentAcUrl);
+      let res = await axios.post(urls.approveAllStudentAcUrl, {}, config);
       message.success(res.data.info);
       res = await axios.get(urls.pendingStudentAcUrl);
       dispatch(setPendingAccounts(res.data))
@@ -197,6 +208,12 @@ const Dashboard = (props) => {
     }
   }, [selectedClearance])
 
+  useEffect(() => {
+    if (selectedDetailClearance.id && selectedDetailClearance.type) {
+      setIsClearanceDetailModalOpen(true);
+    }
+  }, [selectedDetailClearance])
+
   if (adminRolesLoaded && adminRoles.length == 0) {
     return (
       <Container>
@@ -211,6 +228,11 @@ const Dashboard = (props) => {
         isModalOpen={isRemarksModalOpen}
         setIsModalOpen={closeRemarksModal}
         selectedClearance={selectedClearance}
+      />
+      <ClearanceDetailModal
+        isModalOpen={isClearanceDetailModalOpen}
+        setIsModalOpen={closeClearanceDetailModal}
+        selectedClearance={selectedDetailClearance}
       />
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
