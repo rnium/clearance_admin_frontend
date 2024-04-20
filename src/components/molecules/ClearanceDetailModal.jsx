@@ -12,12 +12,17 @@ import { getCookie } from '../../utils/cookies';
 const ClearanceSection = (props) => {
     let entities = [];
     let title = "";
+    console.log(props);
     if (props.type === 'administrative') {
         entities = props.data;
         title = "Administration"
     } else {
-        title = props.data.title
-        entities = [...props.data.lab_approval, ...props.data.clerk_approval]
+        if (props.data?.section_title) {
+            title = props.data.section_title
+        } else {
+            title = props.data.title
+        }
+        entities = [...props.data.lab_approval, ...props.data.clerk_approval, props.data]
     }
     return (
         <div>
@@ -45,6 +50,7 @@ const ClearanceSection = (props) => {
 
 
 const ClearanceDetailModal = (props) => {
+
     const [clearanceInfo, setClearanceInfo] = useState(
         {
             loaded: false,
@@ -98,9 +104,17 @@ const ClearanceDetailModal = (props) => {
         <Modal title={title} open={props.isModalOpen} footer={null} onCancel={onLocalClosure}>
             {
                 clearanceInfo.loaded ?
-                    clearanceInfo.info.department.map(dept => (
-                        <ClearanceSection type="department" data={dept} />
-                    )) : 
+                    props.selectedClearance.type === 'administrative' ?
+                        <div>
+                            <ClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
+                            {
+                                clearanceInfo.info.department.map(dept => (
+                                    <ClearanceSection type="department" data={dept} />
+                                ))
+                            }
+                        </div>
+                        : <ClearanceSection type="department" data={clearanceInfo.info} />
+                    :
                     <Stack sx={{ py: 5 }}>
                         <Spin size='large' />
                     </Stack>
