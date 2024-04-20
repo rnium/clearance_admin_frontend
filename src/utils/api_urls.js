@@ -31,3 +31,4 @@ export const sessionAddUrl = baseUrl + '/clearance/api/sessions/add/';
 export const clearanceRemarksUrl = baseUrl + '/clearance/api/remarks/';
 export const clearanceInfoUrl = baseUrl + '/clearance/api/clearanceinfo/';
 export const clearanceRemarksInfoUrl = baseUrl + '/clearance/api/remarksinfo/';
+export const clearanceReportDownloadUrl = baseUrl + '/clearance/report/download/';

@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material';
+import { clearanceReportDownloadUrl } from '../../utils/api_urls';
 
 const DonwloadCard = () => {
   return (
@@ -20,11 +21,20 @@ const DonwloadCard = () => {
           You're Cleared
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Congratulations, you've received clearance approvals from all departments as well as administrative authorities of Sylhet Engineering College. 
+          Congratulations, you've received clearance approvals from all departments as well as 
+          administrative authorities of Sylhet Engineering College. Now you can download your clearance approval report.
         </Typography>
       </CardContent>
-      <Stack sx={{px: 2, pb: 2}}>
-        <Button variant='contained' sx={{borderRadius: '180px', px: 3}} size="small">Download Permit Card</Button>
+      <Stack sx={{ px: 2, pb: 2 }}>
+        <Button
+          variant='contained'
+          sx={{ borderRadius: '180px', px: 3 }}
+          size="small"
+          href={clearanceReportDownloadUrl}
+          target="_blank"
+        >
+          Download Report
+        </Button>
       </Stack>
     </Card>
   )
