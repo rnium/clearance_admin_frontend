@@ -13,6 +13,7 @@ import { setDeptSessions, setLoaded } from '../redux/deptSessionReducer';
 import Unselected from '../components/atoms/Unselected';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import SessionAddModal from '../components/molecules/SessionAddModal';
+import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal'
 
 export const loadDeptSessions = async (dispatch) => {
   try {
@@ -31,13 +32,22 @@ export const loadDeptSessions = async (dispatch) => {
 const Students = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFlowModalOpen, setIsFlowModalOpen] = useState(false);
   const departments = useSelector(state => state.deptSession.departments)
   const deptSessionsLoaded = useSelector(state => state.deptSession.is_loaded)
   const dispatch = useDispatch();
   const [deptSelected, setDeptSelected] = useState(null);
+  const [studentSelected, setStudentSelected] = useState(null);
   const [sessionSelected, setSessionSelected] = useState(null);
   const [students_data, setStudentsData] = useState([]);
   const [studentsDataLoaded, setStudentsDataLoaded] = useState(false);
+
+  const setIsFlowModalOpenCustom = val => {
+    if (val === false) {
+      setStudentSelected(null)
+    }
+    setIsFlowModalOpen(val);
+  }
 
   const handleDeptChange = (e, newDept) => {
     if (newDept != null) {
@@ -77,6 +87,12 @@ const Students = () => {
     }
   }, [sessionSelected])
 
+  useEffect(() => {
+    if (studentSelected) {
+      setIsFlowModalOpen(true);
+    }
+  }, [studentSelected])
+
   if (!deptSessionsLoaded) {
     return (
       <Stack alignItems="center" sx={{ mt: 10 }}>
@@ -87,6 +103,12 @@ const Students = () => {
 
   return (
     <Container sx={{ mt: 4, mb: 5 }}>
+      <ClearanceDetailModal
+        isModalOpen={isFlowModalOpen}
+        setIsModalOpen={setIsFlowModalOpenCustom}
+        selectedStudent={studentSelected}
+        type="administrative"
+      />
       <Stack sx={{ mb: 2 }} direction="row" justifyContent="center">
         <img src="/static/images/3d-cube.png" alt="" width="30px" height="30px" />
         <Typography
@@ -161,8 +183,8 @@ const Students = () => {
               <Grid container spacing={2}>
                 {
                   students_data.map(student => (
-                    <Grid item xs={6} md={4}>
-                      <StudentProfile student={student} />
+                    <Grid item xs={12} md={4}>
+                      <StudentProfile onProgressClick={(reg) => setStudentSelected(reg)} student={student} />
                     </Grid>
                   ))
                 }

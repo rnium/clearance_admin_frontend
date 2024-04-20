@@ -12,7 +12,6 @@ import { getCookie } from '../../utils/cookies';
 const ClearanceSection = (props) => {
     let entities = [];
     let title = "";
-    console.log(props);
     if (props.type === 'administrative') {
         entities = props.data;
         title = "Administration"
@@ -59,7 +58,12 @@ const ClearanceDetailModal = (props) => {
     )
 
     const fetchClearanceInfo = async () => {
-        let params = { ...props.selectedClearance }
+        let params;
+        if (props?.selectedClearance) {
+            params = { ...props.selectedClearance }
+        } else if (props?.selectedStudent) {
+            params = {registration: props.selectedStudent}
+        }
         try {
             let res = await axios.get(urls.clearanceInfoAsAdminUrl, { params });
             setClearanceInfo(
@@ -104,7 +108,7 @@ const ClearanceDetailModal = (props) => {
         <Modal title={title} open={props.isModalOpen} footer={null} onCancel={onLocalClosure}>
             {
                 clearanceInfo.loaded ?
-                    props.selectedClearance.type === 'administrative' ?
+                    props?.selectedClearance?.type === 'administrative'  || props?.type === 'administrative' ?
                         <div>
                             <ClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
                             {
