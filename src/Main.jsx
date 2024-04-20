@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import Homepage from './pages_admin/Homepage';
-import StudentHome from './pages_student.jsx/StudentHome';
+import StudentHome from './pages_student/StudentHome';
 import MainAuth from './pages_auth/MainAuth';
 import Loading from './components/organisms/Loading'
 import axios from 'axios';

@@ -12,9 +12,6 @@ const DeptEntity = ({ entity }) => {
         logo_src = '/static/images/3d-cube.png';
     }
     let title = entity.title;
-    if (entity.role === 'dept_head') {
-        title = 'Head of the department';
-    }
 
     return (
         <Paper style={{ overflow: 'hidden', position: 'relative' }} className="clearanceEntity" elevation={2}>

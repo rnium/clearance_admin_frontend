@@ -9,7 +9,11 @@ const StudentClearanceSection = (props) => {
         entities = props.data;
         title = "Administration"
     } else {
-        title = props.data.title
+        if (props.data?.section_title) {
+            title = props.data.section_title
+        } else {
+            title = props.data.title
+        }
         entities = [...props.data.lab_approval, ...props.data.clerk_approval, props.data]
     }
     return (

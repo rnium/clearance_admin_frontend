@@ -32,10 +32,7 @@ const AdminSignup = () => {
             message.error("Passwords doesn't matches", 5)
             return;
         }
-        if (profilePhoto === null) {
-            message.error("Profile photo not selected", 5)
-            return;
-        }
+        
         const postData = new FormData();
         for (const key in formData) {
             if (key !== 'last_name' && formData[key].length === 0) {
@@ -44,8 +41,12 @@ const AdminSignup = () => {
             }
             postData.append(key, formData[key]);
         }
-        postData.append('profilePhoto', profilePhoto);
+        
         postData.append('tokenid', token);
+        if (profilePhoto !== null) {
+            postData.append('profilePhoto', profilePhoto);
+            return;
+        }
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
