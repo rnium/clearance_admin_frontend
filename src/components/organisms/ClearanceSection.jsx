@@ -6,7 +6,7 @@ import Clearance from '../molecules/Clearance';
 import { Empty } from 'antd';
 
 
-const ClearanceSection = ({section_data, onAction, handleRemarksClick, titleAlign='center', type='pending'}) => {
+const ClearanceSection = ({section_data, onAction, handleRemarksClick, handleDetailClick, titleAlign='center', type='pending'}) => {
     let logo_src = "/static/images/cube.png";
     if (section_data.type === 'administrative' || section_data.type === 'dept_head') {
         logo_src = "/static/images/3d-cube.png"
@@ -35,9 +35,11 @@ const ClearanceSection = ({section_data, onAction, handleRemarksClick, titleAlig
                         key={student.registration}
                         student_data={student}
                         type={type}
+                        sectionType={section_data.type}
                         approvalType={section_data.type}
                         onAction={onAction}
                         handleRemarksClick={handleRemarksClick}
+                        handleDetailClick={handleDetailClick}
                     />
                 ))
             }

@@ -8,12 +8,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import dateFormat from "dateformat";
+import DeviceHubIcon from '@mui/icons-material/DeviceHub';
 import { dateMask } from '../../utils/config';
 import * as urls from '../../utils/api_urls'
 
 
 
-const Clearance = ({ student_data, type, approvalType, onAction, handleRemarksClick }) => {
+const Clearance = ({ student_data, type, approvalType, onAction, sectionType, handleRemarksClick, handleDetailClick }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const performAction = async (url) => {
         setIsSubmitting(true);
@@ -75,7 +76,7 @@ const Clearance = ({ student_data, type, approvalType, onAction, handleRemarksCl
         <Paper sx={{ display: 'flex', mb: 1 }} style={{ overflow: 'hidden' }} alignItems="center" justifyContent="center">
             <CardMedia
                 component="img"
-                sx={{ width: 150, height: 'auto', display: {xs: 'none', md: 'block'} }}
+                sx={{ width: 150, height: 'auto', display: { xs: 'none', md: 'block' } }}
                 // style = {{borderRadius: '5px'}}
                 image={urls.baseUrl + student_data.avatar_url}
                 alt="avatar"
@@ -83,36 +84,48 @@ const Clearance = ({ student_data, type, approvalType, onAction, handleRemarksCl
             <CardContent sx={{ width: '100%' }} >
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: "center" }}>
                     <Box sx={{ display: 'flex' }} alignItems="center">
-                        <Avatar sx={{display: {xs: 'block', md: 'none'}, width: '60px', height: '60px', mr: 1}} src={urls.baseUrl + student_data.avatar_url} />
+                        <Avatar sx={{ display: { xs: 'block', md: 'none' }, width: '60px', height: '60px', mr: 1 }} src={urls.baseUrl + student_data.avatar_url} />
                         <Box component="div" flexGrow={1} >
-                            <Typography component="div" variant="h5" sx={{fontSize: {xs: '1rem', md: '1.3rem'}}} >
+                            <Typography component="div" variant="h5" sx={{ fontSize: { xs: '1rem', md: '1.3rem' } }} >
                                 {student_data.name}
                             </Typography>
 
                             <Stack direction="row" spacing={1}>
-                                <Typography variant="subtitle1" color="text.secondary" component="span" sx={{fontSize: {xs: '0.8rem', md: '1.1rem'}}}>
+                                <Typography variant="subtitle1" color="text.secondary" component="span" sx={{ fontSize: { xs: '0.8rem', md: '1.1rem' } }}>
                                     {student_data.registration}
                                 </Typography>
-                                <Typography variant="subtitle1" color="secondary" component="span" sx={{fontSize: {xs: '0.8rem', md: '1.1rem'}}}>
+                                <Typography variant="subtitle1" color="secondary" component="span" sx={{ fontSize: { xs: '0.8rem', md: '1.1rem' } }}>
                                     {student_data.session}
                                 </Typography>
                             </Stack>
-                            <Typography container="span" sx={{fontSize: {xs: '0.7rem', md: '0.8rem'}}} color="text.secondary">
+                            <Typography container="span" sx={{ fontSize: { xs: '0.7rem', md: '0.8rem' } }} color="text.secondary">
                                 Applied At: {dateFormat(student_data.applied_at, dateMask)}
                             </Typography>
                         </Box>
                         <Box>
-                            <CircularProgressWithLabel sx={{display: {xs: 'none', md: 'block'}}} value={student_data.progress} />
+                            <CircularProgressWithLabel sx={{ display: { xs: 'none', md: 'block' } }} value={student_data.progress} />
                         </Box>
                     </Box>
                     <Box sx={{ mt: 2, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                         {action_btns}
+                        <Box>
+                        {
+                            sectionType === 'dept_head' ?
+                                <Chip
+                                    label="Insider"
+                                    icon={<DeviceHubIcon />}
+                                    onClick={() => handleDetailClick(approvalType, student_data.id)}
+                                    sx={{ px: 1, mr: { xs: 0, md: 1 }, mb: { xs: 1, md: 0 } }}
+                                /> : null
+                        }
+
                         <Chip
                             label="Remarks"
                             icon={<NotesIcon />}
                             onClick={() => handleRemarksClick(approvalType, student_data.id)}
                             sx={{ px: 1 }}
                         />
+                        </Box>
                     </Box>
                 </Box>
             </CardContent>

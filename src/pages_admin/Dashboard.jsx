@@ -23,7 +23,7 @@ import { getCookie } from '../utils/cookies';
 
 const Dashboard = (props) => {
   const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
-  const [isClearanceDetailModalOpen, setIsClearanceDetailModalOpen] = useState(true);
+  const [isClearanceDetailModalOpen, setIsClearanceDetailModalOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedClearance, setSelectedClearance] = useState({ type: null, id: null });
   const [selectedDetailClearance, setSelectedDetailClearance] = useState({ type: null, id: null });
@@ -250,6 +250,7 @@ const Dashboard = (props) => {
                       section_data={section}
                       onAction={clearanceAction}
                       handleRemarksClick={handleRemarksClick}
+                      handleDetailClick={handleClearanceDetailModalClick}
                     />
                   )
                 })
