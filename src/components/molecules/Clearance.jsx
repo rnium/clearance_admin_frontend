@@ -112,7 +112,7 @@ const Clearance = ({ student_data, type, approvalType, onAction, sectionType, ha
                         {
                             sectionType === 'dept_head' ?
                                 <Chip
-                                    label="Insider"
+                                    label="Flow"
                                     icon={<DeviceHubIcon />}
                                     onClick={() => handleDetailClick(approvalType, student_data.id)}
                                     sx={{ px: 1, mr: { xs: 0, md: 1 }, mb: { xs: 1, md: 0 } }}

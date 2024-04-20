@@ -94,7 +94,7 @@ const ClearanceDetailModal = (props) => {
         }
     })
 
-    let title = 'Approvals';
+    let title = 'View Clearance Flow';
     // if (apprdepartmentsLoaded) {
     //     title = `ApprDepartments  ${remarks.registration}`
     // }

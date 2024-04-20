@@ -3,7 +3,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import HourglassDisabledIcon from '@mui/icons-material/HourglassDisabled';
 import {
-    Stack, Typography, TextField, Box, Button, Paper, Grid, Chip
+    Stack, Typography, Paper, Chip, Alert, AlertTitle
 } from '@mui/material';
 
 const ClearanceDetailModalEntity = ({ entity }) => {
@@ -17,6 +17,13 @@ const ClearanceDetailModalEntity = ({ entity }) => {
                         : entity.is_seekable ?
                             <Chip size='small' label="Pending" color="secondary" icon={<HourglassBottomIcon />} sx={{ px: 2 }} />
                             : <Chip size='small' label="Not Activated" icon={<HourglassDisabledIcon />} sx={{ px: 2 }} />
+                }
+                {
+                    entity.remarks ?
+                    <Alert security='info' icon={false} sx={{px: 3}}>
+                        <AlertTitle>Remarks</AlertTitle>
+                        {entity.remarks}
+                    </Alert>: null
                 }
             </Stack>
         </Paper>
