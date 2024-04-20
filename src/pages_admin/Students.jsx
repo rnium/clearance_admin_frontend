@@ -157,7 +157,7 @@ const Students = () => {
           }
         </Stack>
         {
-          deptSelected ?
+          deptSelected && (adminAcType === 'academic' || adminAcType === 'principal') ?
             <Stack sx={{ width: '100%' }} direction="row" justifyContent="flex-end" alignItems="flex-end">
               <SessionAddModal
                 isModalOpen={isModalOpen}
