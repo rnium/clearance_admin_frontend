@@ -99,9 +99,9 @@ const ClearanceDetailModal = (props) => {
     })
 
     let title = 'View Clearance Flow';
-    // if (apprdepartmentsLoaded) {
-    //     title = `ApprDepartments  ${remarks.registration}`
-    // }
+    if (props?.selectedStudent) {
+        title = `Clearance Flow of  ${props?.selectedStudent}`
+    }
 
 
     return (
