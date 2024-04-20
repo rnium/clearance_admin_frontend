@@ -35,7 +35,7 @@ const PendingStudent = ({ student, approve, onDelete }) => {
                             </Typography>
                         </Typography>
                         <Typography sx={{ fontSize: '0.8rem' }} variant="subtitle2" color="text.secondary" component="span" >
-                            IP: {student.ip_address}
+                            Phone: {student.phone}
                         </Typography>
                     </Box>
                     <Stack>

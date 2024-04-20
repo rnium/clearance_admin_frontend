@@ -8,7 +8,6 @@ import { message } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import { getCookie } from '../utils/cookies';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -19,6 +18,7 @@ const StudentSignup = () => {
             first_name: '',
             last_name: '',
             registration_no: '',
+            phone: '',
             email: '',
             session: '',
             department: '',
@@ -32,6 +32,10 @@ const StudentSignup = () => {
         event.preventDefault()
         if (formData.password !== rePass) {
             message.error("Passwords doesn't matches", 5)
+            return;
+        }
+        if (formData.phone.length !== 11) {
+            message.error("Phone number should be 11 digits long", 5)
             return;
         }
         if (profilePhoto === null) {
@@ -90,12 +94,17 @@ const StudentSignup = () => {
 
     return (
         <Box sx={{ display: 'flex' }} flexDirection="column" justifyContent="center" alignItems="center">
-            <Box width={{ xs: "90%", md: '40%' }} sx={{ mt: '8vh', mb: 5 }}>
+            <Box width={{ xs: "90%", md: '40%' }} sx={{ mt: '5vh', mb: 5 }}>
                 <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" >
-                    <img src="/static/images/cube(1).png" alt="Technoventure Logo" width="100px" />
+                    <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                        <img src="/static/images/cube(1).png" alt="Technoventure Logo" width="100px" />
+                    </Box>
+                    <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+                        <img src="/static/images/cube(1).png" alt="Technoventure Logo" width="60px" />
+                    </Box>
                     <Stack sx={{ ml: 1 }}>
-                        <Typography color="text.secondary" variant='h5' component="span">SEC Clearance Portal</Typography>
-                        <Typography color="text.secondary" variant='h6'>Student Signup</Typography>
+                        <Typography color="text.secondary" sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} variant='h5' component="span">SEC Clearance Portal</Typography>
+                        <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.8rem', md: '1.2rem' } }}>Student Signup</Typography>
                     </Stack>
                 </Box>
                 <form onSubmit={handleSubmit} >
@@ -114,6 +123,9 @@ const StudentSignup = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField label="Session (e.g., 2018-19)" name="session" onChange={handleChange} variant='outlined' fullWidth required />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField label="Phone Number" name="phone" onChange={handleChange} variant='outlined' required fullWidth />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField label="Email Address" name="email" type="email" onChange={handleChange} variant='outlined' required fullWidth />
