@@ -6,7 +6,7 @@ import {
   DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
 import RolesCard from '../components/molecules/RolesCard';
-import { Modal, Spin, message, Empty } from 'antd';
+import { Spin, message, Empty, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
@@ -135,7 +135,28 @@ const Dashboard = (props) => {
     }
   }
 
-  const deleteAccount = async payload => {
+  const approveAllAccounts = async () => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        // 'X-CSRFToken': getCookie('csrftoken')
+      },
+    };
+    try {
+      let res = await axios.post(urls.approveAllStudentAcUrl);
+      message.success(res.data.info);
+      res = await axios.get(urls.pendingStudentAcUrl);
+      dispatch(setPendingAccounts(res.data))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  const deleteAccount = async registration => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -144,7 +165,7 @@ const Dashboard = (props) => {
     };
     try {
       let res = await axios.post(
-        urls.deleteStudentAcUrl, payload, config
+        urls.deleteStudentAcUrl, {registration}, config
       );
       message.success(res.data.info);
       res = await axios.get(urls.pendingStudentAcUrl);
@@ -236,11 +257,27 @@ const Dashboard = (props) => {
                       {
                         pendingAccounts.length ?
                           pendingAccounts.map(s => (
-                            <PendingStudent openDialog={openDialog} approve={approveAccount} student={s} />
+                            <PendingStudent onDelete={deleteAccount} approve={approveAccount} student={s} />
                           )) :
                           <Stack sx={{ py: 5 }}>
                             <Empty />
                           </Stack>
+                      }
+                      {
+                        pendingAccounts.length ?
+                          <Popconfirm
+                            title="Confirmation"
+                            description="Are you sure to approve all pending students?"
+                            okText="Yes"
+                            cancelText="Cancel"
+                            onConfirm={approveAllAccounts}
+                          >
+                            <Button
+                              variant='contained'
+                            >
+                              Approve All
+                            </Button>
+                          </Popconfirm> : null
                       }
                     </Paper> :
                     <Paper sx={{ py: 15 }}>

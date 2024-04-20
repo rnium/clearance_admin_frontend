@@ -2,11 +2,12 @@ import { useState } from 'react';
 import {
     Paper, Box, CardMedia, Typography, Chip, Stack, Fade
 } from '@mui/material';
+import { Popconfirm } from 'antd'
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import * as urls from '../../utils/api_urls'
 
-const PendingStudent = ({ student, approve, openDialog }) => {
+const PendingStudent = ({ student, approve, onDelete }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const performAprroval = async (registration) => {
         setIsSubmitting(true);
@@ -48,16 +49,24 @@ const PendingStudent = ({ student, approve, openDialog }) => {
                             variant='contained'
                         >
                         </Chip>
-                        <Chip
-                            label="Delete"
-                            sx={{ px: 1, mt: 0.5 }}
-                            color='error'
-                            icon={<DeleteIcon />}
-                            disabled={isSubmitting}
-                            onClick={() => openDialog(student.registration)}
-                            variant='contained'
+                        <Popconfirm
+                            title="Confirmation"
+                            description="Are you sure to delete this account?"
+                            okText="Yes"
+                            cancelText="Cancel"
+                            onConfirm={() => onDelete(student.registration)}
                         >
-                        </Chip>
+                            <Chip
+                                label="Delete"
+                                sx={{ px: 1, mt: 0.5 }}
+                                color='error'
+                                icon={<DeleteIcon />}
+                                disabled={isSubmitting}
+                                onClick={() => console.log("deleting")}
+                                variant='contained'
+                            >
+                            </Chip>
+                        </Popconfirm>
                     </Stack>
                 </Box>
             </Paper>
