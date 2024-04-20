@@ -90,7 +90,7 @@ const StudentDashboard = () => {
       loadClearanceInfo();
       loadRemarksInfo();
     }
-  }, [studentInfoLoaded])
+  }, [studentInfoLoaded, studentInfo.state])
 
 
   if (!studentInfoLoaded) {
