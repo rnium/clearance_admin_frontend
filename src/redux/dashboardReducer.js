@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+    deptSelected: 'CSE',
+    pendingStudentDept: 'CSE',
     pendingClearances: {
         isLoaded: false,
         clearances: null
@@ -19,6 +21,12 @@ const dashboardSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
+        setDeptSelected: (state, action) => {
+            state.deptSelected = action.payload;
+        },
+        setPendingStudentDept: (state, action) => {
+            state.pendingStudentDept = action.payload;
+        },
         setPendingClearances: (state, action) => {
             state.pendingClearances.clearances = action.payload;
         },
@@ -41,6 +49,8 @@ const dashboardSlice = createSlice({
 })
 
 export const {
-    setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded, setPendingAccounts, setPendingAccountsLoaded
+    setPendingClearances, setDeptSelected, setPendingStudentDept, 
+    setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded, 
+    setPendingAccounts, setPendingAccountsLoaded
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

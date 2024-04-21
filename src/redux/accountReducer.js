@@ -2,15 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     userinfo: {
-        is_authenticated: false,
+        is_authenticated: true,
         username: '',
         avatar_url: '',
-        user_fullname: '',
-        account_type: '',
-        user_type: '',
+        user_fullname: 'Custom ACR',
+        account_type: 'admin',
+        user_type: 'academic',
         is_superadmin: false,
     },
-    is_loaded: false,
+    is_loaded: true,
     is_loading: false,
 }
 

@@ -14,7 +14,8 @@ import {
 } from '../redux/dashboardReducer';
 import Unselected from '../components/atoms/Unselected';
 import ClearanceSection from '../components/organisms/ClearanceSection';
-import RemarksModal from '../components/molecules/RemarksModal'
+import RemarksModal from '../components/molecules/RemarksModal';
+import CustomDeptSegmented from '../components/atoms/CustomDeptSegmented';
 
 
 
@@ -35,6 +36,7 @@ const Applications = ({ pagetype }) => {
   const dispatch = useDispatch();
   const roles = useSelector(state => state.dashboard.adminRoles?.roles);
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
+  const [deptSelected, setDeptSelected] = useState('CSE');
   const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
@@ -93,7 +95,7 @@ const Applications = ({ pagetype }) => {
   }
 
   const fetchPageSilent = async () => {
-    let params = { code, type, page: page + 1, pagesize: rowsPerPage, ...pageKwargs[pagetype] };
+    let params = { code, type, page: page + 1, pagesize: rowsPerPage, dept: deptSelected.toLowerCase(), ...pageKwargs[pagetype] };
     try {
       let res = await axios.get(urls.clearanceSectionUrl, { params });
       setCount(res.data.count);
@@ -146,6 +148,14 @@ const Applications = ({ pagetype }) => {
   })
 
   useEffect(() => {
+    if (adminRolesLoaded && type && code) {
+      setTimeout(() => {
+        fetchPage();
+      }, 100)
+    }
+  }, [deptSelected])
+
+  useEffect(() => {
     if (selectedClearanceId) {
       setIsRemarksModalOpen(true);
     }
@@ -154,8 +164,8 @@ const Applications = ({ pagetype }) => {
   if (!adminRolesLoaded) {
     return (
       <Container >
-        <Stack sx={{mt: '12vh'}} alignItems="center">
-          <Spin size='large'/>
+        <Stack sx={{ mt: '12vh' }} alignItems="center">
+          <Spin size='large' />
         </Stack>
       </Container>
     )
@@ -173,11 +183,17 @@ const Applications = ({ pagetype }) => {
         isModalOpen={isRemarksModalOpen}
         setIsModalOpen={closeRemarksModal}
         pagetype={pagetype}
-        selectedClearance={{type, id:selectedClearanceId}}
+        selectedClearance={{ type, id: selectedClearanceId }}
       />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={9}>
-          <Typography variant='h5' color="text.secondary" sx={{mb: 2}}>{titles[pagetype]}</Typography>
+          <Typography variant='h5' color="text.secondary" sx={{ mb: 2 }}>{titles[pagetype]}</Typography>
+          <Box sx={{mb: 1}}>
+            <CustomDeptSegmented 
+             value={deptSelected}
+             onChange={setDeptSelected}
+            />
+          </Box>
           <Box>
             {
               roles.map(r => (

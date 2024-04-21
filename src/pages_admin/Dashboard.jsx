@@ -5,12 +5,13 @@ import {
   DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
 import RolesCard from '../components/molecules/RolesCard';
-import { Spin, message, Empty, Popconfirm } from 'antd';
+import { Spin, message, Empty, Popconfirm, Segmented, ConfigProvider } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import {
-  setPendingClearances, setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
+  setPendingClearances, setDeptSelected, setPendingStudentDept,
+  setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
   setPendingAccounts, setPendingAccountsLoaded
 } from '../redux/dashboardReducer';
 import ClearanceSection from '../components/organisms/ClearanceSection';
@@ -19,6 +20,7 @@ import Unselected from '../components/atoms/Unselected';
 import RemarksModal from '../components/molecules/RemarksModal';
 import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal';
 import { getCookie } from '../utils/cookies';
+import CustomDeptSegmented from '../components/atoms/CustomDeptSegmented';
 
 
 const Dashboard = (props) => {
@@ -29,6 +31,8 @@ const Dashboard = (props) => {
   const [selectedDetailClearance, setSelectedDetailClearance] = useState({ type: null, id: null });
   const [deletableId, setDeletableId] = useState(null);
   const dispatch = useDispatch();
+  const deptSelected = useSelector(state => state.dashboard.deptSelected)
+  const pendingStudentDept = useSelector(state => state.dashboard.pendingStudentDept)
   const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances)
   const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded)
   const adminRoles = useSelector(state => state.dashboard.adminRoles.roles)
@@ -37,10 +41,19 @@ const Dashboard = (props) => {
   const pendingAccountsLoaded = useSelector(state => state.dashboard.pendingAccounts.isLoaded)
   const adminAcType = useSelector(state => state.account.userinfo?.user_type)
 
+  const changeDeptSelected = (val) => {
+    dispatch(setDeptSelected(val));
+  }
+
+  const changePendingStudentDept = (val) => {
+    dispatch(setPendingStudentDept(val));
+  }
+
   const closeDialog = () => {
     setDialogOpen(false);
     setDeletableId(null);
   }
+
   const openDialog = reg_id => {
     setDialogOpen(true);
     setDeletableId(reg_id);
@@ -65,8 +78,9 @@ const Dashboard = (props) => {
   }
 
   async function loadClearances() {
+    let params = { dept: deptSelected.toLowerCase() };
     try {
-      let res = await axios.get(urls.dashboardClearancesUrl);
+      let res = await axios.get(urls.dashboardClearancesUrl, { params });
       dispatch(setPendingClearances(res.data))
       dispatch(setPendingClearancesLoaded(true))
     } catch (error) {
@@ -93,8 +107,9 @@ const Dashboard = (props) => {
   }
 
   async function loadPendingAccounts() {
+    let params = { dept: pendingStudentDept.toLowerCase() }
     try {
-      let res = await axios.get(urls.pendingStudentAcUrl);
+      let res = await axios.get(urls.pendingStudentAcUrl, { params });
       dispatch(setPendingAccounts(res.data))
       dispatch(setPendingAccountsLoaded(true))
     } catch (error) {
@@ -110,8 +125,7 @@ const Dashboard = (props) => {
     try {
       let res = await axios.get(urls.baseUrl + url);
       message.success(res.data.info);
-      res = await axios.get(urls.dashboardClearancesUrl);
-      dispatch(setPendingClearances(res.data))
+      await loadClearances();
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -135,8 +149,7 @@ const Dashboard = (props) => {
         config
       );
       message.success(res.data.info);
-      res = await axios.get(urls.pendingStudentAcUrl);
-      dispatch(setPendingAccounts(res.data))
+      await loadPendingAccounts();
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -154,10 +167,9 @@ const Dashboard = (props) => {
       },
     };
     try {
-      let res = await axios.post(urls.approveAllStudentAcUrl, {}, config);
+      let res = await axios.post(urls.approveAllStudentAcUrl, {dept: pendingStudentDept.toLowerCase()}, config);
       message.success(res.data.info);
-      res = await axios.get(urls.pendingStudentAcUrl);
-      dispatch(setPendingAccounts(res.data))
+      await loadPendingAccounts();
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -176,7 +188,7 @@ const Dashboard = (props) => {
     };
     try {
       let res = await axios.post(
-        urls.deleteStudentAcUrl, {registration}, config
+        urls.deleteStudentAcUrl, { registration }, config
       );
       message.success(res.data.info);
       res = await axios.get(urls.pendingStudentAcUrl);
@@ -201,6 +213,24 @@ const Dashboard = (props) => {
       loadPendingAccounts();
     }
   }, [])
+
+  useEffect(() => {
+    if (pendingClearancesLoaded) {
+      dispatch(setPendingClearancesLoaded(false));
+      setTimeout(() => {
+        loadClearances();
+      }, 10)
+    }
+  }, [deptSelected])
+
+  useEffect(() => {
+    if (pendingAccountsLoaded) {
+      dispatch(setPendingAccountsLoaded(false));
+      setTimeout(() => {
+        loadPendingAccounts();
+      }, 10)
+    }
+  }, [pendingStudentDept])
 
   useEffect(() => {
     if (selectedClearance.id && selectedClearance.type) {
@@ -236,6 +266,8 @@ const Dashboard = (props) => {
       />
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
+          <CustomDeptSegmented value={deptSelected} onChange={changeDeptSelected} />
+
           {
             pendingClearancesLoaded === false ?
               <Stack sx={{ mt: 5 }}>
@@ -272,42 +304,53 @@ const Dashboard = (props) => {
             adminAcType === 'academic' ?
               <Box sx={{ mb: 2 }}>
                 {
-                  pendingAccountsLoaded ?
-                    <Paper sx={{ p: 2 }} >
-                      <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-                        Pending Accounts
-                      </Typography>
-                      {
-                        pendingAccounts.length ?
-                          pendingAccounts.map(s => (
-                            <PendingStudent onDelete={deleteAccount} approve={approveAccount} student={s} />
-                          )) :
-                          <Stack sx={{ py: 5 }}>
-                            <Empty />
-                          </Stack>
-                      }
-                      {
-                        pendingAccounts.length ?
-                          <Popconfirm
-                            title="Confirmation"
-                            description="Are you sure to approve all pending students?"
-                            okText="Yes"
-                            cancelText="Cancel"
-                            onConfirm={approveAllAccounts}
-                          >
-                            <Button
-                              variant='contained'
-                            >
-                              Approve All
-                            </Button>
-                          </Popconfirm> : null
-                      }
-                    </Paper> :
-                    <Paper sx={{ py: 15 }}>
-                      <Stack>
-                        <Spin size='large' />
-                      </Stack>
-                    </Paper>
+                  <Paper sx={{ p: 2 }} >
+                    <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+                      Pending Accounts
+                    </Typography>
+                    <Box sx={{ mb: 1 }}>
+                      <CustomDeptSegmented
+                        value={pendingStudentDept}
+                        onChange={changePendingStudentDept}
+                        trackBg="#f5f5f5"
+                        block={true}
+                      />
+                    </Box>
+                    {
+                      pendingAccountsLoaded ?
+                        <div>
+                          {
+                            pendingAccounts.length ?
+                              pendingAccounts.map(s => (
+                                <PendingStudent onDelete={deleteAccount} approve={approveAccount} student={s} />
+                              )) :
+                              <Stack sx={{ py: 5 }}>
+                                <Empty />
+                              </Stack>
+                          }
+                          {
+                            pendingAccounts.length ?
+                              <Popconfirm
+                                title="Confirmation"
+                                description="Are you sure to approve all pending students?"
+                                okText="Yes"
+                                cancelText="Cancel"
+                                onConfirm={approveAllAccounts}
+                              >
+                                <Button
+                                  variant='contained'
+                                >
+                                  Approve All
+                                </Button>
+                              </Popconfirm> : null
+                          }
+                        </div> :
+                        <Stack sx={{ py: 15 }}>
+                          <Spin size='large' />
+                        </Stack>
+                    }
+                  </Paper>
+
                 }
               </Box> : null
           }
