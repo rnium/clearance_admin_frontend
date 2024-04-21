@@ -45,7 +45,6 @@ const AdminSignup = () => {
         postData.append('tokenid', token);
         if (profilePhoto !== null) {
             postData.append('profilePhoto', profilePhoto);
-            return;
         }
         const config = {
             headers: {
