@@ -22,6 +22,7 @@ export const studentinfoUrl = baseUrl + '/account/progressive-studentinfo/'
 export const applyClearanceUrl = baseUrl + '/clearance/api/apply/'
 export const userInfoUrl = baseUrl + '/clearance/api/userinfo/'
 export const dashboardClearancesUrl = baseUrl + '/clearance/api/dashboard-clearances/'
+export const adminDashboardStatsUrl = baseUrl + '/clearance/api/dashboard/adminstats/'
 export const clearanceSectionUrl = baseUrl + '/clearance/api/section-clearances/'
 export const departmentsUrl = baseUrl + '/clearance/api/departments/';
 export const departmentsSectionsUrl = baseUrl + '/clearance/api/departments/sections/';

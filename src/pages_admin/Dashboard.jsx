@@ -77,6 +77,25 @@ const Dashboard = (props) => {
     setSelectedDetailClearance({ type, id })
   }
 
+  const fireAdminStats = data => {
+    for (let dept of Object.keys(data)) {
+      if (data[dept].pending > 0) {
+        if (deptSelected !== dept) {
+          changeDeptSelected(dept.toUpperCase());
+        }
+        break;
+      }
+    }
+    for (let dept of Object.keys(data)) {
+      if (data[dept].pending_students > 0) {
+        if (pendingStudentDept !== dept) {
+          changePendingStudentDept(dept.toUpperCase());
+        }
+        break;
+      }
+    }
+  }
+
   async function loadClearances() {
     let params = { dept: deptSelected.toLowerCase() };
     try {
@@ -118,6 +137,19 @@ const Dashboard = (props) => {
         error_msg = error.message;
       }
       message.error(error_msg);
+    }
+  }
+
+  async function loadAdminStats() {
+    try {
+      let res = await axios.get(urls.adminDashboardStatsUrl);
+      fireAdminStats(res.data);
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      console.log(error_msg);
     }
   }
 
@@ -167,7 +199,7 @@ const Dashboard = (props) => {
       },
     };
     try {
-      let res = await axios.post(urls.approveAllStudentAcUrl, {dept: pendingStudentDept.toLowerCase()}, config);
+      let res = await axios.post(urls.approveAllStudentAcUrl, { dept: pendingStudentDept.toLowerCase() }, config);
       message.success(res.data.info);
       await loadPendingAccounts();
     } catch (error) {
@@ -205,6 +237,7 @@ const Dashboard = (props) => {
   useEffect(() => {
     if (!pendingClearancesLoaded) {
       loadClearances();
+      loadAdminStats();
     };
     if (!adminRolesLoaded) {
       loadRoles();
@@ -266,7 +299,9 @@ const Dashboard = (props) => {
       />
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
-          <CustomDeptSegmented value={deptSelected} onChange={changeDeptSelected} />
+          <Box sx={{mb: 2}}>
+            <CustomDeptSegmented value={deptSelected} onChange={changeDeptSelected} />
+          </Box>
 
           {
             pendingClearancesLoaded === false ?
