@@ -5,7 +5,7 @@ import {
   DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
 import RolesCard from '../components/molecules/RolesCard';
-import { Spin, message, Empty, Popconfirm, Segmented, ConfigProvider } from 'antd';
+import { Spin, message, Empty, Popconfirm} from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
@@ -277,7 +277,7 @@ const Dashboard = (props) => {
     }
   }, [selectedDetailClearance])
 
-  if (adminRolesLoaded && adminRoles.length == 0) {
+  if (adminRolesLoaded && adminRoles.length === 0) {
     return (
       <Container>
         <Unselected image='leisure.svg' message='No Roles Assigned' />
@@ -308,7 +308,7 @@ const Dashboard = (props) => {
               <Stack sx={{ mt: 5 }}>
                 <Spin size='large' />
               </Stack> :
-              pendingClearances.length == 0 ?
+              pendingClearances.length === 0 ?
                 <ClearancesEmpty />
                 :
                 pendingClearances.map(section => {

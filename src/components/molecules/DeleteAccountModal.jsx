@@ -11,7 +11,7 @@ import { loadMembers } from '../../pages_admin/Members';
 import * as urls from '../../utils/api_urls';
 import { getCookie } from '../../utils/cookies';
 
-const MemberAssignModal = (props) => {
+const DeleteAccountModal = (props) => {
     const membersLoaded = useSelector(state => state.members.is_loaded)
     const [sending, setSending] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -29,7 +29,7 @@ const MemberAssignModal = (props) => {
             title = `Head of ${props.selectedRole.section}`
             break;
         case 'dept_clerk':
-            title = `Staff of ${props.selectedRole.section}`
+            title = `Clerk of ${props.selectedRole.section}`
             break;
         case 'lab_incharge':
             title = `In-Charge of ${props.selectedRole.title}`
@@ -133,4 +133,4 @@ const MemberAssignModal = (props) => {
     )
 }
 
-export default MemberAssignModal
+export default DeleteAccountModal

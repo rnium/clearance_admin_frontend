@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Container, Stack, Button, Fade
+  Box, Container, Stack, Button, Grid, Paper
 } from '@mui/material';
 import MarkAsUnreadIcon from '@mui/icons-material/MarkAsUnread';
 
@@ -11,6 +11,9 @@ import axios from 'axios';
 import * as urls from '../utils/api_urls'
 import { setMembers, setLoaded } from '../redux/membersReducer';
 import InvitationModal from '../components/molecules/InvitationModal';
+import ChangeDeptModal from '../components/molecules/ChangeDeptModal';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 
 export const loadMembers = async (dispatch) => {
@@ -31,6 +34,7 @@ const Members = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
   const [pageInitialized, setPageInitialized] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangeDeptModalOpen, setIsChangeDeptModalOpen] = useState(true);
   const memberSections = useSelector(state => state.members.memberSections)
   const membersLoaded = useSelector(state => state.members.is_loaded)
   const dispatch = useDispatch();
@@ -59,13 +63,32 @@ const Members = () => {
           <Box sx={{ display: 'flex' }} justifyContent="flex-end">
             <Button variant='contained' startIcon={<MarkAsUnreadIcon />} onClick={() => setIsModalOpen(true)}>Send Invitation</Button>
             <InvitationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-          </Box>: null
+          </Box> : null
       }
+      {
+        adminAcType === 'academic' || adminAcType === 'principal' ?
+          <Paper sx={{ p: 3, my: 2 }}>
+            <ChangeDeptModal
+              isModalOpen = {isChangeDeptModalOpen}
+              setIsModalOpen = {setIsChangeDeptModalOpen}
+            />
+            <Grid container justifyContent="center" spacing={2}>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ borderRadius: '180px' }} onClick={() => setIsChangeDeptModalOpen(true)} variant='contained' startIcon={<ManageAccountsIcon />} color="secondary" fullWidth >Change Department</Button>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Button sx={{ borderRadius: '180px' }} variant='contained' startIcon={<DeleteIcon />} color="error" fullWidth>Delete An Account</Button>
+              </Grid>
+            </Grid>
+          </Paper> : null
+      }
+
       {
         memberSections.map(section => (
           <MemberSection section={section} />
         ))
       }
+
     </Container>
   )
 }
