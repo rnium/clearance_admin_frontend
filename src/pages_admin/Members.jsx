@@ -36,7 +36,7 @@ const Members = () => {
   const [pageInitialized, setPageInitialized] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChangeDeptModalOpen, setIsChangeDeptModalOpen] = useState(false);
-  const [isDeleteAcModalOpen, setIsDeleteAcModalOpen] = useState(true);
+  const [isDeleteAcModalOpen, setIsDeleteAcModalOpen] = useState(false);
   const memberSections = useSelector(state => state.members.memberSections)
   const membersLoaded = useSelector(state => state.members.is_loaded)
   const dispatch = useDispatch();
@@ -67,9 +67,15 @@ const Members = () => {
             <InvitationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
           </Box> : null
       }
+
+      {
+        memberSections.map(section => (
+          <MemberSection section={section} />
+        ))
+      }
       {
         adminAcType === 'academic' || adminAcType === 'principal' ?
-          <Paper sx={{ p: 3, my: 2 }}>
+          <Box sx={{ p: 3, my: 2 }}>
             <ChangeDeptModal
               isModalOpen = {isChangeDeptModalOpen}
               setIsModalOpen = {setIsChangeDeptModalOpen}
@@ -81,20 +87,14 @@ const Members = () => {
               loadMembers = {() => loadMembers(dispatch)}
             />
             <Grid container justifyContent="center" spacing={2}>
-              <Grid item xs={12} md={3}>
-                <Button sx={{ borderRadius: '180px' }} onClick={() => setIsChangeDeptModalOpen(true)} variant='contained' startIcon={<ManageAccountsIcon />} color="secondary" fullWidth >Change Department</Button>
+              <Grid item xs={12} md={4}>
+                <Button sx={{ borderRadius: '180px' }} onClick={() => setIsChangeDeptModalOpen(true)} variant='contained' startIcon={<ManageAccountsIcon />} color="secondary" fullWidth >Change User Department</Button>
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid item xs={12} md={4}>
                 <Button sx={{ borderRadius: '180px' }} onClick={() => setIsDeleteAcModalOpen(true)} variant='contained' startIcon={<DeleteIcon />} color="error" fullWidth>Delete An Account</Button>
               </Grid>
             </Grid>
-          </Paper> : null
-      }
-
-      {
-        memberSections.map(section => (
-          <MemberSection section={section} />
-        ))
+          </Box> : null
       }
 
     </Container>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    AppBar, Toolbar, Typography, Button, Box, Tooltip, Avatar
+    AppBar, Toolbar, Typography, Button, Box, Tooltip, Avatar, Badge, Paper, MenuList,
+    ListItemIcon, ListItemText, Divider
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -16,12 +17,20 @@ import axios from 'axios';
 import * as urls from '../../utils/api_urls';
 import { message } from 'antd';
 import { getCookie } from '../../utils/cookies';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 
 const Navbar = ({ drawerWidth }) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElNotif, setAnchorElNotif] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const userinfo = useSelector(state => state.account.userinfo);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -31,15 +40,25 @@ const Navbar = ({ drawerWidth }) => {
         setAnchorElUser(null);
     };
 
+    const handleOpenNotifMenu = (event) => {
+        setAnchorElNotif(event.currentTarget);
+    };
+    const handleCloseNotifMenu = () => {
+        setAnchorElNotif(null);
+    };
+
+    const handleClickNotifItem = (link) => {
+        navigate(link);
+        setAnchorElNotif(null);
+    }
+
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-    const userinfo = useSelector(state => state.account.userinfo);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    
 
     const logoutUser = async () => {
         const config = {
@@ -112,9 +131,54 @@ const Navbar = ({ drawerWidth }) => {
                             }
                         </Menu>
                     </Box>
-                    <Typography variant="h6" noWrap component="div" flexGrow={1} sx={{fontSize: {xs: '1rem', md: '1.2rem'}}}>
+                    <Typography variant="h6" noWrap component="div" flexGrow={1} sx={{ fontSize: { xs: '1rem', md: '1.2rem' } }}>
                         SEC Clearance Portal
                     </Typography>
+                    <Box sx={{ px: {xs: 1, md: 2} }}>
+                        <IconButton
+                            aria-label="show notifications menu"
+                            color="inherit"
+                            onClick={handleOpenNotifMenu}
+                        >
+                            <Badge invisible={false} color="error" variant='dot'>
+                                <NotificationsNoneIcon />
+                            </Badge>
+                        </IconButton>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElNotif}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElNotif)}
+                            onClose={handleCloseNotifMenu}
+                        >
+                            <Box sx={{ width: 300, maxWidth: '100%' }}>
+                                <MenuList>
+                                    <MenuItem onClick={() => handleClickNotifItem('/applications')}>
+                                        <ListItemIcon>
+                                            <HourglassBottomIcon />
+                                        </ListItemIcon>
+                                        <ListItemText>999 Pending Request</ListItemText>
+                                    </MenuItem>
+                                    {/* <Divider /> */}
+                                    <MenuItem onClick={() => handleClickNotifItem('/archives')}>
+                                        <ListItemIcon>
+                                            <ArchiveIcon />
+                                        </ListItemIcon>
+                                        <ListItemText>1999 Archived Request</ListItemText>
+                                    </MenuItem>
+                                </MenuList>
+                            </Box>
+                        </Menu>
+                    </Box>
                     <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none' } }}>
                         <Tooltip title={userinfo.user_fullname}>
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -159,7 +223,7 @@ const Navbar = ({ drawerWidth }) => {
                     </Box>
                 </Toolbar>
             </AppBar>
-        </div>
+        </div >
     )
 }
 
