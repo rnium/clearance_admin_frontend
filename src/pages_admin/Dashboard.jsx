@@ -14,7 +14,6 @@ import {
   setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
   setPendingAccounts, setPendingAccountsLoaded
 } from '../redux/dashboardReducer';
-import {setPendingStats} from '../redux/notificationReducer'
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 import Unselected from '../components/atoms/Unselected';
@@ -32,15 +31,15 @@ const Dashboard = (props) => {
   const [selectedDetailClearance, setSelectedDetailClearance] = useState({ type: null, id: null });
   const [deletableId, setDeletableId] = useState(null);
   const dispatch = useDispatch();
-  const deptSelected = useSelector(state => state.dashboard.deptSelected)
-  const pendingStudentDept = useSelector(state => state.dashboard.pendingStudentDept)
-  const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances)
-  const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded)
-  const adminRoles = useSelector(state => state.dashboard.adminRoles.roles)
-  const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
-  const pendingAccounts = useSelector(state => state.dashboard.pendingAccounts.accounts)
-  const pendingAccountsLoaded = useSelector(state => state.dashboard.pendingAccounts.isLoaded)
-  const adminAcType = useSelector(state => state.account.userinfo?.user_type)
+  const deptSelected = useSelector(state => state.dashboard.deptSelected);
+  const pendingStudentDept = useSelector(state => state.dashboard.pendingStudentDept);
+  const pendingClearances = useSelector(state => state.dashboard.pendingClearances.clearances);
+  const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded);
+  const adminRoles = useSelector(state => state.dashboard.adminRoles.roles);
+  const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded);
+  const pendingAccounts = useSelector(state => state.dashboard.pendingAccounts.accounts);
+  const pendingAccountsLoaded = useSelector(state => state.dashboard.pendingAccounts.isLoaded);
+  const adminAcType = useSelector(state => state.account.userinfo?.user_type);
 
   const changeDeptSelected = (val) => {
     dispatch(setDeptSelected(val));
@@ -78,43 +77,14 @@ const Dashboard = (props) => {
     setSelectedDetailClearance({ type, id })
   }
 
-  const fireAdminStats = data => {
-    for (let dept of Object.keys(data)) {
-      if (data[dept].pending > 0) {
-        if (deptSelected !== dept) {
-          changeDeptSelected(dept.toUpperCase());
-        }
-        break;
-      }
-    }
-    for (let dept of Object.keys(data)) {
-      if (data[dept].pending_students > 0) {
-        if (pendingStudentDept !== dept) {
-          changePendingStudentDept(dept.toUpperCase());
-        }
-        break;
-      }
-    }
-    let stats = {
-      clearances: 0,
-      archived: 0,
-      students: 0,
-    }
-    for (let dept of Object.keys(data)) {
-      stats.clearances += data[dept].pending;
-      stats.archived += data[dept].archived;
-      stats.students += data[dept].pending_students;
-    }
-    dispatch(setPendingStats(stats));
-
-  }
+  
 
   async function loadClearances() {
     let params = { dept: deptSelected.toLowerCase() };
     try {
       let res = await axios.get(urls.dashboardClearancesUrl, { params });
-      dispatch(setPendingClearances(res.data))
-      dispatch(setPendingClearancesLoaded(true))
+      dispatch(setPendingClearances(res.data));
+      dispatch(setPendingClearancesLoaded(true));
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -153,25 +123,13 @@ const Dashboard = (props) => {
     }
   }
 
-  async function loadAdminStats() {
-    try {
-      let res = await axios.get(urls.adminDashboardStatsUrl);
-      fireAdminStats(res.data);
-    } catch (error) {
-      let error_msg = error?.response?.data?.details;
-      if (error_msg === undefined) {
-        error_msg = error.message;
-      }
-      console.log(error_msg);
-    }
-  }
 
   const clearanceAction = async url => {
     try {
       let res = await axios.get(urls.baseUrl + url);
       message.success(res.data.info);
       await loadClearances();
-      setTimeout(loadAdminStats, 200);
+      setTimeout(props.loadAdminStats, 200);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -196,7 +154,7 @@ const Dashboard = (props) => {
       );
       message.success(res.data.info);
       await loadPendingAccounts();
-      setTimeout(loadAdminStats, 200);
+      setTimeout(props.loadAdminStats, 200);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -217,7 +175,7 @@ const Dashboard = (props) => {
       let res = await axios.post(urls.approveAllStudentAcUrl, { dept: pendingStudentDept.toLowerCase() }, config);
       message.success(res.data.info);
       await loadPendingAccounts();
-      setTimeout(loadAdminStats, 200);
+      setTimeout(props.loadAdminStats, 200);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -252,8 +210,8 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     if (!pendingClearancesLoaded) {
+      console.log('NL');
       loadClearances();
-      loadAdminStats();
     };
     if (!adminRolesLoaded) {
       loadRoles();

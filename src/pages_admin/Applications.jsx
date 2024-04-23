@@ -32,7 +32,7 @@ const titles = {
 }
 
 
-const Applications = ({ pagetype }) => {
+const Applications = ({ pagetype, loadAdminStats }) => {
   const dispatch = useDispatch();
   const roles = useSelector(state => state.dashboard.adminRoles?.roles);
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
@@ -117,6 +117,7 @@ const Applications = ({ pagetype }) => {
       message.success(res.data.info);
       fetchPageSilent();
       loadClearances();
+      setTimeout(loadAdminStats, 100);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
