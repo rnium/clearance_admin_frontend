@@ -62,7 +62,7 @@ const ClearanceDetailModal = (props) => {
         if (props?.selectedClearance) {
             params = { ...props.selectedClearance }
         } else if (props?.selectedStudent) {
-            params = {registration: props.selectedStudent}
+            params = { registration: props.selectedStudent }
         }
         try {
             let res = await axios.get(urls.clearanceInfoAsAdminUrl, { params });
@@ -108,8 +108,16 @@ const ClearanceDetailModal = (props) => {
         <Modal title={title} open={props.isModalOpen} footer={null} onCancel={onLocalClosure}>
             {
                 clearanceInfo.loaded ?
-                    props?.selectedClearance?.type === 'administrative'  || props?.type === 'administrative' ?
+                    props?.selectedClearance?.type === 'administrative' || props?.type === 'administrative' ?
                         <div>
+                            {
+                                clearanceInfo.info.progress === 100 ?
+                                    <Paper sx={{ my: 3 }} elevation={6}>
+                                        <Stack sx={{ px: 3, py: 5, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Button href={urls.baseUrl + clearanceInfo.info.report_url} target="_blank" variant='contained'>Download Report</Button>
+                                        </Stack>
+                                    </Paper> : null
+                            }
                             <ClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
                             {
                                 clearanceInfo.info.department.map(dept => (
