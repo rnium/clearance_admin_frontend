@@ -16,6 +16,7 @@ import Unselected from '../components/atoms/Unselected';
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import RemarksModal from '../components/molecules/RemarksModal';
 import CustomDeptSegmented from '../components/atoms/CustomDeptSegmented';
+import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal';
 
 
 
@@ -38,6 +39,8 @@ const Applications = ({ pagetype, loadAdminStats }) => {
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded)
   const [deptSelected, setDeptSelected] = useState('CSE');
   const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
+  const [isClearanceDetailModalOpen, setIsClearanceDetailModalOpen] = useState(false);
+  const [selectedDetailClearance, setSelectedDetailClearance] = useState({ type: null, id: null });
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [clearances, setClearances] = useState([]);
@@ -56,6 +59,16 @@ const Applications = ({ pagetype, loadAdminStats }) => {
       setSectionTitle(selected_role[0].title);
     }
   };
+
+  const handleClearanceDetailModalClick = (type, id) => {
+    setSelectedDetailClearance({ type, id })
+  }
+
+  const closeClearanceDetailModal = () => {
+    setSelectedDetailClearance({ type: null, id: null });
+    setIsClearanceDetailModalOpen(false);
+  }
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -162,6 +175,12 @@ const Applications = ({ pagetype, loadAdminStats }) => {
     }
   }, [selectedClearanceId])
 
+  useEffect(() => {
+    if (selectedDetailClearance.id && selectedDetailClearance.type) {
+      setIsClearanceDetailModalOpen(true);
+    }
+  }, [selectedDetailClearance])
+
   if (!adminRolesLoaded) {
     return (
       <Container >
@@ -185,6 +204,11 @@ const Applications = ({ pagetype, loadAdminStats }) => {
         setIsModalOpen={closeRemarksModal}
         pagetype={pagetype}
         selectedClearance={{ type, id: selectedClearanceId }}
+      />
+      <ClearanceDetailModal
+        isModalOpen={isClearanceDetailModalOpen}
+        setIsModalOpen={closeClearanceDetailModal}
+        selectedClearance={selectedDetailClearance}
       />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={9}>
@@ -243,6 +267,7 @@ const Applications = ({ pagetype, loadAdminStats }) => {
                     onAction={clearanceAction}
                     type={pagetype}
                     handleRemarksClick={handleRemarksClick}
+                    handleDetailClick={handleClearanceDetailModalClick}
                     section_data={
                       {
                         title: sectionTitle,

@@ -26,7 +26,8 @@ const Homepage = () => {
     const deptSelected = useSelector(state => state.dashboard.deptSelected)
     const pendingStudentDept = useSelector(state => state.dashboard.pendingStudentDept)
     const dispatch = useDispatch();
-    const fireAdminStats = data => {
+
+    const dispatchAdminStats = data => {
         for (let dept of Object.keys(data)) {
             if (data[dept].pending > 0) {
                 if (deptSelected !== dept) {
@@ -60,7 +61,7 @@ const Homepage = () => {
     async function loadAdminStats() {
         try {
             let res = await axios.get(urls.adminDashboardStatsUrl);
-            fireAdminStats(res.data);
+            dispatchAdminStats(res.data);
         } catch (error) {
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
