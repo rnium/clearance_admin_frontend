@@ -27,6 +27,7 @@ export const dashboardClearancesUrl = baseUrl + '/clearance/api/dashboard-cleara
 export const adminDashboardStatsUrl = baseUrl + '/clearance/api/dashboard/adminstats/'
 export const clearanceSectionUrl = baseUrl + '/clearance/api/section-clearances/'
 export const departmentsUrl = baseUrl + '/clearance/api/departments/';
+export const hallsUrl = baseUrl + '/clearance/api/halls/';
 export const departmentsSectionsUrl = baseUrl + '/clearance/api/departments/sections/';
 export const departmentsSessionsUrl = baseUrl + '/clearance/api/departments/sessions/';
 export const assignMemberUrl = baseUrl + '/clearance/api/assignmember/';
