@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
     CardContent, CardMedia, Box, Typography, Chip, Stack, Paper, Avatar
 } from '@mui/material';
+import { Popconfirm } from 'antd';
 import NotesIcon from '@mui/icons-material/Notes';
 import CircularProgressWithLabel from '../atoms/CircularProgressWithLabel';
 import CheckIcon from '@mui/icons-material/Check';
@@ -34,15 +35,23 @@ const Clearance = ({ student_data, type, approvalType, onAction, sectionType, ha
                     disabled={isSubmitting}
                     variant='contained'
                 />
-                <Chip
-                    label="Archive"
-                    sx={{ px: 1, ml: { xs: 0, md: 1 }, mt: { xs: 1, md: 0 } }}
-                    color='error'
-                    icon={<ArchiveIcon />}
-                    disabled={isSubmitting}
-                    onClick={() => performAction(student_data.archive_url)}
-                    variant='outlined'
-                />
+                <Popconfirm
+                    title="Archive Clearance Request"
+                    description="Are you sure to archive this request?"
+                    okText="Yes"
+                    cancelText="Cancel"
+                    onConfirm={() => performAction(student_data.archive_url)}
+                >
+                    <Chip
+                        label="Archive"
+                        sx={{ px: 1, ml: { xs: 0, md: 1 }, mt: { xs: 1, md: 0 } }}
+                        color='error'
+                        icon={<ArchiveIcon />}
+                        disabled={isSubmitting}
+                        onClick={() => console.log("archive chip clicked")}
+                        variant='outlined'
+                    />
+                </Popconfirm>
             </Box>)
             break;
         case 'archived':
@@ -109,22 +118,22 @@ const Clearance = ({ student_data, type, approvalType, onAction, sectionType, ha
                     <Box sx={{ mt: 2, display: 'flex', alignItems: "center", justifyContent: 'space-between' }}>
                         {action_btns}
                         <Box>
-                        {
-                            sectionType === 'dept_head' ?
-                                <Chip
-                                    label="Flow"
-                                    icon={<DeviceHubIcon />}
-                                    onClick={() => handleDetailClick(approvalType, student_data.id)}
-                                    sx={{ px: 1, mr: { xs: 0, md: 1 }, mb: { xs: 1, md: 0 } }}
-                                /> : null
-                        }
+                            {
+                                sectionType === 'dept_head' ?
+                                    <Chip
+                                        label="Flow"
+                                        icon={<DeviceHubIcon />}
+                                        onClick={() => handleDetailClick(approvalType, student_data.id)}
+                                        sx={{ px: 1, mr: { xs: 0, md: 1 }, mb: { xs: 1, md: 0 } }}
+                                    /> : null
+                            }
 
-                        <Chip
-                            label="Remarks"
-                            icon={<NotesIcon />}
-                            onClick={() => handleRemarksClick(approvalType, student_data.id)}
-                            sx={{ px: 1 }}
-                        />
+                            <Chip
+                                label="Remarks"
+                                icon={<NotesIcon />}
+                                onClick={() => handleRemarksClick(approvalType, student_data.id)}
+                                sx={{ px: 1 }}
+                            />
                         </Box>
                     </Box>
                 </Box>

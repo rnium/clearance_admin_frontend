@@ -34,7 +34,7 @@ const Members = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
   const [pageInitialized, setPageInitialized] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isChangeDeptModalOpen, setIsChangeDeptModalOpen] = useState(true);
+  const [isChangeDeptModalOpen, setIsChangeDeptModalOpen] = useState(false);
   const memberSections = useSelector(state => state.members.memberSections)
   const membersLoaded = useSelector(state => state.members.is_loaded)
   const dispatch = useDispatch();
@@ -71,6 +71,7 @@ const Members = () => {
             <ChangeDeptModal
               isModalOpen = {isChangeDeptModalOpen}
               setIsModalOpen = {setIsChangeDeptModalOpen}
+              loadMembers = {() => loadMembers(dispatch)}
             />
             <Grid container justifyContent="center" spacing={2}>
               <Grid item xs={12} md={3}>

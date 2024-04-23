@@ -30,8 +30,6 @@ const ChangeDeptModal = (props) => {
     const [members, setMembers] = useState([]);
     const dispatch = useDispatch();
 
-    let logo_src = '/static/images/outer.png';
-
     async function loadDepts() {
         try {
             let res = await axios.get(urls.departmentsUrl);
@@ -53,13 +51,13 @@ const ChangeDeptModal = (props) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
+                // 'X-CSRFToken': getCookie('csrftoken')
             },
         };
-        let params = { user_id: selectedUser }
+        let params = { user_id: selectedUser, dept }
         try {
-            let res = await axios.post(urls.assignMemberUrl, params, config);
-            await props.loadDeptSections();
+            let res = await axios.post(urls.changeDeptUrl, params, config);
+            await props.loadMembers();
             message.success(res.data.info);
             if (membersLoaded) {
                 loadMembers(dispatch);
@@ -113,8 +111,6 @@ const ChangeDeptModal = (props) => {
                         <Spin size='large' />
                     </Stack> :
                     <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
-                        <img src={logo_src} alt="" width="70px" />
-                        <Typography variant='h6' textAlign="center">Change Department</Typography>
                         <TextField
                             label="Member name or email"
                             variant="outlined"
