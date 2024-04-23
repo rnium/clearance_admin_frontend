@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadMembers } from '../../pages_admin/Members';
 import * as urls from '../../utils/api_urls';
 import { getCookie } from '../../utils/cookies';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const DeleteAccountModal = (props) => {
     const membersLoaded = useSelector(state => state.members.is_loaded)
@@ -19,27 +21,8 @@ const DeleteAccountModal = (props) => {
     const [members, setMembers] = useState([]);
     const dispatch = useDispatch();
     
-    let logo_src = '/static/images/3d-cube.png';
-    if (props.selectedRole.role === 'dept_clerk' || props.selectedRole.role === 'lab_incharge') {
-        logo_src = '/static/images/cube.png'
-    }
-    let title;
-    switch (props.selectedRole.role) {
-        case 'dept_head':
-            title = `Head of ${props.selectedRole.section}`
-            break;
-        case 'dept_clerk':
-            title = `Clerk of ${props.selectedRole.section}`
-            break;
-        case 'lab_incharge':
-            title = `In-Charge of ${props.selectedRole.title}`
-            break;
-        default:
-            title = props.selectedRole.title;
-            break;
-    }
 
-    async function assignMember() {
+    async function deleteAccount() {
         setSending(true);
         const config = {
             headers: {
@@ -47,16 +30,18 @@ const DeleteAccountModal = (props) => {
                 'X-CSRFToken': getCookie('csrftoken')
             },
         };
-        let params = { ...props.selectedRole, user_id: selectedUser }
+        let params = { user_id: selectedUser }
         try {
-            let res = await axios.post(urls.assignMemberUrl, params, config);
-            await props.loadDeptSections();
+            let res = await axios.post(urls.deleteAcUrl, params, config);
+            await props.loadMembers();
             message.success(res.data.info);
             if (membersLoaded) {
                 loadMembers(dispatch);
             }
-            props.setIsModalOpen(false)
+            props.setIsModalOpen(false);
+            setSearchQuery('');
             setSelectedUser(null);
+            setMembers([])
         } catch (error) {
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
@@ -90,10 +75,10 @@ const DeleteAccountModal = (props) => {
     }, [searchQuery])
 
     return (
-        <Modal title="Assign Member" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
+        <Modal title="" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
-                <img src={logo_src} alt="" width="70px" />
-                <Typography variant='h6' textAlign="center">{title}</Typography>
+                <img src="/static/images/delete-user.png" alt="" width="70px" />
+                <Typography variant='h6' textAlign="center">Delete Account</Typography>
                 <TextField
                     label="Member name or email"
                     variant="outlined"
@@ -112,7 +97,7 @@ const DeleteAccountModal = (props) => {
                                                     <Avatar alt={m.name} src={urls.baseUrl + m.avatar_url} />
                                                 </ListItemAvatar>
                                                 <ListItemText
-                                                    primary={m.name}
+                                                    primary={`${m.name} (${m.department})`}
                                                     secondary={m.email}
                                                 />
                                             </ListItemButton>
@@ -126,7 +111,7 @@ const DeleteAccountModal = (props) => {
                 }
 
                 <Box sx={{ display: 'flex', width: '100%' }} justifyContent="flex-end">
-                    <Button onClick={assignMember} disabled={sending || selectedUser === null} variant='contained' startIcon={<PersonAddIcon />} sx={{ px: 2 }}>Assign</Button>
+                    <Button onClick={deleteAccount} disabled={sending || selectedUser === null} color="error" variant='contained' startIcon={<DeleteIcon />} sx={{ px: 2 }}>Delete</Button>
                 </Box>
             </Stack>
         </Modal>

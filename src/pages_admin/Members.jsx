@@ -12,6 +12,7 @@ import * as urls from '../utils/api_urls'
 import { setMembers, setLoaded } from '../redux/membersReducer';
 import InvitationModal from '../components/molecules/InvitationModal';
 import ChangeDeptModal from '../components/molecules/ChangeDeptModal';
+import DeleteAccountModal from '../components/molecules/DeleteAccountModal';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
@@ -35,6 +36,7 @@ const Members = () => {
   const [pageInitialized, setPageInitialized] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChangeDeptModalOpen, setIsChangeDeptModalOpen] = useState(false);
+  const [isDeleteAcModalOpen, setIsDeleteAcModalOpen] = useState(true);
   const memberSections = useSelector(state => state.members.memberSections)
   const membersLoaded = useSelector(state => state.members.is_loaded)
   const dispatch = useDispatch();
@@ -73,12 +75,17 @@ const Members = () => {
               setIsModalOpen = {setIsChangeDeptModalOpen}
               loadMembers = {() => loadMembers(dispatch)}
             />
+            <DeleteAccountModal
+              isModalOpen = {isDeleteAcModalOpen}
+              setIsModalOpen = {setIsDeleteAcModalOpen}
+              loadMembers = {() => loadMembers(dispatch)}
+            />
             <Grid container justifyContent="center" spacing={2}>
               <Grid item xs={12} md={3}>
                 <Button sx={{ borderRadius: '180px' }} onClick={() => setIsChangeDeptModalOpen(true)} variant='contained' startIcon={<ManageAccountsIcon />} color="secondary" fullWidth >Change Department</Button>
               </Grid>
               <Grid item xs={12} md={3}>
-                <Button sx={{ borderRadius: '180px' }} variant='contained' startIcon={<DeleteIcon />} color="error" fullWidth>Delete An Account</Button>
+                <Button sx={{ borderRadius: '180px' }} onClick={() => setIsDeleteAcModalOpen(true)} variant='contained' startIcon={<DeleteIcon />} color="error" fullWidth>Delete An Account</Button>
               </Grid>
             </Grid>
           </Paper> : null
