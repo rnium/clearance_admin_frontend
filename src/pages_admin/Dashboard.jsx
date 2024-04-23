@@ -5,7 +5,7 @@ import {
   DialogTitle, DialogContent, DialogActions, DialogContentText
 } from '@mui/material';
 import RolesCard from '../components/molecules/RolesCard';
-import { Spin, message, Empty, Popconfirm} from 'antd';
+import { Spin, message, Empty, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
@@ -14,6 +14,7 @@ import {
   setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
   setPendingAccounts, setPendingAccountsLoaded
 } from '../redux/dashboardReducer';
+import {setPendingStats} from '../redux/notificationReducer'
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
 import Unselected from '../components/atoms/Unselected';
@@ -94,6 +95,18 @@ const Dashboard = (props) => {
         break;
       }
     }
+    let stats = {
+      clearances: 0,
+      archived: 0,
+      students: 0,
+    }
+    for (let dept of Object.keys(data)) {
+      stats.clearances += data[dept].pending;
+      stats.archived += data[dept].archived;
+      stats.students += data[dept].pending_students;
+    }
+    dispatch(setPendingStats(stats));
+
   }
 
   async function loadClearances() {
@@ -158,6 +171,7 @@ const Dashboard = (props) => {
       let res = await axios.get(urls.baseUrl + url);
       message.success(res.data.info);
       await loadClearances();
+      setTimeout(loadAdminStats, 200);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -182,6 +196,7 @@ const Dashboard = (props) => {
       );
       message.success(res.data.info);
       await loadPendingAccounts();
+      setTimeout(loadAdminStats, 200);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -202,6 +217,7 @@ const Dashboard = (props) => {
       let res = await axios.post(urls.approveAllStudentAcUrl, { dept: pendingStudentDept.toLowerCase() }, config);
       message.success(res.data.info);
       await loadPendingAccounts();
+      setTimeout(loadAdminStats, 200);
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -299,7 +315,7 @@ const Dashboard = (props) => {
       />
       <Grid container spacing={2} >
         <Grid item xs={12} md={7}>
-          <Box sx={{mb: 2}}>
+          <Box sx={{ mb: 2 }}>
             <CustomDeptSegmented value={deptSelected} onChange={changeDeptSelected} />
           </Box>
 

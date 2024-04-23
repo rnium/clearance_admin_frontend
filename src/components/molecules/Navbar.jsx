@@ -22,6 +22,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import Face5Icon from '@mui/icons-material/Face5';
 
 
 const Navbar = ({ drawerWidth }) => {
@@ -29,9 +30,10 @@ const Navbar = ({ drawerWidth }) => {
     const [anchorElNotif, setAnchorElNotif] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const userinfo = useSelector(state => state.account.userinfo);
+    const pendingStats = useSelector(state => state.notification.pendingStats);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    let hasNotification = (pendingStats.clearances + pendingStats.archived + pendingStats.students) > 0;
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -58,7 +60,7 @@ const Navbar = ({ drawerWidth }) => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-    
+
 
     const logoutUser = async () => {
         const config = {
@@ -134,14 +136,16 @@ const Navbar = ({ drawerWidth }) => {
                     <Typography variant="h6" noWrap component="div" flexGrow={1} sx={{ fontSize: { xs: '1rem', md: '1.2rem' } }}>
                         SEC Clearance Portal
                     </Typography>
-                    <Box sx={{ px: {xs: 1, md: 2} }}>
+                    <Box sx={{ px: { xs: 1, md: 2 } }}>
                         <IconButton
                             aria-label="show notifications menu"
                             color="inherit"
                             onClick={handleOpenNotifMenu}
                         >
-                            <Badge invisible={false} color="error" variant='dot'>
-                                <NotificationsNoneIcon />
+                            <Badge badgeContent="!" invisible={!hasNotification} color="error" variant=''>
+                                {
+                                    hasNotification ? <NotificationsIcon /> : <NotificationsNoneIcon />
+                                }
                             </Badge>
                         </IconButton>
                         <Menu
@@ -166,15 +170,24 @@ const Navbar = ({ drawerWidth }) => {
                                         <ListItemIcon>
                                             <HourglassBottomIcon />
                                         </ListItemIcon>
-                                        <ListItemText>999 Pending Request</ListItemText>
+                                        <ListItemText>{pendingStats.clearances} Pending Clearance</ListItemText>
                                     </MenuItem>
                                     {/* <Divider /> */}
                                     <MenuItem onClick={() => handleClickNotifItem('/archives')}>
                                         <ListItemIcon>
                                             <ArchiveIcon />
                                         </ListItemIcon>
-                                        <ListItemText>1999 Archived Request</ListItemText>
+                                        <ListItemText>{pendingStats.archived} Archived Clearance</ListItemText>
                                     </MenuItem>
+                                    {
+                                        userinfo.user_type === 'academic' ?
+                                            <MenuItem >
+                                                <ListItemIcon>
+                                                    <Face5Icon />
+                                                </ListItemIcon>
+                                                <ListItemText>{pendingStats.students} Pending Students</ListItemText>
+                                            </MenuItem> : null
+                                    }
                                 </MenuList>
                             </Box>
                         </Menu>

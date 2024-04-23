@@ -5,6 +5,7 @@ import dashboardReducer from './dashboardReducer';
 import membersReducer from './membersReducer';
 import departmentsReducer from './departmentsReducer';
 import deptSessionReducer from './deptSessionReducer';
+import notificationReducer from './notificationReducer';
 
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
         members: membersReducer,
         departments: departmentsReducer,
         deptSession: deptSessionReducer,
+        notification: notificationReducer,
     }
 })
 
