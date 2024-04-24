@@ -197,8 +197,7 @@ const Dashboard = (props) => {
         urls.deleteStudentAcUrl, { registration }, config
       );
       message.success(res.data.info);
-      res = await axios.get(urls.pendingStudentAcUrl);
-      dispatch(setPendingAccounts(res.data))
+      await loadPendingAccounts();
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
