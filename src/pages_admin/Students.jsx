@@ -13,7 +13,8 @@ import { setDeptSessions, setLoaded } from '../redux/deptSessionReducer';
 import Unselected from '../components/atoms/Unselected';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import SessionAddModal from '../components/molecules/SessionAddModal';
-import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal'
+import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal';
+import StudentEditModal from '../components/molecules/StudentEditModal';
 
 export const loadDeptSessions = async (dispatch) => {
   try {
@@ -33,18 +34,20 @@ const Students = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFlowModalOpen, setIsFlowModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const departments = useSelector(state => state.deptSession.departments)
   const deptSessionsLoaded = useSelector(state => state.deptSession.is_loaded)
   const dispatch = useDispatch();
   const [deptSelected, setDeptSelected] = useState(null);
   const [studentSelected, setStudentSelected] = useState(null);
+  const [editStudentSelected, setEditStudentSelected] = useState(null);
   const [sessionSelected, setSessionSelected] = useState(null);
   const [students_data, setStudentsData] = useState([]);
   const [studentsDataLoaded, setStudentsDataLoaded] = useState(false);
 
   const setIsFlowModalOpenCustom = val => {
     if (val === false) {
-      setStudentSelected(null)
+      setStudentSelected(null);
     }
     setIsFlowModalOpen(val);
   }
@@ -71,6 +74,11 @@ const Students = () => {
     }
   }
 
+  const setEditInfo = (info) => {
+    setEditStudentSelected(info);
+    setIsEditModalOpen(true);
+  }
+
 
   useEffect(() => {
     if (departments && !deptSelected) {
@@ -91,7 +99,14 @@ const Students = () => {
     if (studentSelected) {
       setIsFlowModalOpen(true);
     }
-  }, [studentSelected])
+  }, [studentSelected]);
+
+  useEffect(() => {
+    if (editStudentSelected) {
+      setIsEditModalOpen(true);
+    }
+  }, [editStudentSelected]);
+
 
   if (!deptSessionsLoaded) {
     return (
@@ -108,6 +123,11 @@ const Students = () => {
         setIsModalOpen={setIsFlowModalOpenCustom}
         selectedStudent={studentSelected}
         type="administrative"
+      />
+      <StudentEditModal
+        isModalOpen={isEditModalOpen}
+        setIsModalOpen={setIsEditModalOpen}
+        studentInfo={editStudentSelected}
       />
       <Stack sx={{ mb: 2 }} direction="row" justifyContent="center">
         <img src="/static/images/3d-cube.png" alt="" width="30px" height="30px" />
@@ -184,7 +204,11 @@ const Students = () => {
                 {
                   students_data.map(student => (
                     <Grid item xs={12} md={4}>
-                      <StudentProfile onProgressClick={(reg) => setStudentSelected(reg)} student={student} />
+                      <StudentProfile 
+                        onProgressClick={(reg) => setStudentSelected(reg)} 
+                        onEditClick={(info) => setEditInfo(info)} 
+                        student={student}
+                      />
                     </Grid>
                   ))
                 }

@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import {
-    Container, Grid, Box, Stack, Typography, TextField, Button, Chip, FormControl, Select, MenuItem, InputLabel
+    Grid, Box, Stack, Typography, TextField, Button, Chip, FormControl, Select, MenuItem, InputLabel
 } from '@mui/material';
 import { Image } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import PictureInput from '../components/atoms/PictureInput'
@@ -219,13 +218,13 @@ const Profile = () => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Passoword" name="password" type="password" onChange={handleChange} variant='outlined' fullWidth />
+                            <TextField label="Password" name="password" type="password" onChange={handleChange} variant='outlined' fullWidth />
                         </Grid>
                         <Grid item xs={12}>
                             {
                                 (rePass !== null) & (rePass !== formData.password) ?
-                                    <TextField error label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
-                                    : <TextField label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
+                                    <TextField error label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
+                                    : <TextField label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
                             }
                         </Grid>
                         <Grid item xs={12}>

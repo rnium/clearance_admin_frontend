@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 
-const StudentProfile = ({ student, onProgressClick }) => {
+const StudentProfile = ({ student, onProgressClick, onEditClick }) => {
     const usertype = useSelector(state => state.account.userinfo.user_type);
     return (
         <Fade in={true}>
@@ -19,7 +19,7 @@ const StudentProfile = ({ student, onProgressClick }) => {
                     {
                         usertype === 'principal' || usertype === 'academic' || usertype === 'cashier' ?
                             <Box sx={{ position: 'absolute', p: 1, right: 0, bottom: 0 }}>
-                                <IconButton >
+                                <IconButton onClick={() => onEditClick(student)}>
                                     <ManageAccountsIcon />
                                 </IconButton>
                             </Box> : null

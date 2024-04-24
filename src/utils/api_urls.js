@@ -19,6 +19,7 @@ export const validateTokenUrl = baseUrl + '/account/validate-token/'
 export const adminSignupApiUrl = baseUrl + '/account/api/admin/signup/'
 export const studentSignupUrl = baseUrl + '/account/student/signup/'
 export const studentProfileUpdateUrl = baseUrl + '/account/student/updateprofile/'
+export const studentProfileUpdateByAdminUrl = baseUrl + '/account/student/byadmin/updateprofile/'
 export const studentinfoUrl = baseUrl + '/account/progressive-studentinfo/'
 // Clearance API
 export const applyClearanceUrl = baseUrl + '/clearance/api/apply/'
