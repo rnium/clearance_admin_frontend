@@ -128,6 +128,7 @@ const Students = () => {
         isModalOpen={isEditModalOpen}
         setIsModalOpen={setIsEditModalOpen}
         studentInfo={editStudentSelected}
+        fetchStudents={fetchStudents}
       />
       <Stack sx={{ mb: 2 }} direction="row" justifyContent="center">
         <img src="/static/images/3d-cube.png" alt="" width="30px" height="30px" />

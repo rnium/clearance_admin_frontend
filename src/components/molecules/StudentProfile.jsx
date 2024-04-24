@@ -49,7 +49,7 @@ const StudentProfile = ({ student, onProgressClick, onEditClick }) => {
                                         <Chip
                                             icon={<HourglassBottomIcon />}
                                             sx={{ px: 1 }}
-                                            variant="outlined"
+                                            variant="contained"
                                             label={`${student.progress}% Cleared`}
                                             onClick={() => onProgressClick(student.registration)}
                                             size='small'

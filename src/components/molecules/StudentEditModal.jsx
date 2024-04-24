@@ -21,6 +21,7 @@ const non_resident_hall = {
 
 const StudentEditModal = (props) => {
     const usertype = useSelector(state => state.account.userinfo.user_type);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [halls, setHalls] = useState([]);
     const [hallsLoaded, setHallsLoaded] = useState(false);
     const [formData, setFormData] = useState(
@@ -48,6 +49,7 @@ const StudentEditModal = (props) => {
     }
 
     const handleSubmit = async event => {
+        setIsSubmitting(true);
         event.preventDefault();
         const postData = new FormData();
         for (const key in formData) {
@@ -55,6 +57,7 @@ const StudentEditModal = (props) => {
                 postData.append(key, formData[key]);
             }
         }
+        postData.append('registration', props.studentInfo.registration);
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -63,7 +66,9 @@ const StudentEditModal = (props) => {
         };
         try {
             await axios.post(urls.studentProfileUpdateByAdminUrl, postData, config);
-            message.success("Profile Updated", 5)
+            props.fetchStudents();
+            message.success("Profile Updated", 5);
+            props.setIsModalOpen(false);
         } catch (error) {
             let info = error?.response?.data?.details
             if (info === undefined) {
@@ -71,6 +76,7 @@ const StudentEditModal = (props) => {
             }
             message.error(info, 5)
         }
+        setIsSubmitting(false);
     }
 
     const handleDelete = async event => {
@@ -82,7 +88,9 @@ const StudentEditModal = (props) => {
         };
         try {
             await axios.post(urls.deleteStudentAcUrl, {registration: props.studentInfo.registration}, config);
+            props.fetchStudents();
             message.info("Account Deleted", 5)
+            props.setIsModalOpen(false);
         } catch (error) {
             let info = error?.response?.data?.details
             if (info === undefined) {
@@ -163,12 +171,12 @@ const StudentEditModal = (props) => {
                                                 okText="Yes"
                                                 cancelText="No"
                                             >
-                                                <Button sx={{ px: 5 }} color="error" variant='outlined'>Delete Student</Button>
+                                                <Button disabled={isSubmitting} sx={{ px: 5 }} color="error" variant='outlined'>Delete Student</Button>
                                             </Popconfirm>
-                                            <Button sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
+                                            <Button disabled={isSubmitting} sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
                                         </Box> :
                                         <Box display="flex" justifyContent="flex-end">
-                                            <Button sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
+                                            <Button disabled={isSubmitting} sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
                                         </Box>
                                 }
 
