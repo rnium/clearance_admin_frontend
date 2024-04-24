@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Modal, Spin, message } from 'antd';
+import { Modal, Spin, message, Popconfirm } from 'antd';
 import {
     Stack, Typography, TextField, Grid,
     ListItemAvatar, Box, Button, InputLabel, FormControl, Select, MenuItem
@@ -7,6 +7,7 @@ import {
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import axios from 'axios';
 import * as urls from '../../utils/api_urls';
+import { useSelector } from 'react-redux';
 import { getCookie } from '../../utils/cookies';
 
 const non_resident_hall = {
@@ -19,7 +20,7 @@ const non_resident_hall = {
 
 
 const StudentEditModal = (props) => {
-    console.log(props.studentInfo);
+    const usertype = useSelector(state => state.account.userinfo.user_type);
     const [halls, setHalls] = useState([]);
     const [hallsLoaded, setHallsLoaded] = useState(false);
     const [formData, setFormData] = useState(
@@ -72,6 +73,25 @@ const StudentEditModal = (props) => {
         }
     }
 
+    const handleDelete = async event => {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
+        try {
+            await axios.post(urls.deleteStudentAcUrl, {registration: props.studentInfo.registration}, config);
+            message.info("Account Deleted", 5)
+        } catch (error) {
+            let info = error?.response?.data?.details
+            if (info === undefined) {
+                info = error.message;
+            }
+            message.error(info, 5)
+        }
+    }
+
     const handleChange = e => {
         setFormData({
             ...formData,
@@ -102,7 +122,7 @@ const StudentEditModal = (props) => {
         <Modal title="Edit Student Info" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             {
                 props.studentInfo === null || hallsLoaded === false ?
-                    <Stack sx={{my: 10}}>
+                    <Stack sx={{ my: 10 }}>
                         <Spin size='large' />
                     </Stack> :
                     <form action="" onSubmit={handleSubmit} >
@@ -133,9 +153,25 @@ const StudentEditModal = (props) => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <Box display="flex" justifyContent="flex-end">
-                                    <Button sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
-                                </Box>
+                                {
+                                    usertype === 'principal' || usertype === 'academic' ?
+                                        <Box display="flex" justifyContent="space-between">
+                                            <Popconfirm
+                                                title="Delete Account"
+                                                description="Are you sure to delete this student?"
+                                                onConfirm={handleDelete}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <Button sx={{ px: 5 }} color="error" variant='outlined'>Delete Student</Button>
+                                            </Popconfirm>
+                                            <Button sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
+                                        </Box> :
+                                        <Box display="flex" justifyContent="flex-end">
+                                            <Button sx={{ px: 5 }} type="submit" variant='contained'>Save</Button>
+                                        </Box>
+                                }
+
                             </Grid>
                         </Grid>
 
