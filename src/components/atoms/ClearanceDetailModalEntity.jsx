@@ -10,7 +10,14 @@ const ClearanceDetailModalEntity = ({ entity }) => {
     return (
         <Paper elevation={5}>
             <Stack alignItems="center" sx={{ py: 2, px: 1 }} spacing={1}>
-                <Typography variant='h6' textAlign="center">{entity.title}</Typography>
+                <Typography
+                    variant='body1'
+                    textAlign="center"
+                    color="text.secondary"
+                    sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}
+                >
+                    {entity.title}
+                </Typography>
                 {
                     entity.is_approved ?
                         <Chip size='small' label={entity.approved_by} color='success' icon={<CheckIcon />} sx={{ px: 2 }} />
@@ -20,10 +27,10 @@ const ClearanceDetailModalEntity = ({ entity }) => {
                 }
                 {
                     entity.remarks ?
-                    <Alert security='info' icon={false} sx={{px: 3}}>
-                        <AlertTitle>Remarks</AlertTitle>
-                        {entity.remarks}
-                    </Alert>: null
+                        <Alert severity='info' icon={false} sx={{ px: 3 }}>
+                            <AlertTitle>Remarks</AlertTitle>
+                            {entity.remarks}
+                        </Alert> : null
                 }
             </Stack>
         </Paper>

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Modal, Spin, Empty, message } from 'antd';
+import { Modal, Spin, Empty, message, Popconfirm } from 'antd';
 import {
-    Stack, Typography, TextField, Box, Button, Paper
+    Stack, Typography, TextField, Box, Button, Paper, IconButton
 } from '@mui/material';
 import axios from 'axios';
 import * as urls from '../../utils/api_urls';
 import { getCookie } from '../../utils/cookies';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const RemarksModal = (props) => {
@@ -58,6 +59,29 @@ const RemarksModal = (props) => {
         setSubmitting(false)
     }
 
+    const removeRemakrs = async () => {
+        setSubmitting(true)
+        let payload = { ...props.selectedClearance }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        };
+        try {
+            let res = await axios.post(urls.clearanceRemarksDeleteUrl, payload, config);
+            message.success("Remarks deleted")
+            onLocalClosure();
+        } catch (error) {
+            let error_msg = error?.response?.data?.details;
+            if (error_msg === undefined) {
+                error_msg = error.message;
+            }
+            message.error(error_msg);
+        }
+        setSubmitting(false)
+    }
+
     const onLocalClosure = () => {
         props.setIsModalOpen(false)
         setRemarksLoaded(false);
@@ -89,12 +113,25 @@ const RemarksModal = (props) => {
                         <Spin size='large' />
                     </Stack> :
                     <Stack alignItems="center" sx={{ mt: 4, pb: 1 }} spacing={2}>
-                        <Typography sx={{ mb: 1, fontSize: {xs: '1rem', md: '1.3rem'} }} variant='h6' color="primary" textAlign="center">
+                        <Typography sx={{ mb: 1, fontSize: { xs: '1rem', md: '1.3rem' } }} variant='h6' color="primary" textAlign="center">
                             {remarks.title}
                         </Typography>
                         {
                             remarks?.remarks_text ?
-                                <Paper sx={{ width: '100%', backgroundColor: '#efefef' }}>
+                                <Paper style={{ boxSizing: 'border-box' }} sx={{ width: '100%', pr: 3, backgroundColor: '#efefef', position: 'relative' }}>
+                                    <Box sx={{ position: 'absolute', p: 1, right: 0, top: 0 }}>
+                                        <Popconfirm
+                                            title="Delete Remarks"
+                                            description="Are you sure to delete the remarks?"
+                                            onConfirm={removeRemakrs}
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <IconButton color='error'>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </Popconfirm>
+                                    </Box>
                                     <Typography sx={{ p: 2 }} variant='body1'>
                                         {remarks.remarks_text}
                                     </Typography>

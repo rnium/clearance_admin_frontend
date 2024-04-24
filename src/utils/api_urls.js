@@ -36,6 +36,7 @@ export const unAssignMemberUrl = baseUrl + '/clearance/api/unassign-member/';
 export const sessionStudentsUrl = baseUrl + '/clearance/api/sessions/students/';
 export const sessionAddUrl = baseUrl + '/clearance/api/sessions/add/';
 export const clearanceRemarksUrl = baseUrl + '/clearance/api/remarks/';
+export const clearanceRemarksDeleteUrl = baseUrl + '/clearance/api/remarks/delete/';
 export const clearanceInfoUrl = baseUrl + '/clearance/api/clearanceinfo/';
 export const clearanceInfoAsAdminUrl = baseUrl + '/clearance/api/clearanceinfo/adminview/';
 export const clearanceRemarksInfoUrl = baseUrl + '/clearance/api/remarksinfo/';

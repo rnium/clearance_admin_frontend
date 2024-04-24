@@ -26,9 +26,8 @@ const ClearanceSection = (props) => {
     return (
         <div>
             <Typography
-                variant='h5'
+                variant='h6'
                 textAlign="center"
-                color="text.secondary"
                 sx={{ mb: 1, fontSize: { xs: '0.8rem', md: '1rem' } }}
             >
                 {title}
@@ -73,6 +72,15 @@ const ClearanceDetailModal = (props) => {
                 }
             );
         } catch (error) {
+            if (error.response.status === 404) {
+                setClearanceInfo(
+                    {
+                        loaded: true,
+                        info: null
+                    }
+                )
+                return;
+            }
             let error_msg = error?.response?.data?.details;
             if (error_msg === undefined) {
                 error_msg = error.message;
@@ -108,24 +116,32 @@ const ClearanceDetailModal = (props) => {
         <Modal title={title} open={props.isModalOpen} footer={null} onCancel={onLocalClosure}>
             {
                 clearanceInfo.loaded ?
-                    props?.selectedClearance?.type === 'administrative' || props?.type === 'administrative' ?
-                        <div>
-                            {
-                                clearanceInfo.info.progress === 100 ?
-                                    <Paper sx={{ my: 3 }} elevation={6}>
-                                        <Stack sx={{ px: 3, py: 5, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Button href={urls.baseUrl + clearanceInfo.info.report_url} target="_blank" variant='contained'>Download Report</Button>
-                                        </Stack>
-                                    </Paper> : null
-                            }
-                            <ClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
-                            {
-                                clearanceInfo.info.department.map(dept => (
-                                    <ClearanceSection type="department" data={dept} />
-                                ))
-                            }
-                        </div>
-                        : <ClearanceSection type="department" data={clearanceInfo.info} />
+                    clearanceInfo.info === null ?
+                        <Box sx={{py: 5}}>
+                            <Empty
+                                description={
+                                    <Typography>Not Applied For Clearance</Typography>
+                                }
+                            />
+                        </Box> :
+                        props?.selectedClearance?.type === 'administrative' || props?.type === 'administrative' ?
+                            <div>
+                                {
+                                    clearanceInfo.info.progress === 100 ?
+                                        <Paper sx={{ my: 3 }} elevation={6}>
+                                            <Stack sx={{ px: 3, py: 5, justifyContent: 'center', alignItems: 'center' }}>
+                                                <Button href={urls.baseUrl + clearanceInfo.info.report_url} target="_blank" variant='contained'>Download Report</Button>
+                                            </Stack>
+                                        </Paper> : null
+                                }
+                                <ClearanceSection type="administrative" data={clearanceInfo.info.adminstrative} />
+                                {
+                                    clearanceInfo.info.department.map(dept => (
+                                        <ClearanceSection type="department" data={dept} />
+                                    ))
+                                }
+                            </div>
+                            : <ClearanceSection type="department" data={clearanceInfo.info} />
                     :
                     <Stack sx={{ py: 5 }}>
                         <Spin size='large' />
