@@ -190,13 +190,13 @@ const StudentSignup = () => {
                                     <TextField label="Email Address" name="email" type="email" onChange={handleChange} variant='outlined' required fullWidth />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField label="Passoword" name="password" type="password" onChange={handleChange} variant='outlined' required fullWidth />
+                                    <TextField label="Password" name="password" type="password" onChange={handleChange} variant='outlined' required fullWidth />
                                 </Grid>
                                 <Grid item xs={12}>
                                     {
                                         (rePass !== null) & (rePass !== formData.password) ?
-                                            <TextField error label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
-                                            : <TextField label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
+                                            <TextField error label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
+                                            : <TextField label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
                                     }
                                 </Grid>
                                 <Grid item xs={12}>
