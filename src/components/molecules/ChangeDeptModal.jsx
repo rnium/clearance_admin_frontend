@@ -51,7 +51,7 @@ const ChangeDeptModal = (props) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                // 'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': getCookie('csrftoken')
             },
         };
         let params = { user_id: selectedUser, dept }
