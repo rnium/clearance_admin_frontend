@@ -77,8 +77,8 @@ function NavbarStudent() {
                             </Link>
                             <Link to="/">
                                 <Stack sx={{ ml: 1 }}>
-                                    <Typography color="primary" variant='h5' sx={{ fontSize: { xs: '0.8rem', md: '1.4rem' } }} component="span">SEC Clearance Portal</Typography>
-                                    <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.6rem', md: '1rem' } }}>Student</Typography>
+                                    <Typography color="primary" variant='h5' sx={{ fontSize: { xs: '1rem', md: '1.4rem' } }} component="span">SEC Clearance Portal</Typography>
+                                    <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}>Student</Typography>
                                 </Stack>
                             </Link>
                         </Box>
