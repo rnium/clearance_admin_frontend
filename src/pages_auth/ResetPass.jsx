@@ -42,11 +42,11 @@ const ResetPass = () => {
     return (
         <Fade in={true}>
             <div sx={{ width: '100%' }}>
-                <TextField sx={{mb: 1}} onChange={e => setPassword(e.target.value)} label="New Passoword" type="passoword" variant="outlined" fullWidth />
+                <TextField sx={{mb: 1}} onChange={e => setPassword(e.target.value)} label="New Password" type="password" variant="outlined" fullWidth />
                 {
                     (rePass.length > 0) & (rePass !== password) ?
-                        <TextField sx={{mb: 3}} error label="Retype Passoword" onChange={e => setRepass(e.target.value)} type="password" variant='outlined' fullWidth />
-                        : <TextField sx={{mb: 3}} label="Retype Passoword" onChange={e => setRepass(e.target.value)} type="password" variant='outlined' fullWidth />
+                        <TextField sx={{mb: 3}} error label="Retype Password" onChange={e => setRepass(e.target.value)} type="password" variant='outlined' fullWidth />
+                        : <TextField sx={{mb: 3}} label="Retype Password" onChange={e => setRepass(e.target.value)} type="password" variant='outlined' fullWidth />
                 }
                 {
                     (password.length > 0) & (password === rePass) ?
