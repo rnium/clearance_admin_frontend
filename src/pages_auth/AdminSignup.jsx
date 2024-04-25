@@ -8,6 +8,8 @@ import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import { getCookie } from '../utils/cookies';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUserInfo, setLoaded } from '../redux/accountReducer';
 
 
 const AdminSignup = () => {
@@ -25,6 +27,7 @@ const AdminSignup = () => {
     const [rePass, setRePass] = useState(null);
     const [profilePhoto, setprofilePhoto] = useState(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = async event => {
         event.preventDefault()
@@ -53,9 +56,11 @@ const AdminSignup = () => {
             },
         };
         try {
-            await axios.post(urls.adminSignupApiUrl, postData, config);
-            message.success("Signup complete", 5)
+            let res = await axios.post(urls.adminSignupApiUrl, postData, config);
+            message.success("Signup Complete", 5)
             setTimeout(() => {
+                dispatch(setUserInfo(res.data.data));
+                dispatch(setLoaded(true));
                 navigate('/');
             }, 1000)
         } catch (error) {

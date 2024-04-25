@@ -9,6 +9,8 @@ import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import { getCookie } from '../utils/cookies';
 import { useNavigate } from 'react-router-dom';
+import { setUserInfo, setLoaded } from '../redux/accountReducer';
+import { useDispatch } from 'react-redux';
 
 const non_resident_hall = {
     id: -1,
@@ -23,6 +25,7 @@ const StudentSignup = () => {
     const navigate = useNavigate();
     const [halls, setHalls] = useState([]);
     const [hallsLoaded, setHallsLoaded] = useState(false);
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState(
         {
             first_name: '',
@@ -70,9 +73,11 @@ const StudentSignup = () => {
             },
         };
         try {
-            const response = await axios.post(urls.studentSignupUrl, postData, config);
+            let res = await axios.post(urls.studentSignupUrl, postData, config);
             message.success("Signup complete", 5)
             setTimeout(() => {
+                dispatch(setUserInfo(res.data.info));
+                dispatch(setLoaded(true));
                 navigate('/');
             }, 1000)
         } catch (error) {

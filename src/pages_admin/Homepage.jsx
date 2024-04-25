@@ -25,6 +25,7 @@ const drawerWidth = 240;
 const Homepage = () => {
     const deptSelected = useSelector(state => state.dashboard.deptSelected)
     const pendingStudentDept = useSelector(state => state.dashboard.pendingStudentDept)
+    const userinfo = useSelector(state => state.account.userinfo);
     const dispatch = useDispatch();
 
     const dispatchAdminStats = data => {
@@ -52,7 +53,9 @@ const Homepage = () => {
         for (let dept of Object.keys(data)) {
             stats.clearances += data[dept].pending;
             stats.archived += data[dept].archived;
-            stats.students += data[dept].pending_students;
+            if (userinfo.user_type === 'academic') {
+                stats.students += data[dept].pending_students;
+            }
         }
         dispatch(setPendingStats(stats));
 

@@ -33,7 +33,12 @@ const Navbar = ({ drawerWidth }) => {
     const pendingStats = useSelector(state => state.notification.pendingStats);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let hasNotification = (pendingStats.clearances + pendingStats.archived + pendingStats.students) > 0;
+
+    let hasNotification = (pendingStats.clearances + pendingStats.archived) > 0;
+    if (userinfo.user_type === 'academic') {
+        hasNotification = (pendingStats.clearances + pendingStats.archived + pendingStats.students) > 0;
+    }
+    
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
