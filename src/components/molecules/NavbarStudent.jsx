@@ -9,8 +9,10 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import LogoutIcon from '@mui/icons-material/Logout';
+import UserInfo from '../atoms/UserInfo';
 import {
-    Stack
+    Stack, Button
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetUserInfo } from '../../redux/accountReducer';
@@ -24,7 +26,8 @@ import { getCookie } from '../../utils/cookies';
 const settings = ['Account', 'Logout'];
 
 function NavbarStudent() {
-    const avatar_url = urls.baseUrl + useSelector(state => state.studentStore.info?.avatar_url);
+    const avatar_url = urls.baseUrl + useSelector(state => state.account.userinfo?.avatar_url);
+    const fullname = urls.baseUrl + useSelector(state => state.account.userinfo?.user_fullname);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
     const handleOpenUserMenu = (event) => {
@@ -84,38 +87,43 @@ function NavbarStudent() {
                         </Box>
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open options">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="UserName" src={avatar_url} />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            <NavLink to='profile/'>
-                                <MenuItem onClick={handleCloseUserMenu}>
-                                    Profile
+                    <Stack direction="row" alignItems="center" sx={{ flexGrow: 0 }}>
+                        <Typography variant="body1" style={{ marginRight: '10px' }} sx={{ display: { xs: 'none', md: 'block' } }}>
+                            {fullname}
+                        </Typography>
+                        <Box>
+                            <Tooltip title="Open options">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="UserName" src={avatar_url} />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <NavLink to='profile/'>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        Profile
+                                    </MenuItem>
+                                </NavLink>
+                                <MenuItem onClick={logoutUser}>
+                                    Logout
                                 </MenuItem>
-                            </NavLink>
-                            <MenuItem onClick={logoutUser}>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </Box>
+                            </Menu>
+                        </Box>
+                    </Stack>
                 </Toolbar>
             </Container>
         </AppBar>
