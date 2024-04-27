@@ -36,6 +36,7 @@ const Profile = () => {
     {
       first_name: '',
       last_name: '',
+      phone: '',
       password: '',
     }
   );
@@ -47,6 +48,10 @@ const Profile = () => {
     event.preventDefault()
     if (formData.password.length > 0 && formData.password !== rePass) {
       message.error("Passwords doesn't matches", 5)
+      return;
+    }
+    if (formData.phone.length > 0 && formData.phone.length != 11) {
+      message.error("Phone number must be 11 digits long", 5)
       return;
     }
     const postData = new FormData();
@@ -116,6 +121,11 @@ const Profile = () => {
           <Stack sx={{ ml: 5 }} justifyContent="center">
             <Typography variant='h5'>{userInfo.user_fullname}</Typography>
             <Typography variant='subtitle1'>{userInfo?.username}</Typography>
+            {
+              userInfo.phone ?
+              <Typography variant='subtitle2' color="text.secondary">Phone: {userInfo?.phone}</Typography>:
+              <Typography variant='subtitle2' color="error">Phone no. empty</Typography>
+            }
           </Stack>
         </Box>
         <form action="" onSubmit={handleSubmit} >
@@ -127,13 +137,16 @@ const Profile = () => {
               <TextField label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} variant='outlined' fullWidth />
             </Grid>
             <Grid item xs={12}>
-              <TextField label="Passoword" name="password" type="password" onChange={handleChange} variant='outlined' fullWidth />
+              <TextField label="Phone" name="phone" onChange={handleChange} variant='outlined' fullWidth />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField label="Password" name="password" type="password" onChange={handleChange} variant='outlined' fullWidth />
             </Grid>
             <Grid item xs={12}>
               {
                 (rePass !== null) & (rePass !== formData.password) ?
-                  <TextField error label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
-                  : <TextField label="Retype Passoword" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
+                  <TextField error label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
+                  : <TextField label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' fullWidth />
               }
             </Grid>
             <Grid item xs={12}>
@@ -151,7 +164,8 @@ const Profile = () => {
                   disabled={
                     formData.first_name.length === 0
                     && formData.last_name.length === 0
-                    && formData.password.length === 0
+                    && formData.phone.length != 11
+                    && formData.password.length < 4
                     && profilePhoto === null
                   }
                 >Save

@@ -4,6 +4,7 @@ const initialState = {
     userinfo: {
         is_authenticated: false,
         username: '',
+        phone: '',
         avatar_url: '',
         user_fullname: '',
         account_type: '',

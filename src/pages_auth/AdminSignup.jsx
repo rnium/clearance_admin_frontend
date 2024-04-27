@@ -20,6 +20,7 @@ const AdminSignup = () => {
         {
             first_name: '',
             last_name: '',
+            phone: '',
             password: '',
         }
     );
@@ -33,6 +34,11 @@ const AdminSignup = () => {
         event.preventDefault()
         if (formData.password !== rePass) {
             message.error("Passwords doesn't matches", 5)
+            return;
+        }
+
+        if (formData.phone.length != 11) {
+            message.error("Enter a phone number with 11 digits", 5)
             return;
         }
         
@@ -143,6 +149,9 @@ const AdminSignup = () => {
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <TextField label="Last Name" name='last_name' onChange={handleChange} variant='outlined' fullWidth />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField label="Phone Number" name='phone' onChange={handleChange} variant='outlined' required fullWidth />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField label="Passoword" name='password' onChange={handleChange} type="password" variant='outlined' required fullWidth />
