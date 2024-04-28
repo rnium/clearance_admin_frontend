@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import {
-    Box, Typography, Stack, Button, TextField, Grid, FormControl, Select, InputLabel, MenuItem
+    Box, Typography, Stack, Button, TextField, Grid, FormControl,
+    Paper, Select, InputLabel, MenuItem, Container, Accordion,
+    AccordionSummary, AccordionDetails
 } from '@mui/material';
 import PictureInput from '../components/atoms/PictureInput'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
-import { message, Spin } from 'antd';
+import { message, Spin, Timeline } from 'antd';
 import axios from 'axios';
 import * as urls from '../utils/api_urls';
 import { getCookie } from '../utils/cookies';
@@ -133,98 +136,183 @@ const StudentSignup = () => {
     }, [])
 
     return (
-        <Box sx={{ display: 'flex' }} flexDirection="column" justifyContent="center" alignItems="center">
-            <Box width={{ xs: "90%", md: '40%' }} sx={{ mt: 3, mb: 5 }}>
+        <Container sx={{ my: 6 }} >
+            <Box display="flex" flexDirection="row" alignItems="center" justifyContent={{ xs: 'center', md: 'flex-start' }} >
                 <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" >
                     <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-                        <img src="/static/images/cube(1).png" alt="Technoventure Logo" width="100px" />
+                        <img src="/static/images/cube(1).png" alt="Logo" width="70px" />
                     </Box>
                     <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-                        <img src="/static/images/cube(1).png" alt="Technoventure Logo" width="60px" />
+                        <img src="/static/images/cube(1).png" alt="Logo" width="60px" />
                     </Box>
-                    <Stack sx={{ ml: 1 }}>
-                        <Typography color="text.secondary" sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} variant='h5' component="span">SEC Clearance Portal</Typography>
+                    <Stack sx={{ ml: { xs: 1, md: 3 } }}>
+                        <Typography sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} variant='h5' component="span">SEC Clearance Portal</Typography>
                         <Typography color="text.secondary" variant='h6' sx={{ fontSize: { xs: '0.8rem', md: '1.2rem' } }}>Student Signup</Typography>
                     </Stack>
                 </Box>
-                {
-                    !hallsLoaded ?
-                        <Stack sx={{mt: 5}}>
-                            <Spin size='large' />
-                        </Stack> :
-                        <form onSubmit={handleSubmit} >
-                            <Grid container spacing={1} sx={{ mt: 2 }}>
-                                <Grid item xs={12} md={6}>
-                                    <TextField label="First Name" name="first_name" onChange={handleChange} variant='outlined' required fullWidth />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <TextField label="Last Name" name="last_name" onChange={handleChange} variant='outlined' fullWidth />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="Registration No." name="registration_no" onChange={handleChange} variant='outlined' required fullWidth />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <TextField label="Department (e.g., EEE)" name="department" onChange={handleChange} variant='outlined' required fullWidth />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <TextField label="Session (e.g., 2018-19)" name="session" onChange={handleChange} variant='outlined' fullWidth required />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Select Hall</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={formData.hall}
-                                            label="Select Hall"
-                                            onChange={handleChange}
-                                            name="hall"
-                                        >
-                                            {
-                                                halls.map(h => (
-                                                    <MenuItem key={h.id} value={h.id}>{h.display_name}</MenuItem>
-                                                ))
-                                            }
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="Phone Number" name="phone" onChange={handleChange} variant='outlined' required fullWidth />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="Email Address" name="email" type="email" onChange={handleChange} variant='outlined' required fullWidth />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="Password" name="password" type="password" onChange={handleChange} variant='outlined' required fullWidth />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {
-                                        (rePass !== null) & (rePass !== formData.password) ?
-                                            <TextField error label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
-                                            : <TextField label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
-                                    }
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Stack direction={{ xs: 'column', md: 'row' }} alignItems="center" spacing={1}>
-                                        <PictureInput onChange={handleFileChange} />
-                                        <Typography variant='body2' color="text.secondary">{fileInfo}</Typography>
-                                    </Stack>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Box display="flex" justifyContent="flex-end">
-                                        {/* <FormGroup>
+            </Box>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={7}>
+                    {
+                        !hallsLoaded ?
+                            <Stack sx={{ mt: 5 }}>
+                                <Spin size='large' />
+                            </Stack> :
+                            <form onSubmit={handleSubmit} >
+                                <Grid container spacing={1} sx={{ mt: 2 }}>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="First Name" name="first_name" onChange={handleChange} variant='outlined' required fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Last Name" name="last_name" onChange={handleChange} variant='outlined' fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Registration No." name="registration_no" onChange={handleChange} variant='outlined' required fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <TextField label="Department (e.g., EEE)" name="department" onChange={handleChange} variant='outlined' required fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <TextField label="Session (e.g., 2018-19)" name="session" onChange={handleChange} variant='outlined' fullWidth required />
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Select Hall</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={formData.hall}
+                                                label="Select Hall"
+                                                onChange={handleChange}
+                                                name="hall"
+                                            >
+                                                {
+                                                    halls.map(h => (
+                                                        <MenuItem key={h.id} value={h.id}>{h.display_name}</MenuItem>
+                                                    ))
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Phone Number" name="phone" onChange={handleChange} variant='outlined' required fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Email Address" name="email" type="email" onChange={handleChange} variant='outlined' required fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField label="Password" name="password" type="password" onChange={handleChange} variant='outlined' required fullWidth />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {
+                                            (rePass !== null) & (rePass !== formData.password) ?
+                                                <TextField error label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
+                                                : <TextField label="Retype Password" onChange={handleRePassChange} type="password" variant='outlined' required fullWidth />
+                                        }
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Stack direction={{ xs: 'column', md: 'row' }} alignItems="center" spacing={1}>
+                                            <PictureInput onChange={handleFileChange} />
+                                            <Typography variant='body2' color="text.secondary">{fileInfo}</Typography>
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Box display="flex" justifyContent="flex-end">
+                                            {/* <FormGroup>
                                     <FormControlLabel required control={<Checkbox defaultChecked />} label="Agree to terms of service" />
                                 </FormGroup> */}
-                                        <Button sx={{ px: 5 }} type="submit" variant='contained'>Signup</Button>
-                                    </Box>
+                                            <Button sx={{ px: 5 }} type="submit" variant='contained'>Signup</Button>
+                                        </Box>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
 
-                        </form>
-                }
-
-            </Box>
-        </Box>
+                            </form>
+                    }
+                </Grid>
+                <Grid item xs={12} md={5}>
+                    <Paper sx={{ py: 3, px: {xs: 2, md: 3}, backgroundColor: 'aliceblue' }}>
+                        <Typography variant='h6'>Guide for Students</Typography>
+                        <Typography variant='body1'>
+                            Congratulations on successfully completing your academic journey at Sylhet Engineering College. As you begin the clearance registration process, here are some important notes to guide you.
+                        </Typography>
+                        <Box sx={{ mt: 1 }}>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1-content"
+                                    id="panel1-header"
+                                >
+                                    Traditional vs Online Clearance Method 
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography variant='body2' color="text.secondary">
+                                        In the traditional method, applicants had to collect a clearance form and visit each lab in-charge, the department head, and administration for their signatures. This process was time-consuming and exhausting for the applicant. The online portal simplifies the approval process. All you need to do is create an account as a student and apply for clearance once your account is approved
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2-content"
+                                    id="panel2-header"
+                                >
+                                    Steps of Getting Online Clearance
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Timeline
+                                        items={[
+                                            {
+                                                children: 'Create an account with valid information',
+                                            },
+                                            {
+                                                children: 'Wait until SEC Academic verifies your information and gives approval. You will be notified the confirmation approval via email.',
+                                            },
+                                            {
+                                                children: "After your account is approved, you'll be able to apply for clearance from your dashboard.",
+                                            },
+                                            {
+                                                children: "After you've applied for clearance, an approval request will be sent to all lab in-charges, department heads, general department staff, the general department in-charge, the cash section, the principal, and SEC Academic. It may take a day or two to receive all the approvals.",
+                                            },
+                                            {
+                                                children: "Once you have received all the approvals, you will be able to download your Clearance Approval Report from the dashboard. This report is the final document required for official documentation.",
+                                            },
+                                        ]}
+                                    />
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel3-content"
+                                    id="panel3-header"
+                                >
+                                    The Clearance Approval Report
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography variant='body2' color="text.secondary">
+                                        After you have received 100% approval, you will receive a Clearance Approval Report. This is similar to the traditional clearance form, but it does not require any physical signatures, as all administrative members have already digitally signed it. Download the report from the dashboard and print a color copy of it.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion defaultExpanded>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel3-content"
+                                    id="panel3-header"
+                                >
+                                    The Profile Picture
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography variant='body2' color="text.secondary">
+                                        Every student applying for online clearance must upload a formal profile picture. The photo should have an aspect ratio of 1:1 and the file size must be less than 1MB. Please ensure to upload a formal photo for your profile picture, as it will be utilized in official documents.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Box>
+                    </Paper>
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
 
