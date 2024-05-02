@@ -31,7 +31,7 @@ const Homepage = () => {
     const dispatchAdminStats = data => {
         for (let dept of Object.keys(data)) {
             if (data[dept].pending > 0) {
-                if (deptSelected !== dept) {
+                if (deptSelected !== dept.toUpperCase() && data[deptSelected.toLowerCase()].pending === 0) {
                     dispatch(setDeptSelected(dept.toUpperCase()));
                 }
                 break;
@@ -39,7 +39,7 @@ const Homepage = () => {
         }
         for (let dept of Object.keys(data)) {
             if (data[dept].pending_students > 0) {
-                if (pendingStudentDept !== dept) {
+                if (pendingStudentDept !== dept.toUpperCase() && data[pendingStudentDept.toLowerCase()].pending_students === 0) {
                     dispatch(setPendingStudentDept(dept.toUpperCase()));
                 }
                 break;
