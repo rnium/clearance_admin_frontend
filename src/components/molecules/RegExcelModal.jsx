@@ -21,6 +21,7 @@ const RegExcelModal = (props) => {
     async function uploadExcel() {
         setSubmitting(true);
         const postData = new FormData();
+        postData.append('dept', props.deptSelected);
         postData.append('excel', excelFile);
         const config = {
             headers: {
@@ -30,9 +31,13 @@ const RegExcelModal = (props) => {
         };
         try {
             let res = await axios.post(urls.exportStudentRegExcel, postData, config);
-            message.success("File Processed", 5);
             props.fetchStudents();
             props.setIsModalOpen(false);
+            let info = res.data?.info;
+            if (info === undefined) {
+                info = "File Processed"
+            }
+            message.success(info, 5);
         } catch (error) {
             let info = error?.response?.data?.details
             if (info === undefined) {

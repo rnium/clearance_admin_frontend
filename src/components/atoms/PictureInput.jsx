@@ -23,7 +23,7 @@ const InputFileUpload = ({onChange}) => {
             tabIndex={-1}
             startIcon={<AddPhotoAlternateIcon />}
         >
-            Select Profile picture
+            Select Profile Picture
             <VisuallyHiddenInput type="file" onChange={e => onChange(e)} />
         </Button>
     );

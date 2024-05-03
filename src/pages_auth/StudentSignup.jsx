@@ -36,8 +36,6 @@ const StudentSignup = () => {
             registration_no: '',
             phone: '',
             email: '',
-            session: '',
-            department: '',
             hall: null,
             password: '',
         }
@@ -169,13 +167,7 @@ const StudentSignup = () => {
                                     <Grid item xs={12}>
                                         <TextField label="Registration No." name="registration_no" onChange={handleChange} variant='outlined' required fullWidth />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <TextField label="Department (e.g., EEE)" name="department" onChange={handleChange} variant='outlined' required fullWidth />
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <TextField label="Session (e.g., 2018-19)" name="session" onChange={handleChange} variant='outlined' fullWidth required />
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid item xs={12}>
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">Select Hall</InputLabel>
                                             <Select

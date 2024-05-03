@@ -213,7 +213,7 @@ const Students = () => {
                 startIcon={<PlaylistAddIcon />}
                 onClick={() => setIsExcelModalOpen(true)}
               >
-                Add Student Registrations
+                Export Student Registrations
               </Button>
             </Stack> : null
         }
