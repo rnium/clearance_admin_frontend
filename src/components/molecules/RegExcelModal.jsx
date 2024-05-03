@@ -58,7 +58,7 @@ const RegExcelModal = (props) => {
         <Modal title="Export Excel" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
                 <img src="/static/images/microsoft-excel.svg" alt="" width="90px" />
-                <Typography variant='h6' textAlign="center">Add Student Registrations to {props.deptSelected.toUpperCase()}</Typography>
+                <Typography variant='h6' textAlign="center">Export Student Registrations in {props.deptSelected.toUpperCase()}</Typography>
                 <Alert severity='info'>
                     <AlertTitle>Please Note</AlertTitle>
                     The excel filename must contain session code (e.g.: 2018-19) and the file must have a column named as `reg` that contains the registration numbers of the session mentioned in the filename.
