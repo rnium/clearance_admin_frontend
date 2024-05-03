@@ -15,6 +15,8 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import SessionAddModal from '../components/molecules/SessionAddModal';
 import ClearanceDetailModal from '../components/molecules/ClearanceDetailModal';
 import StudentEditModal from '../components/molecules/StudentEditModal';
+import RegExcelModal from '../components/molecules/RegExcelModal';
+import StudentPlaceholder from '../components/molecules/StudentPlaceholder'
 
 export const loadDeptSessions = async (dispatch) => {
   try {
@@ -33,6 +35,7 @@ export const loadDeptSessions = async (dispatch) => {
 const Students = () => {
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isExcelModalOpen, setIsExcelModalOpen] = useState(false);
   const [isFlowModalOpen, setIsFlowModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const departments = useSelector(state => state.deptSession.departments)
@@ -55,11 +58,15 @@ const Students = () => {
   const handleDeptChange = (e, newDept) => {
     if (newDept != null) {
       setDeptSelected(newDept);
-      // setStudentsDataLoaded(false);
+      setStudentsDataLoaded(false);
+      setSessionSelected(null);
     }
   }
 
   const fetchStudents = async () => {
+    if (sessionSelected === null) {
+      return;
+    }
     let params = { sessionid: sessionSelected };
     try {
       let res = await axios.get(urls.sessionStudentsUrl, { params });
@@ -179,12 +186,18 @@ const Students = () => {
         </Stack>
         {
           deptSelected && (adminAcType === 'academic' || adminAcType === 'principal') ?
-            <Stack sx={{ width: '100%' }} direction="row" justifyContent="flex-end" alignItems="flex-end">
+            <Stack sx={{ width: '100%' }} spacing={2} direction="row" justifyContent="flex-end" alignItems="flex-end">
               <SessionAddModal
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 dept={deptSelected}
                 loadDeptSessions={() => loadDeptSessions(dispatch)}
+              />
+              <RegExcelModal
+                isModalOpen={isExcelModalOpen}
+                setIsModalOpen={setIsExcelModalOpen}
+                deptSelected={deptSelected}
+                fetchStudents={fetchStudents}
               />
               <Button
                 size='small'
@@ -194,21 +207,38 @@ const Students = () => {
               >
                 Add Session
               </Button>
+              <Button
+                size='small'
+                color='secondary'
+                startIcon={<PlaylistAddIcon />}
+                onClick={() => setIsExcelModalOpen(true)}
+              >
+                Add Student Registrations
+              </Button>
             </Stack> : null
         }
       </Paper>
       <Box sx={{ mt: 2 }}>
         {
           studentsDataLoaded ?
-            students_data.length ?
+            students_data.students.length || students_data.placeholders.length ?
               <Grid container spacing={2}>
                 {
-                  students_data.map(student => (
+                  students_data.students.map(student => (
                     <Grid item xs={12} md={4}>
                       <StudentProfile 
                         onProgressClick={(reg) => setStudentSelected(reg)} 
                         onEditClick={(info) => setEditInfo(info)} 
                         student={student}
+                      />
+                    </Grid>
+                  ))
+                }
+                {
+                  students_data.placeholders.map(student => (
+                    <Grid item xs={12} md={4}>
+                      <StudentPlaceholder
+                      student={student}
                       />
                     </Grid>
                   ))
