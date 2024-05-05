@@ -21,7 +21,6 @@ const RegExcelModal = (props) => {
     async function uploadExcel() {
         setSubmitting(true);
         const postData = new FormData();
-        postData.append('dept', props.deptSelected);
         postData.append('excel', excelFile);
         const config = {
             headers: {
@@ -58,10 +57,10 @@ const RegExcelModal = (props) => {
         <Modal title="Export Excel" open={props.isModalOpen} footer={null} onCancel={() => props.setIsModalOpen(false)}>
             <Stack alignItems="center" sx={{ pt: 2, pb: 1 }} spacing={2}>
                 <img src="/static/images/microsoft-excel.svg" alt="" width="90px" />
-                <Typography variant='h6' textAlign="center">Export Student Registrations in {props.deptSelected.toUpperCase()}</Typography>
+                <Typography variant='h6' textAlign="center">Export Student Registrations</Typography>
                 <Alert severity='info'>
                     <AlertTitle>Please Note</AlertTitle>
-                    The excel filename must contain session code (e.g.: 2018-19) and the file must have a column named as `reg` that contains the registration numbers of the session mentioned in the filename.
+                    The excel filename must contain department with session code (e.g.: EEE 2018-19) and the file must have a column named as `reg` that contains the registration numbers of the session mentioned in the filename.
                 </Alert>
                 <Stack direction="row" justifyContent="flex-end" sx={{width: '100%', pt: 2}} spacing={3}>
                     <FileUploadButton title="Select & Process Excel" onChange={handleFileChange} isSubmitting={submitting} />

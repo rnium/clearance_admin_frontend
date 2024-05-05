@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 import {
     Box, Typography, Stack, Button, TextField, Grid, FormControl,
     Paper, Select, InputLabel, MenuItem, Container, Accordion,
-    AccordionSummary, AccordionDetails
+    AccordionSummary, AccordionDetails, List, ListItem, ListItemIcon
 } from '@mui/material';
 import PictureInput from '../components/atoms/PictureInput'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { useState } from 'react';
 import { message, Spin, Timeline } from 'antd';
 import axios from 'axios';
@@ -222,7 +223,7 @@ const StudentSignup = () => {
                     }
                 </Grid>
                 <Grid item xs={12} md={5}>
-                    <Paper sx={{ py: 3, px: {xs: 2, md: 3}, backgroundColor: 'aliceblue' }}>
+                    <Paper sx={{ py: 3, px: { xs: 2, md: 3 }, backgroundColor: 'aliceblue' }}>
                         <Typography variant='h6'>Guide for Students</Typography>
                         <Typography variant='body1'>
                             Congratulations on successfully completing your academic journey at Sylhet Engineering College. As you begin the clearance registration process, here are some important notes to guide you.
@@ -234,7 +235,7 @@ const StudentSignup = () => {
                                     aria-controls="panel1-content"
                                     id="panel1-header"
                                 >
-                                    Traditional vs Online Clearance Method 
+                                    Traditional vs Online Clearance Method
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Typography variant='body2' color="text.secondary">
@@ -278,6 +279,43 @@ const StudentSignup = () => {
                                     aria-controls="panel3-content"
                                     id="panel3-header"
                                 >
+                                    Prerequisites
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <TaskAltIcon sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} />
+                                            </ListItemIcon>
+                                            <Typography variant='body2' color="text.secondary">
+                                                Your final semester result must be published, and you need to pass accordingly.
+                                            </Typography>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <TaskAltIcon sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} />
+                                            </ListItemIcon>
+                                            <Typography variant='body2' color="text.secondary">
+                                                To be able to signup, your registration number needs to be added in the clearance system by SEC Academic.
+                                            </Typography>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <TaskAltIcon sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} />
+                                            </ListItemIcon>
+                                            <Typography variant='body2' color="text.secondary">
+                                                It's advised to clear all dues before applying for clearance.
+                                            </Typography>
+                                        </ListItem>
+                                    </List>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel3-content"
+                                    id="panel3-header"
+                                >
                                     The Clearance Approval Report
                                 </AccordionSummary>
                                 <AccordionDetails>
@@ -286,7 +324,7 @@ const StudentSignup = () => {
                                     </Typography>
                                 </AccordionDetails>
                             </Accordion>
-                            <Accordion defaultExpanded>
+                            <Accordion>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel3-content"
