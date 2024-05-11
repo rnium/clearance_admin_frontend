@@ -1,5 +1,5 @@
-// export const baseUrl = 'http://127.0.0.1:8000'
-export const baseUrl = ''
+export const baseUrl = 'http://127.0.0.1:8000'
+// export const baseUrl = ''
 export const loginUrl = baseUrl + '/account/api/login/'
 export const logoutUrl = baseUrl + '/account/api/logout/'
 export const pendingStudentAcUrl = baseUrl + '/account/pendingstudents/'
@@ -24,6 +24,7 @@ export const studentProfileUpdateByAdminUrl = baseUrl + '/account/student/byadmi
 export const studentinfoUrl = baseUrl + '/account/progressive-studentinfo/'
 // Clearance API
 export const applyClearanceUrl = baseUrl + '/clearance/api/apply/'
+export const studentNoticeUrl = baseUrl + '/clearance/api/noticeboard/'
 export const userInfoUrl = baseUrl + '/clearance/api/userinfo/'
 export const dashboardClearancesUrl = baseUrl + '/clearance/api/dashboard-clearances/'
 export const adminDashboardStatsUrl = baseUrl + '/clearance/api/dashboard/adminstats/'

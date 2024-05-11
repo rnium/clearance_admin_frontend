@@ -15,6 +15,10 @@ const initialState = {
         isLoaded: false,
         accounts: null
     },
+    studentNotice: {
+        isLoaded: false,
+        notice: null,
+    }
 }
 
 const dashboardSlice = createSlice({
@@ -23,6 +27,12 @@ const dashboardSlice = createSlice({
     reducers: {
         setDeptSelected: (state, action) => {
             state.deptSelected = action.payload;
+        },
+        setStudentNotice: (state, action) => {
+            state.studentNotice.notice = action.payload;
+        },
+        setStudentNoticeLoaded: (state, action) => {
+            state.studentNotice.isLoaded = action.payload;
         },
         setPendingStudentDept: (state, action) => {
             state.pendingStudentDept = action.payload;
@@ -51,6 +61,6 @@ const dashboardSlice = createSlice({
 export const {
     setPendingClearances, setDeptSelected, setPendingStudentDept, 
     setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded, 
-    setPendingAccounts, setPendingAccountsLoaded
+    setPendingAccounts, setPendingAccountsLoaded, setStudentNotice, setStudentNoticeLoaded
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { setUserInfo, setLoaded } from '../redux/accountReducer';
 import { useDispatch } from 'react-redux';
 
+
 const non_resident_hall = {
     id: -1,
     codename: "non-resident",
@@ -136,6 +137,7 @@ const StudentSignup = () => {
 
     return (
         <Container sx={{ my: 6 }} >
+
             <Box display="flex" flexDirection="row" alignItems="center" justifyContent={{ xs: 'center', md: 'flex-start' }} >
                 <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" >
                     <Box sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -152,6 +154,7 @@ const StudentSignup = () => {
             </Box>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={7}>
+
                     {
                         !hallsLoaded ?
                             <Stack sx={{ mt: 5 }}>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PendingStudent from '../components/molecules/PendingStudent';
 import {
   Container, Grid, Paper, Box, Typography, Stack, Dialog, TextField, Button,
-  DialogTitle, DialogContent, DialogActions, DialogContentText
+  DialogTitle, DialogContent, DialogActions, DialogContentText, Alert, Grow
 } from '@mui/material';
 import RolesCard from '../components/molecules/RolesCard';
 import { Spin, message, Empty, Popconfirm } from 'antd';
@@ -12,7 +12,7 @@ import * as urls from '../utils/api_urls';
 import {
   setPendingClearances, setDeptSelected, setPendingStudentDept,
   setPendingClearancesLoaded, setAdminRoles, setAdminRolesLoaded,
-  setPendingAccounts, setPendingAccountsLoaded
+  setPendingAccounts, setPendingAccountsLoaded, setStudentNotice, setStudentNoticeLoaded
 } from '../redux/dashboardReducer';
 import ClearanceSection from '../components/organisms/ClearanceSection';
 import ClearancesEmpty from '../components/atoms/ClearancesEmpty';
@@ -25,6 +25,8 @@ import CustomDeptSegmented from '../components/atoms/CustomDeptSegmented';
 
 const Dashboard = (props) => {
   const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
+  const [isAddNoticeOpen, setIsAddNoticeOpen] = useState(false);
+  const [noticeText, setNoticeText] = useState('');
   const [isClearanceDetailModalOpen, setIsClearanceDetailModalOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedClearance, setSelectedClearance] = useState({ type: null, id: null });
@@ -37,6 +39,8 @@ const Dashboard = (props) => {
   const pendingClearancesLoaded = useSelector(state => state.dashboard.pendingClearances.isLoaded);
   const adminRoles = useSelector(state => state.dashboard.adminRoles.roles);
   const adminRolesLoaded = useSelector(state => state.dashboard.adminRoles.isLoaded);
+  const studentNotice = useSelector(state => state.dashboard.studentNotice.notice);
+  const studentNoticeLoaded = useSelector(state => state.dashboard.studentNotice.isLoaded);
   const pendingAccounts = useSelector(state => state.dashboard.pendingAccounts.accounts);
   const pendingAccountsLoaded = useSelector(state => state.dashboard.pendingAccounts.isLoaded);
   const adminAcType = useSelector(state => state.account.userinfo?.user_type);
@@ -77,7 +81,7 @@ const Dashboard = (props) => {
     setSelectedDetailClearance({ type, id })
   }
 
-  
+
 
   async function loadClearances() {
     let params = { dept: deptSelected.toLowerCase() };
@@ -114,6 +118,58 @@ const Dashboard = (props) => {
       let res = await axios.get(urls.pendingStudentAcUrl, { params });
       dispatch(setPendingAccounts(res.data))
       dispatch(setPendingAccountsLoaded(true))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  async function loadNotice() {
+    try {
+      let res = await axios.get(urls.studentNoticeUrl);
+      dispatch(setStudentNotice(res.data))
+      dispatch(setStudentNoticeLoaded(true))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  async function postNotice() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+    };
+    try {
+      let res = await axios.post(urls.studentNoticeUrl, {notice: noticeText}, config);
+      dispatch(setStudentNotice(res.data))
+    } catch (error) {
+      let error_msg = error?.response?.data?.details;
+      if (error_msg === undefined) {
+        error_msg = error.message;
+      }
+      message.error(error_msg);
+    }
+  }
+
+  async function deleteNotice() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+    };
+    try {
+      let res = await axios.post(urls.studentNoticeUrl, {}, config);
+      dispatch(setStudentNotice(null))
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -215,8 +271,13 @@ const Dashboard = (props) => {
     if (!adminRolesLoaded) {
       loadRoles();
     };
-    if (adminAcType === 'academic' && pendingAccountsLoaded === false) {
-      loadPendingAccounts();
+    if (adminAcType === 'academic') {
+      if (pendingAccountsLoaded === false) {
+        loadPendingAccounts();
+      }
+      if (studentNoticeLoaded === false) {
+        loadPendingAccounts();
+      }
     }
   }, [])
 
@@ -311,55 +372,99 @@ const Dashboard = (props) => {
           {
             adminAcType === 'academic' ?
               <Box sx={{ mb: 2 }}>
-                {
-                  <Paper sx={{ p: 2 }} >
-                    <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-                      Pending Accounts
-                    </Typography>
-                    <Box sx={{ mb: 1 }}>
-                      <CustomDeptSegmented
-                        value={pendingStudentDept}
-                        onChange={changePendingStudentDept}
-                        trackBg="#f5f5f5"
-                        block={true}
-                      />
-                    </Box>
-                    {
-                      pendingAccountsLoaded ?
-                        <div>
-                          {
-                            pendingAccounts.length ?
-                              pendingAccounts.map(s => (
-                                <PendingStudent onDelete={deleteAccount} approve={approveAccount} student={s} />
-                              )) :
-                              <Stack sx={{ py: 5 }}>
-                                <Empty />
-                              </Stack>
-                          }
-                          {
-                            pendingAccounts.length ?
-                              <Popconfirm
-                                title="Confirmation"
-                                description="Are you sure to approve all pending students?"
-                                okText="Yes"
-                                cancelText="Cancel"
-                                onConfirm={approveAllAccounts}
+                <Paper sx={{ p: 2, mb: 2 }} >
+                  <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+                    Pending Accounts
+                  </Typography>
+                  <Box sx={{ mb: 1 }}>
+                    <CustomDeptSegmented
+                      value={pendingStudentDept}
+                      onChange={changePendingStudentDept}
+                      trackBg="#f5f5f5"
+                      block={true}
+                    />
+                  </Box>
+                  {
+                    pendingAccountsLoaded ?
+                      <div>
+                        {
+                          pendingAccounts.length ?
+                            pendingAccounts.map(s => (
+                              <PendingStudent onDelete={deleteAccount} approve={approveAccount} student={s} />
+                            )) :
+                            <Stack sx={{ py: 5 }}>
+                              <Empty />
+                            </Stack>
+                        }
+                        {
+                          pendingAccounts.length ?
+                            <Popconfirm
+                              title="Confirmation"
+                              description="Are you sure to approve all pending students?"
+                              okText="Yes"
+                              cancelText="Cancel"
+                              onConfirm={approveAllAccounts}
+                            >
+                              <Button
+                                variant='contained'
                               >
-                                <Button
-                                  variant='contained'
-                                >
-                                  Approve All
-                                </Button>
-                              </Popconfirm> : null
+                                Approve All
+                              </Button>
+                            </Popconfirm> : null
+                        }
+                      </div> :
+                      <Stack sx={{ py: 15 }}>
+                        <Spin size='large' />
+                      </Stack>
+                  }
+                </Paper>
+                <Paper sx={{ p: 2 }} >
+                  <Typography component="div" variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+                    Student Notice
+                  </Typography>
+                  {
+                    studentNoticeLoaded ?
+                      studentNotice ?
+                        <Box>
+                          <Alert severity='success' icon={false}>
+                            {studentNotice}
+                          </Alert>
+                          <Stack direction="row" sx={{ mt: 1 }} justifyContent="flex-end">
+                            <Button variant='outlined' size='small' color='error' onClick={deleteNotice}>Delete Notice</Button>
+                          </Stack>
+                        </Box> :
+                        <Stack sx={{ py: 3 }} spacing={2}>
+                          <Empty
+                            description={
+                              <Typography>Notice Empty</Typography>
+                            }
+                          />
+                          {
+                            isAddNoticeOpen ?
+                              <Grow in={isAddNoticeOpen}>
+                                <Stack spacing={1}>
+                                  <TextField
+                                    label="Notice Body"
+                                    variant="filled"
+                                    onChange={e => setNoticeText(e.target.value)}
+                                  />
+                                  <Stack direction="row" spacing={1} justifyContent="flex-end">
+                                    <Button variant='outlined' size='small' color="error" onClick={() => setIsAddNoticeOpen(false)}>
+                                      Cancel
+                                    </Button>
+                                    <Button variant='contained' size='small' onClick={postNotice}>Post</Button>
+                                  </Stack>
+                                </Stack>
+                              </Grow> :
+                              <Button variant='contained' size='small' onClick={() => setIsAddNoticeOpen(true)}>New Notice</Button>
                           }
-                        </div> :
-                        <Stack sx={{ py: 15 }}>
-                          <Spin size='large' />
                         </Stack>
-                    }
-                  </Paper>
-
-                }
+                      :
+                      <Stack sx={{ py: 10 }}>
+                        <Spin size='large' />
+                      </Stack>
+                  }
+                </Paper>
               </Box> : null
           }
         </Grid>
