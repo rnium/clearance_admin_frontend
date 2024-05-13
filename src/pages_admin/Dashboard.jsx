@@ -130,7 +130,7 @@ const Dashboard = (props) => {
   async function loadNotice() {
     try {
       let res = await axios.get(urls.studentNoticeUrl);
-      dispatch(setStudentNotice(res.data))
+      dispatch(setStudentNotice(res.data.notice))
       dispatch(setStudentNoticeLoaded(true))
     } catch (error) {
       let error_msg = error?.response?.data?.details;
@@ -149,8 +149,8 @@ const Dashboard = (props) => {
       },
     };
     try {
-      let res = await axios.post(urls.studentNoticeUrl, {notice: noticeText}, config);
-      dispatch(setStudentNotice(res.data))
+      let res = await axios.post(urls.studentNoticeUrl, { notice: noticeText }, config);
+      dispatch(setStudentNotice(res.data.notice))
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -168,8 +168,8 @@ const Dashboard = (props) => {
       },
     };
     try {
-      let res = await axios.post(urls.studentNoticeUrl, {}, config);
-      dispatch(setStudentNotice(null))
+      await axios.post(urls.studentNoticeUrl, {}, config);
+      dispatch(setStudentNotice(null));
     } catch (error) {
       let error_msg = error?.response?.data?.details;
       if (error_msg === undefined) {
@@ -276,7 +276,7 @@ const Dashboard = (props) => {
         loadPendingAccounts();
       }
       if (studentNoticeLoaded === false) {
-        loadPendingAccounts();
+        loadNotice();
       }
     }
   }, [])
@@ -430,7 +430,15 @@ const Dashboard = (props) => {
                             {studentNotice}
                           </Alert>
                           <Stack direction="row" sx={{ mt: 1 }} justifyContent="flex-end">
-                            <Button variant='outlined' size='small' color='error' onClick={deleteNotice}>Delete Notice</Button>
+                            <Popconfirm
+                              title="Confirmation"
+                              description="Are you sure to delete this notice?"
+                              okText="Yes"
+                              cancelText="Cancel"
+                              onConfirm={deleteNotice}
+                            >
+                              <Button variant='outlined' size='small' color='error'>Delete Notice</Button>
+                            </Popconfirm>
                           </Stack>
                         </Box> :
                         <Stack sx={{ py: 3 }} spacing={2}>
